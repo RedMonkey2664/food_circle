@@ -74,6 +74,14 @@ async function FriendsContent({
   return (
     <>
       <TabBar active={tab} requestCount={requestCount} />
+      {params.blocked ? (
+        <p
+          role="status"
+          className="bg-public-bg text-public-fg mt-4 rounded-[var(--radius-button)] px-3 py-2 text-sm"
+        >
+          {t.blocked}
+        </p>
+      ) : null}
       {params.added ? (
         <p
           role="status"

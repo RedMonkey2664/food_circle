@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { BottomNav } from '@/components/nav/BottomNav';
+import { BottomNav, BottomNavStatic } from '@/components/nav/BottomNav';
 import { requireOnboardedUser } from '@/lib/auth';
 
 // Session guard. The shell (nav, column) prerenders instantly; the session check streams in
@@ -26,7 +26,9 @@ export default function AppLayout({ children }: LayoutProps<'/'>) {
           <AuthGate>{children}</AuthGate>
         </Suspense>
       </div>
-      <BottomNav />
+      <Suspense fallback={<BottomNavStatic />}>
+        <BottomNav />
+      </Suspense>
     </>
   );
 }

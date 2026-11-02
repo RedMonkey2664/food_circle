@@ -680,6 +680,11 @@ isOneToOne: false
               "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string
             }[]
                            },
+"get_profile_stats":
+{ Args: { "p_user": string }; Returns: {
+              "followers": number,"following": number,"friends": number,"places_visible": number,"visits_visible": number
+            }[]
+                           },
 "normalize_name":
 { Args: { "n": string }; Returns: string
                            },

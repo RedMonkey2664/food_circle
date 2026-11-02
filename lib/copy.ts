@@ -66,6 +66,7 @@ export const copy = {
     searchPlaceholder: 'e.g. riya or @riya.eats',
     noResults: 'Nobody found. Try another spelling, or send an invite link.',
     added: 'You are now friends.',
+    blocked: 'Blocked. You won’t see each other anywhere.',
     followsYou: 'follows you',
   },
   invite: {
@@ -98,6 +99,30 @@ export const copy = {
   footer: {
     osm: '© OpenStreetMap contributors',
     privacy: 'Your entries are only visible to the people you choose.',
+  },
+  profile: {
+    stats: { places: 'places', friends: 'friends', followers: 'followers', following: 'following' },
+    privateTitle: 'This account is private.',
+    privateBody: 'Follow or become friends to see their picks.',
+    emptySelf: 'Your verdicts will show up here once you log a place.',
+    emptyOther: 'No verdicts you can see yet.',
+    recent: 'Recent verdicts',
+    youFollow: 'Followers',
+    youAreFollowing: 'Following',
+    listEmpty: 'Nobody here yet.',
+    friendsBadge: 'Friends',
+    followsYou: 'Follows you',
+    menu: {
+      label: 'More options',
+      removeFollower: 'Remove follower',
+      unfriendConfirm: (name: string) => `Unfriend ${name}? They won't be told.`,
+      blockConfirm: (name: string) =>
+        `Block ${name}? You'll stop seeing each other everywhere, and any friendship or follows are removed.`,
+      reportLabel: 'What is wrong? Only admins see this.',
+      send: 'Send report',
+      sending: 'Sending…',
+      reported: 'Thanks. An admin will look at it.',
+    },
   },
   notFound: {
     title: "We couldn't find that page.",

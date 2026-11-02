@@ -50,14 +50,14 @@ Goal: the whole product sentence works end to end, with relationship labels on e
 - [x] P1-01 (M) Onboarding: unique username (validation, availability check), display name, home area, diet preference (veg / jain / halal / egg / non-veg, multi-select), account privacy (default public), default entry visibility. Redirect incomplete profiles here.
 - [x] P1-02 (L) Friend system: send request, accept, decline, cancel, unfriend. `/friends` with tabs Friends, Requests, Find (search by username). Notifications are in-app badges only for now.
 - [x] P1-03 (M) Invite links: create, revoke, expire after 7 days, max 20 uses. `/invite/[code]` creates a friendship immediately (inviter pre-consented by creating the link). WhatsApp share via `wa.me` prefilled text with Web Share API fallback.
-- [ ] P1-04 (M) Follow system: follow, unfollow, follow requests for private accounts, approve/reject, followers and following lists.
-- [ ] P1-05 (M) Block and report: block hides both directions everywhere; report a user or a visit with a reason; `/admin/reports` list behind an admin flag.
+- [x] P1-04 (M) Follow system: follow, unfollow, follow requests for private accounts, approve/reject, followers and following lists.
+- [x] P1-05 (M) Block and report: block hides both directions everywhere; report a user or a visit with a reason; `/admin/reports` list behind an admin flag.
 - [ ] P1-06 (M) Place search over our own `places` table: trigram name match plus proximity bias if location is granted (optional). Recent searches stored locally. Google fallback exists behind env flag `GOOGLE_PLACES_ENABLED`, off by default.
 - [ ] P1-07 (L) Place page per UI_UX.md: header (name, area, diet badges), TierSummary (Friends / Following / Everyone, separate counts), filter toggle, VerdictCards with RelationshipTag, Everyone tier collapsed, empty states with nudges, handoff button per PLACES_DATA.md.
 - [ ] P1-08 (L) Log flow (bottom sheet): pick place, tap Go / Skip / Only for (with one short free-text for "only for"), visibility selector showing who can see it, save. Success state. Repeat visits allowed. Only the verdict is required.
 - [ ] P1-09 (M) Hook `recompute_visit_flags(user_id)` (SCORING_BADGES.md) to run after visit insert/delete so the flags are correct from day one. No score UI yet.
 - [ ] P1-10 (M) Home feed: tabs Friends and Following, cursor pagination, relationship tags, empty states that explain how to add friends.
-- [ ] P1-11 (M) Profile pages (own and others): header, relationship buttons by state, recent verdicts (RLS-filtered), counts.
+- [x] P1-11 (M) Profile pages (own and others): header, relationship buttons by state, recent verdicts (RLS-filtered), counts.
 - [ ] P1-12 (S) PWA manifest, icons, theme colour, install-friendly meta. No service worker yet.
 - [x] P1-13 (M) Dev seed (`supabase/seed.sql` or script): users covering every relationship type (friend, following, blocked, private account, stranger) and visits at every visibility level.
 - [ ] P1-14 (M) RLS test matrix: for each visibility level x each viewer relationship, assert allowed or denied. Also blocked and private-account cases.

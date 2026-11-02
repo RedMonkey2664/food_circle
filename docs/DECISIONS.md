@@ -143,3 +143,11 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Relationship buttons follow UI_UX §4.6. Friends show no buttons in lists; unfriend, block and report will live in the profile menu (P1-11).
 - Styled 404 page added. `/admin/reports` lists open reports for admins (is_admin set by hand) with Dismiss / Mark actioned (audited RPC).
 - Browser-verified locally: sam -> asha friend request, asha accepts; sam creates an invite, chitra opens it and becomes sam's friend.
+
+### P1-04, P1-05, P1-11 (2026-11-03)
+- Profile `/u/[username]`: header, counts (places / friends / followers / following), relationship buttons, ⋯ menu (unfriend, remove follower, block, report with a reason), recent verdicts visible to the viewer (RLS). `/me` redirects to your own profile. Private accounts show a lock message to people who can't see their entries.
+- Counts for other people come from `get_profile_stats` (numbers only, empty when blocked) because RLS only exposes your own relationship rows.
+- Follower / following lists are shown for your own profile only (others' relationship rows aren't readable). Revisit in Phase 2 Discover if needed.
+- Blocking redirects to /friends with a note (their profile disappears for you). Mute (optional in Phase 1) is not built; table and RLS exist.
+- DEFERRED: an "unblock" UI. Blocked profiles are hidden from the blocker by RLS, so a blocked-people list needs a small RPC; planned with a Settings page.
+- Bottom nav sits in <Suspense> with a static fallback (it reads the URL; Cache Components requires this on dynamic routes).

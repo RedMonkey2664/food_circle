@@ -80,7 +80,12 @@ export const respondFollow: FormAction = async (p, f) =>
   userAction('respond_follow', 'p_follower', accept)(p, f);
 export const removeFollower: FormAction = async (p, f) =>
   userAction('remove_follower', 'p_follower')(p, f);
-export const blockUser: FormAction = async (p, f) => userAction('block_user', 'p_target')(p, f);
+export const blockUser: FormAction = async (p, f) => {
+  const r = await userAction('block_user', 'p_target')(p, f);
+  // Their profile disappears for you once blocked, so leave the page.
+  if (r.ok) redirect('/friends?blocked=1');
+  return r;
+};
 export const unblockUser: FormAction = async (p, f) => userAction('unblock_user', 'p_target')(p, f);
 
 // Invites -----------------------------------------------------------------------------------

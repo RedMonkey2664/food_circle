@@ -12,9 +12,17 @@ const items = [
   { href: '/me', label: copy.nav.me, Icon: PersonIcon },
 ] as const;
 
+/** Live nav: highlights the current section. Must sit inside <Suspense> (reads the URL). */
 export function BottomNav() {
-  const pathname = usePathname();
+  return <BottomNavView pathname={usePathname()} />;
+}
 
+/** Static nav for the prerendered shell (no active state until the URL is known). */
+export function BottomNavStatic() {
+  return <BottomNavView pathname={null} />;
+}
+
+function BottomNavView({ pathname }: { pathname: string | null }) {
   return (
     <nav
       aria-label="Main"
@@ -31,7 +39,10 @@ export function BottomNav() {
             <PlusIcon size={26} strokeWidth={2.5} />
           </Link>
         </li>
-        <NavItem {...items[1]} active={pathname.startsWith('/me')} />
+        <NavItem
+          {...items[1]}
+          active={!!pathname && (pathname.startsWith('/me') || pathname.startsWith('/u/'))}
+        />
       </ul>
     </nav>
   );
