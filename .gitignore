@@ -36,3 +36,6 @@ Thumbs.db
 desktop.ini
 *.log
 .idea/
+
+# personal design references (not part of the app)
+ui_designing/
