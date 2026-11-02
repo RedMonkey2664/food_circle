@@ -121,3 +121,12 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Dev seed (`supabase/seed.sql`): 8 fake `@example.test` users covering friend / follower / pending follower / private / stranger / blocked / not-onboarded, 5 dev places, 12 visits across every visibility. Local test password lives in the seed file; `/dev/login` signs in as a seed user and 404s unless running `next dev` against a localhost Supabase.
 - After `pnpm db:reset`, run `pnpm seed:osm` again (it uses the cached OSM download).
 - OneDrive keeps serving stale modules to `next dev`; restarting the dev server fixes it. Strongly recommend moving the repo out of OneDrive.
+
+### P1-02..P1-05 backend (2026-11-03)
+- Social graph RPCs: request_friend (crossing requests auto-accept), respond_friend, cancel_friend_request, remove_friend (also drops group memberships that depended on the friendship), create_invite / revoke_invite / get_invite_preview / redeem_invite, follow_user / unfollow_user / respond_follow / remove_follower, block_user / unblock_user, report_content, admin_resolve_report (audited).
+- Follow status (pending for private accounts) is set inside follow_user instead of a `set_follow_status` trigger (DATABASE.md §8): follow_user is the only client write path, and a trigger would override explicit statuses in seeds/admin tooling. Going public auto-accepts pending follow requests.
+- block_user also removes mutes and companion tags between the two people.
+- Daily limits per IST day: 30 friend requests, 100 follows, 10 invites, 20 reports, 20 invite redemptions.
+- Invite codes: 18 random bytes -> 24 url-safe chars. Group invites are rejected until Phase 3.
+- Reports now go only through report_content (direct insert grant revoked) so the rate limit can't be bypassed.
+- pgTAP: 121 assertions across 9 files.

@@ -650,21 +650,75 @@ isOneToOne: false
             "admin_refresh_place_areas":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
+"admin_resolve_report":
+{ Args: { "p_note"?: string,"p_report": string,"p_status": Database["public"]['Enums']["report_status"] }; Returns: undefined
+                           },
+"block_user":
+{ Args: { "p_target": string }; Returns: undefined
+                           },
+"cancel_friend_request":
+{ Args: { "p_other": string }; Returns: undefined
+                           },
 "complete_onboarding":
 { Args: { "p_default_visibility": Database["public"]['Enums']["visibility"],"p_diet_prefs": (string)[],"p_display_name": string,"p_home_area": string,"p_is_private": boolean,"p_username": string }; Returns: undefined
+                           },
+"create_invite":
+{ Args: { "p_group"?: string,"p_kind"?: Database["public"]['Enums']["invite_kind"] }; Returns: {
+              "code": string,"expires_at": string,"id": string,"max_uses": number
+            }[]
                            },
 "find_place_candidates":
 { Args: { "p_lat": number,"p_lng": number,"p_name": string,"p_radius_m"?: number }; Returns: {
               "area_name": string,"distance_m": number,"id": string,"name": string,"name_similarity": number,"status": Database["public"]['Enums']["place_status"]
             }[]
                            },
+"follow_user":
+{ Args: { "p_target": string }; Returns: string
+                           },
+"get_invite_preview":
+{ Args: { "p_code": string }; Returns: {
+              "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string
+            }[]
+                           },
 "normalize_name":
 { Args: { "n": string }; Returns: string
+                           },
+"redeem_invite":
+{ Args: { "p_code": string }; Returns: {
+              "inviter": string,"kind": Database["public"]['Enums']["invite_kind"]
+            }[]
+                           },
+"remove_follower":
+{ Args: { "p_follower": string }; Returns: undefined
+                           },
+"remove_friend":
+{ Args: { "p_other": string }; Returns: undefined
+                           },
+"report_content":
+{ Args: { "p_id": string,"p_reason": string,"p_type": Database["public"]['Enums']["report_target"] }; Returns: string
+                           },
+"request_friend":
+{ Args: { "p_target": string }; Returns: string
+                           },
+"respond_follow":
+{ Args: { "p_accept": boolean,"p_follower": string }; Returns: undefined
+                           },
+"respond_friend":
+{ Args: { "p_accept": boolean,"p_other": string }; Returns: undefined
+                           },
+"revoke_invite":
+{ Args: { "p_invite": string }; Returns: undefined
                            },
 "search_places":
 { Args: { "p_lat"?: number,"p_limit"?: number,"p_lng"?: number,"p_query": string }; Returns: {
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
             }[]
+                           },
+"unblock_user":
+{ Args: { "p_target": string }; Returns: undefined
+                           },
+"unfollow_user":
+{ Args: { "p_target": string }; Returns: undefined
                            },
 "username_available":
 { Args: { "p_username": string }; Returns: boolean
