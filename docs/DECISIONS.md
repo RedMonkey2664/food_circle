@@ -130,3 +130,8 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Invite codes: 18 random bytes -> 24 url-safe chars. Group invites are rejected until Phase 3.
 - Reports now go only through report_content (direct insert grant revoked) so the rate limit can't be bypassed.
 - pgTAP: 121 assertions across 9 files.
+
+### Hosted database bootstrap (2026-11-03)
+- Phase 0 migrations (13) applied to the hosted project through the dashboard SQL editor as one transaction (no DB password needed), and recorded in `supabase_migrations.schema_migrations` so `supabase db push` skips them. Supabase's editor also enabled RLS on that history table. Verified: 27 tables, 0 without RLS, signup trigger present, 12 badges.
+- Phase 1 migrations are NOT on the hosted project yet; they go up when Phase 1 is approved (via `supabase db push`, or the same SQL-editor route).
+- Hosted Google sign-in: Client ID in Supabase matches Google. The stored Client secret is wrong (Google only shows a secret once at creation). Fix = "Add secret" in Google, paste into Supabase (human; secrets are not typed by the agent).
