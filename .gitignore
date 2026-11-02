@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env files (never commit secrets)
+.env
+.env*.local
+.env.production
+
+# supabase local
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# raw data caches (OSM downloads)
+data/raw/
+
+# tests
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# vercel
+.vercel/
+
+# os / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.idea/
