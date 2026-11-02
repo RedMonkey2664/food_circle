@@ -20,17 +20,22 @@ function GoogleButton({ disabled = false }: { disabled?: boolean }) {
 async function LoginForm({ searchParams }: { searchParams: PageProps<'/login'>['searchParams'] }) {
   const params = await searchParams;
   const next = typeof params.next === 'string' ? params.next : '';
-  const hasError = typeof params.error === 'string';
+  const errorText =
+    params.error === 'provider'
+      ? copy.login.providerOff
+      : typeof params.error === 'string'
+        ? copy.login.error
+        : null;
 
   return (
     <form action={signInWithGoogle} className="space-y-3">
       <input type="hidden" name="next" value={next} />
-      {hasError ? (
+      {errorText ? (
         <p
           role="alert"
           className="bg-skip-soft text-skip rounded-[var(--radius-button)] px-3 py-2 text-sm"
         >
-          {copy.login.error}
+          {errorText}
         </p>
       ) : null}
       <GoogleButton />

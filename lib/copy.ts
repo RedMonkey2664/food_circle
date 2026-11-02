@@ -12,6 +12,7 @@ export const copy = {
     privacy:
       'We only use your name and photo from Google. You choose who sees each entry before you post it.',
     error: 'Sign-in did not finish. Please try again.',
+    providerOff: 'Google sign-in is not set up on this server yet. Please try again later.',
   },
   home: {
     title: 'Home',

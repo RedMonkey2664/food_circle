@@ -17,9 +17,29 @@ async function siteOrigin(): Promise<string> {
   return host ? `${proto}://${host}` : publicEnv().NEXT_PUBLIC_SITE_URL;
 }
 
+const authSettings = z.object({ external: z.object({ google: z.boolean() }) });
+
+/** Asks Supabase Auth whether the Google provider is switched on (public settings endpoint). */
+async function googleEnabled(): Promise<boolean> {
+  const env = publicEnv();
+  try {
+    const res = await fetch(`${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
+      headers: { apikey: env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY },
+      cache: 'no-store',
+    });
+    const parsed = authSettings.safeParse(await res.json());
+    return parsed.success && parsed.data.external.google;
+  } catch {
+    return true; // can't tell: let Supabase handle it rather than block sign-in
+  }
+}
+
 export async function signInWithGoogle(formData: FormData): Promise<void> {
   const parsed = signInInput.safeParse({ next: formData.get('next') ?? undefined });
   const next = safeNextPath(parsed.success ? parsed.data.next : undefined);
+
+  // Without this, a disabled provider sends the user to a raw JSON error page.
+  if (!(await googleEnabled())) redirect('/login?error=provider');
 
   const supabase = await createClient();
   const callback = new URL('/auth/callback', await siteOrigin());
