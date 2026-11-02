@@ -23,7 +23,7 @@ Cut order if behind: Phase 7 first, then voice/follow extras, then Phase 3. Neve
 
 Goal: an empty but deployed app with the correct skeleton and the full schema.
 
-- [ ] P0-01 (S) Init repo: Next.js App Router, TypeScript strict, Tailwind, pnpm, ESLint, Prettier, Vitest, Playwright. Add the scripts listed in CLAUDE.md. Add README.md with setup steps.
+- [x] P0-01 (S) Init repo: Next.js App Router, TypeScript strict, Tailwind, pnpm, ESLint, Prettier, Vitest, Playwright. Add the scripts listed in CLAUDE.md. Add README.md with setup steps.
 - [ ] P0-02 (S) `supabase init`; enable extensions postgis, pg_trgm, citext in the first migration.
 - [ ] P0-03 (L) Migrations per the "Migration order" list in DATABASE.md (tables, helper functions, place functions, scoring functions, triggers, badge rows). Create ALL tables now even though most UI comes later.
 - [ ] P0-04 (M) Row Level Security per SECURITY_PRIVACY.md on every table, plus helper functions (are_friends, is_following, is_blocked_between, can_view_visit).

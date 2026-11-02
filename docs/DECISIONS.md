@@ -42,3 +42,22 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Areas: fallback strategy (OSM place=suburb|neighbourhood centroids, nearest within 3 km). Polygons later if a licence-clean source is confirmed. Slugs listed here after load.
 - ODbL share-alike implications of mixing OSM and user places: human to verify before launch.
 - Map tile provider: not chosen; not needed until Phase 5.
+
+### P0-01 (2026-11-02)
+- Next.js 16.4 + React 19.3. Kept the template defaults `cacheComponents` and `partialPrefetching`: static shell + streamed per-user sections fit the slow-4G budget. Session reads must sit inside `<Suspense>`. Turn off if it fights Supabase SSR.
+- Next 16 renamed `middleware.ts` to `proxy.ts`; session refresh will live in `proxy.ts`.
+- `AGENTS.md` is written by `next dev` (points agents at version-matched docs in node_modules); committed so the tree stays clean.
+- `typecheck` runs `next typegen` first (needed for the global `PageProps`/`LayoutProps` types).
+- Supabase CLI pinned at v2.122 (v3 just released; staying on the well-documented major until there is a reason to move).
+- TS stricter than the template: `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch`. ESLint: `no-explicit-any`, `no-non-null-assertion` as errors.
+- Line endings: `.gitattributes` forces LF (SQL/shell scripts break with CRLF on Windows).
+
+### Dependencies added (P0-01)
+- `@supabase/supabase-js`, `@supabase/ssr`: the backend client and cookie-based auth for App Router (stack).
+- `zod`: input validation at every boundary (CLAUDE.md).
+- `server-only`: build-time guard that keeps server modules (service-role client) out of client bundles.
+- `vitest`, `@vitejs/plugin-react`, `vite-tsconfig-paths`: unit tests with the `@/` alias.
+- `@playwright/test`, `@axe-core/playwright`: mobile smoke tests and a11y checks (TESTING.md).
+- `prettier`, `prettier-plugin-tailwindcss`: consistent formatting and class order.
+- `supabase` (CLI): local stack, migrations, pgTAP, type generation.
+- `tsx`, `dotenv`: run TypeScript scripts (OSM seed) with `.env.local`.
