@@ -32,7 +32,7 @@ Goal: an empty but deployed app with the correct skeleton and the full schema.
 - [x] P0-07 (M) OSM seed script `pnpm seed:osm` per PLACES_DATA.md: Mumbai restaurants/cafes/etc into `places`, area boundaries or fallback into `areas`. Idempotent (safe to re-run). Attribution text in the app footer and map.
 - [x] P0-08 (S) `pnpm db:types`, typed Supabase clients in `lib/supabase` (browser, server, middleware, admin-for-scripts).
 - [x] P0-09 (M) pgTAP scaffold and first RLS tests (profiles, friendships). Vitest scaffold with one domain test.
-- [ ] P0-10 (S) `.env.example`, deploy web to Vercel and migrations to hosted Supabase. Provide the human exact steps for anything that needs their accounts.
+- [x] P0-10 (S) `.env.example`, deploy web to Vercel and migrations to hosted Supabase. Provide the human exact steps for anything that needs their accounts.
 - [x] P0-11 (S) docs/DECISIONS.md created with any assumptions so far.
 
 Done when:
