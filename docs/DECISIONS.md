@@ -161,3 +161,10 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Search: plain GET form, server-rendered results via search_places; "recently viewed" kept in localStorage only (never sent anywhere). "Can't find it?" says adding places is coming soon (Phase 5).
 - Log flow is a page (/log) styled as a sheet; tapping GO or SKIP saves immediately, ONLY FOR saves after the short text. The visibility line always says who can see it, using real friend/follower counts. Daily cap of 60 logs per IST day (trigger).
 - Measured locally: the save round trip is ~0.2 s; verdict-only logging is one tap after the sheet opens.
+
+### P1-09 scoring flags (2026-11-03)
+- recompute_visit_flags, refresh_user_scores, refresh_user_streak and an evaluate_badges stub, exactly as SCORING_BADGES.md, live in the private schema and run from the visits trigger (insert, delete, update of user/place/date/visibility). Existing visits were backfilled. `get_my_scores()` returns the caller's own cache. No score UI until Phase 6.
+- Week start uses ISO day-of-week arithmetic on the date (Monday) rather than date_trunc on a timestamptz, so the session time zone can never shift it.
+- Streak: a gap of exactly one missed week is forgiven and doesn't add length; it's "current" if the last active week is this week, last week, or the week before (grace).
+- Visits inserted in the same transaction share `logged_at` (now() is frozen), so their order falls back to id. Real logs are one per request; bulk imports should set increasing logged_at. Tests do this explicitly.
+- pgTAP scoring.test.sql covers repeats, daily cap 5 vs 6, chain cap 3 vs 4 and the next-month reset, backdating (yesterday vs two days ago), private visits (own score yes, shared score no), and delete -> recompute promoting the next place into the daily cap. Merge recompute is tested with the merge tool in Phase 5.

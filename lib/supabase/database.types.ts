@@ -680,6 +680,11 @@ isOneToOne: false
               "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string
             }[]
                            },
+"get_my_scores":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "period": Database["public"]['Enums']["score_period"],"period_start": string,"unique_areas": number,"unique_cuisines": number,"unique_places": number,"unique_places_shared": number
+            }[]
+                           },
 "get_place":
 { Args: { "p_place": string }; Returns: {
               "area_name": string,"area_slug": string,"brand_name": string,"cuisine_tags": (string)[],"diet_flags": (string)[],"id": string,"lat": number,"lng": number,"merged_into": string,"name": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"]

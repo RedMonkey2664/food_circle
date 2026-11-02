@@ -55,7 +55,7 @@ Goal: the whole product sentence works end to end, with relationship labels on e
 - [x] P1-06 (M) Place search over our own `places` table: trigram name match plus proximity bias if location is granted (optional). Recent searches stored locally. Google fallback exists behind env flag `GOOGLE_PLACES_ENABLED`, off by default.
 - [x] P1-07 (L) Place page per UI_UX.md: header (name, area, diet badges), TierSummary (Friends / Following / Everyone, separate counts), filter toggle, VerdictCards with RelationshipTag, Everyone tier collapsed, empty states with nudges, handoff button per PLACES_DATA.md.
 - [x] P1-08 (L) Log flow (bottom sheet): pick place, tap Go / Skip / Only for (with one short free-text for "only for"), visibility selector showing who can see it, save. Success state. Repeat visits allowed. Only the verdict is required.
-- [ ] P1-09 (M) Hook `recompute_visit_flags(user_id)` (SCORING_BADGES.md) to run after visit insert/delete so the flags are correct from day one. No score UI yet.
+- [x] P1-09 (M) Hook `recompute_visit_flags(user_id)` (SCORING_BADGES.md) to run after visit insert/delete so the flags are correct from day one. No score UI yet.
 - [ ] P1-10 (M) Home feed: tabs Friends and Following, cursor pagination, relationship tags, empty states that explain how to add friends.
 - [x] P1-11 (M) Profile pages (own and others): header, relationship buttons by state, recent verdicts (RLS-filtered), counts.
 - [ ] P1-12 (S) PWA manifest, icons, theme colour, install-friendly meta. No service worker yet.
