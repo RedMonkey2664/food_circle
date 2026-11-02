@@ -1,0 +1,2 @@
+-- Dev seed (P1-13): clearly fake users (@example.test) covering every relationship.
+-- Intentionally empty in Phase 0. NEVER run against production.
