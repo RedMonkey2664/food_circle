@@ -2,10 +2,14 @@
 begin;
 \ir _helpers.psql
 
-select plan(10);
+select plan(11);
 
 select is(normalize_name('Kyani & Co.'), 'kyani and co', 'normalize_name lowercases, expands &, strips punctuation');
 select is(normalize_name('  Britannia   &   Co. '), 'britannia and co', 'normalize_name collapses whitespace');
+
+-- Start from an empty places/areas set so seeded OSM data cannot affect results (rolled back).
+delete from places;
+delete from areas;
 
 insert into areas (slug, name, kind, centroid) values
   ('bandra-west', 'Bandra West', 'suburb', st_setsrid(st_makepoint(72.8347, 19.0596), 4326)),
@@ -22,6 +26,14 @@ select is((select area_id from places where name = 'Middle of Nowhere Dhaba'), n
   'points far from every area stay unassigned');
 select is((select search_text from places where name = 'Candies'), 'candies candies bandra',
   'search_text includes normalized aliases');
+
+-- a neighbourhood centroid closer than the suburb centroid must not win
+insert into areas (slug, name, kind, centroid) values
+  ('pali-village', 'Pali Village', 'neighbourhood', st_setsrid(st_makepoint(72.8262, 19.0662), 4326));
+insert into places (name, geom, source) values
+  ('Pali Cafe', st_setsrid(st_makepoint(72.8263, 19.0663), 4326)::geography, 'osm');
+select is((select a.slug from places p join areas a on a.id = p.area_id where p.name = 'Pali Cafe'), 'bandra-west',
+  'area resolution prefers the nearest suburb over a closer neighbourhood');
 
 select tests.create_user('searcher') as searcher \gset
 select tests.authenticate_as(:'searcher');

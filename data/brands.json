@@ -1,0 +1,20 @@
+[
+  { "slug": "starbucks", "name": "Starbucks", "match": ["starbucks", "tata starbucks"] },
+  { "slug": "mcdonalds", "name": "McDonald's", "match": ["mcdonalds"] },
+  { "slug": "dominos", "name": "Domino's Pizza", "match": ["dominos", "dominos pizza"] },
+  { "slug": "subway", "name": "Subway", "match": ["subway"] },
+  { "slug": "kfc", "name": "KFC", "match": ["kfc", "kentucky fried chicken"] },
+  { "slug": "pizza-hut", "name": "Pizza Hut", "match": ["pizza hut"] },
+  { "slug": "burger-king", "name": "Burger King", "match": ["burger king"] },
+  { "slug": "cafe-coffee-day", "name": "Cafe Coffee Day", "match": ["cafe coffee day", "ccd"] },
+  { "slug": "barista", "name": "Barista", "match": ["barista", "barista lavazza"] },
+  { "slug": "haldirams", "name": "Haldiram's", "match": ["haldirams"] },
+  { "slug": "theobroma", "name": "Theobroma", "match": ["theobroma"] },
+  { "slug": "social", "name": "Social", "match": ["social"] },
+  { "slug": "wow-momo", "name": "Wow! Momo", "match": ["wow momo"] },
+  { "slug": "baskin-robbins", "name": "Baskin Robbins", "match": ["baskin robbins"] },
+  { "slug": "naturals", "name": "Natural Ice Cream", "match": ["naturals", "natural ice cream", "naturals ice cream"] },
+  { "slug": "chaayos", "name": "Chaayos", "match": ["chaayos"] },
+  { "slug": "third-wave-coffee", "name": "Third Wave Coffee", "match": ["third wave coffee", "third wave coffee roasters"] },
+  { "slug": "blue-tokai", "name": "Blue Tokai", "match": ["blue tokai", "blue tokai coffee roasters"] }
+]

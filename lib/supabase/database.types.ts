@@ -647,7 +647,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "find_place_candidates":
+            "admin_refresh_place_areas":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"find_place_candidates":
 { Args: { "p_lat": number,"p_lng": number,"p_name": string,"p_radius_m"?: number }; Returns: {
               "area_name": string,"distance_m": number,"id": string,"name": string,"name_similarity": number,"status": Database["public"]['Enums']["place_status"]
             }[]
