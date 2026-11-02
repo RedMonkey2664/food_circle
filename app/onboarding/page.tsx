@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { requireUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
+import { safeNextPath } from '@/lib/domain/redirect';
 import { createClient } from '@/lib/supabase/server';
 import { OnboardingForm, type AreaGroup } from './OnboardingForm';
 
@@ -38,13 +39,20 @@ async function loadAreas(): Promise<AreaGroup[]> {
   return groups.filter((g) => g.areas.length > 0);
 }
 
-async function Onboarding() {
+async function Onboarding({
+  searchParams,
+}: {
+  searchParams: PageProps<'/onboarding'>['searchParams'];
+}) {
+  const { next } = await searchParams;
+  const nextPath = safeNextPath(typeof next === 'string' ? next : null);
   const user = await requireUser();
-  if (user.onboarded) redirect('/');
+  if (user.onboarded) redirect(nextPath);
   const areas = await loadAreas();
   const keepUsername = !user.username.startsWith('user_');
   return (
     <OnboardingForm
+      next={nextPath}
       areas={areas}
       initial={{
         username: keepUsername ? user.username : suggestUsername(user.displayName),
@@ -54,7 +62,7 @@ async function Onboarding() {
   );
 }
 
-export default function OnboardingPage() {
+export default function OnboardingPage(props: PageProps<'/onboarding'>) {
   return (
     <main className="mx-auto min-h-dvh max-w-[480px] px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-10">
       <p className="font-display text-primary text-xl font-semibold">{copy.app.name}</p>
@@ -68,7 +76,7 @@ export default function OnboardingPage() {
           </div>
         }
       >
-        <Onboarding />
+        <Onboarding searchParams={props.searchParams} />
       </Suspense>
     </main>
   );

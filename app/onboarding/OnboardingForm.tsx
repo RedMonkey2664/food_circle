@@ -16,7 +16,11 @@ import { DIET_PREFS, USERNAME_RE } from '@/lib/validation/onboarding';
 
 export type AreaGroup = { label: string; areas: Array<{ id: string; name: string }> };
 
-type Props = { areas: AreaGroup[]; initial: { username: string; displayName: string } };
+type Props = {
+  areas: AreaGroup[];
+  initial: { username: string; displayName: string };
+  next: string;
+};
 
 type Availability = 'idle' | 'checking' | 'available' | 'taken' | 'invalid';
 
@@ -53,7 +57,7 @@ function Field({
 const inputCls =
   'border-line bg-surface text-ink placeholder:text-muted min-h-12 w-full rounded-[var(--radius-button)] border-2 px-3 focus:border-primary focus:outline-none';
 
-export function OnboardingForm({ areas, initial }: Props) {
+export function OnboardingForm({ areas, initial, next }: Props) {
   const [state, formAction, pending] = useActionState<OnboardingState, FormData>(
     completeOnboarding,
     null,
@@ -103,6 +107,7 @@ export function OnboardingForm({ areas, initial }: Props) {
 
   return (
     <form action={formAction} className="mt-8 space-y-7" noValidate>
+      <input type="hidden" name="next" value={next} />
       <Field label="Username" hint="How friends find you." htmlFor={ids.username}>
         <div className={cn(inputCls, 'focus-within:border-primary flex items-center gap-1')}>
           <span className="text-muted" aria-hidden>

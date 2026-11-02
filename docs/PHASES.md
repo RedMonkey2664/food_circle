@@ -48,8 +48,8 @@ Done when:
 Goal: the whole product sentence works end to end, with relationship labels on every verdict.
 
 - [x] P1-01 (M) Onboarding: unique username (validation, availability check), display name, home area, diet preference (veg / jain / halal / egg / non-veg, multi-select), account privacy (default public), default entry visibility. Redirect incomplete profiles here.
-- [ ] P1-02 (L) Friend system: send request, accept, decline, cancel, unfriend. `/friends` with tabs Friends, Requests, Find (search by username). Notifications are in-app badges only for now.
-- [ ] P1-03 (M) Invite links: create, revoke, expire after 7 days, max 20 uses. `/invite/[code]` creates a friendship immediately (inviter pre-consented by creating the link). WhatsApp share via `wa.me` prefilled text with Web Share API fallback.
+- [x] P1-02 (L) Friend system: send request, accept, decline, cancel, unfriend. `/friends` with tabs Friends, Requests, Find (search by username). Notifications are in-app badges only for now.
+- [x] P1-03 (M) Invite links: create, revoke, expire after 7 days, max 20 uses. `/invite/[code]` creates a friendship immediately (inviter pre-consented by creating the link). WhatsApp share via `wa.me` prefilled text with Web Share API fallback.
 - [ ] P1-04 (M) Follow system: follow, unfollow, follow requests for private accounts, approve/reject, followers and following lists.
 - [ ] P1-05 (M) Block and report: block hides both directions everywhere; report a user or a visit with a reason; `/admin/reports` list behind an admin flag.
 - [ ] P1-06 (M) Place search over our own `places` table: trigram name match plus proximity bias if location is granted (optional). Recent searches stored locally. Google fallback exists behind env flag `GOOGLE_PLACES_ENABLED`, off by default.

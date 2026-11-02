@@ -1,21 +1,13 @@
 'use server';
 
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { safeNextPath } from '@/lib/domain/redirect';
 import { publicEnv } from '@/lib/env';
+import { siteOrigin } from '@/lib/site';
 import { createClient } from '@/lib/supabase/server';
 
 const signInInput = z.object({ next: z.string().max(512).optional() });
-
-async function siteOrigin(): Promise<string> {
-  // Prefer the request origin (works on Vercel previews); fall back to the configured URL.
-  const h = await headers();
-  const host = h.get('x-forwarded-host') ?? h.get('host');
-  const proto = h.get('x-forwarded-proto') ?? 'http';
-  return host ? `${proto}://${host}` : publicEnv().NEXT_PUBLIC_SITE_URL;
-}
 
 const authSettings = z.object({ external: z.object({ google: z.boolean() }) });
 

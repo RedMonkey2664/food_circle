@@ -136,3 +136,10 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Phase 1 migrations are NOT on the hosted project yet; they go up when Phase 1 is approved (via `supabase db push`, or the same SQL-editor route).
 - Hosted Google sign-in: Client ID in Supabase matches Google. The stored Client secret is wrong (Google only shows a secret once at creation). Fix = "Add secret" in Google, paste into Supabase (human; secrets are not typed by the agent).
 - 2026-11-03: Hosted Google sign-in fixed (new client secret). Owner signed in on the phase-0 preview URL and landed on the home screen: Phase 0 done-when (1) PASS. All Phase 0 checks now pass except (4), which is flagged (6/11 favourites).
+
+### P1-02, P1-03 UI (2026-11-03)
+- `/friends` with tabs Friends / Requests (count badge) / Find (search by name or username, onboarded profiles only, blocked people never appear via RLS). In-app badge only, no notifications (as specified).
+- Invite links: built from the request origin (works on localhost, previews, production), shared via Web Share sheet with a wa.me fallback, plus Copy. `/invite/[code]` is read-only on open; the friendship is created only by the "Add as friend" tap. Signed-out visitors are sent to sign in and onboarding with `next` preserved, so they land back on the invite.
+- Relationship buttons follow UI_UX §4.6. Friends show no buttons in lists; unfriend, block and report will live in the profile menu (P1-11).
+- Styled 404 page added. `/admin/reports` lists open reports for admins (is_admin set by hand) with Dismiss / Mark actioned (audited RPC).
+- Browser-verified locally: sam -> asha friend request, asha accepts; sam creates an invite, chitra opens it and becomes sam's friend.

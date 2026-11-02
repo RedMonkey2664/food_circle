@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
+import { safeNextPath } from '@/lib/domain/redirect';
 import { onboardingFromForm, onboardingInput, usernameSchema } from '@/lib/validation/onboarding';
 import { createClient } from '@/lib/supabase/server';
 
@@ -41,5 +42,6 @@ export async function completeOnboarding(
     p_default_visibility: v.defaultVisibility,
   });
   if (error) return { ok: false, ...fromDbError(error) };
-  redirect('/');
+  const next = formData.get('next');
+  redirect(safeNextPath(typeof next === 'string' ? next : null));
 }

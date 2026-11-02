@@ -15,16 +15,32 @@ const sizes: Record<Size, string> = {
   lg: 'min-h-13 px-5 text-lg',
 };
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: Variant;
-  size?: Size;
-  fullWidth?: boolean;
-};
+type StyleOptions = { variant?: Variant; size?: Size; fullWidth?: boolean; className?: string };
 
-export function Button({
+/** Button styling, usable on links too (<Link className={buttonClass(...)}>). */
+export function buttonClass({
   variant = 'primary',
   size = 'md',
   fullWidth = false,
+  className,
+}: StyleOptions = {}) {
+  return cn(
+    'inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] font-semibold',
+    'transition-[transform,background-color,border-color] duration-150 ease-[var(--ease-out)]',
+    'active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
+    variants[variant],
+    sizes[size],
+    fullWidth && 'w-full',
+    className,
+  );
+}
+
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & Omit<StyleOptions, 'className'>;
+
+export function Button({
+  variant,
+  size,
+  fullWidth,
   className,
   type = 'button',
   ...props
@@ -32,15 +48,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] font-semibold',
-        'transition-[transform,background-color,border-color] duration-150 ease-[var(--ease-out)]',
-        'active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
-        variants[variant],
-        sizes[size],
-        fullWidth && 'w-full',
-        className,
-      )}
+      className={buttonClass({ variant, size, fullWidth, className })}
       {...props}
     />
   );
