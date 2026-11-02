@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { RouteSettled } from '@/components/motion/RouteSettled';
 import { BottomNav, BottomNavStatic } from '@/components/nav/BottomNav';
 import { requireOnboardedUser } from '@/lib/auth';
 
@@ -28,6 +29,9 @@ export default function AppLayout({ children }: LayoutProps<'/'>) {
       </div>
       <Suspense fallback={<BottomNavStatic />}>
         <BottomNav />
+      </Suspense>
+      <Suspense fallback={null}>
+        <RouteSettled />
       </Suspense>
     </>
   );

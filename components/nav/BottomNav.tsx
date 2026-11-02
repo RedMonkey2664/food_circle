@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { CircleOpenLink } from '@/components/motion/CircleLink';
 import { HomeIcon, PersonIcon, PlusIcon } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
@@ -23,6 +24,8 @@ export function BottomNavStatic() {
 }
 
 function BottomNavView({ pathname }: { pathname: string | null }) {
+  // The log screen is a full-screen takeover with its own close button.
+  if (pathname?.startsWith('/log')) return null;
   return (
     <nav
       aria-label="Main"
@@ -31,13 +34,13 @@ function BottomNavView({ pathname }: { pathname: string | null }) {
       <ul className="mx-auto grid max-w-[480px] grid-cols-3 items-center px-4">
         <NavItem {...items[0]} active={pathname === '/'} />
         <li className="flex justify-center">
-          <Link
+          <CircleOpenLink
             href="/log"
             aria-label={copy.nav.log}
             className="bg-primary text-on-primary -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(194_65_12/0.6)] transition-transform duration-150 active:scale-[0.94]"
           >
             <PlusIcon size={26} strokeWidth={2.5} />
-          </Link>
+          </CircleOpenLink>
         </li>
         <NavItem
           {...items[1]}

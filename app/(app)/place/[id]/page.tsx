@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { DietBadges } from '@/components/place/DietBadges';
+import { CircleOpenLink } from '@/components/motion/CircleLink';
 import { RememberPlace } from '@/components/place/RecentPlaces';
 import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -233,7 +234,7 @@ async function PlaceContent({
       {/* Sticky primary action above the bottom nav. */}
       <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10">
         <div className="mx-auto max-w-[480px] px-4">
-          <Link
+          <CircleOpenLink
             href={`/log?place=${place.id}`}
             className={buttonClass({
               size: 'lg',
@@ -242,7 +243,7 @@ async function PlaceContent({
             })}
           >
             {t.ateHere}
-          </Link>
+          </CircleOpenLink>
         </div>
       </div>
       <div className="h-20" aria-hidden />

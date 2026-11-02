@@ -187,3 +187,11 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - NOT DONE: Playwright smoke tests (TESTING.md §4: auth, log-flow, tiers, friends, a11y) are not written yet, so `pnpm test:e2e` has nothing to run. Needs `playwright install chromium` (a ~150 MB browser download). Waiting on the human's go-ahead.
 - NOT DONE: real-phone check (Android Chrome + iPhone Safari) and Lighthouse numbers. Needs the human's devices / the hosted preview with Phase 1 migrations applied.
 - Phase 1 database changes are not on the hosted project yet; they go up when Phase 1 is approved.
+
+### Circle reveal transition (2026-11-03, requested by the human, outside the phase plan)
+- Recreated the reference video's transition (613.mp4): the next screen grows out of the tapped element as a circle (~0.27 s to cover in the reference; ours 520 ms with cubic-bezier(0.32, 0.72, 0, 1)), and closing shrinks it back into the same origin with an ease-in (340 ms). The 2x2 cards were left out, as the human asked for the transition only.
+- Built on the browser View Transitions API (document.startViewTransition) + CSS clip-path keyframes on ::view-transition-new/old(root). No dependency, nothing extra in the DOM, no layout shift; reduced motion and unsupported browsers navigate instantly.
+- Triggers: the + Log button and "I ate here". The log screen became a spice-orange full-screen takeover (editorial heading, the white sheet on top, dark x close top-right; bottom nav hidden), echoing the reference's red screen. "Done" after logging also closes with the circle back to the place.
+- Gotcha fixed: the "new route committed" signal must not use requestAnimationFrame. Rendering is suppressed while a view transition waits for its update callback, so rAF never fired and every reveal stalled until the 1.5 s safety timeout.
+- Edge cases verified on a production build: double-tap open (one transition), double-tap close (one), close mid-open (open skipped, close plays), reduced motion (no transition), same-URL navigation (no transition). Circle starts 9-21 ms after the tap; open finishes ~535 ms, close ~360 ms. No console errors.
+- Tuning lives in app/globals.css (--vt-open-duration, --vt-open-ease, --vt-close-duration, --vt-close-ease).

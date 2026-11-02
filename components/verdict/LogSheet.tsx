@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useTransition } from 'react';
+import { CircleCloseLink } from '@/components/motion/CircleLink';
 import { buttonClass } from '@/components/ui/Button';
 import { logVisit } from '@/lib/actions/visits';
 import { copy } from '@/lib/copy';
@@ -50,9 +51,9 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
         </p>
         <p className="text-muted mt-1 text-sm">{t.moreLater}</p>
         <div className="mt-5 grid grid-cols-2 gap-2">
-          <Link href={`/place/${place.id}`} className={buttonClass()}>
+          <CircleCloseLink href={`/place/${place.id}`} className={buttonClass()}>
             {t.done}
-          </Link>
+          </CircleCloseLink>
           <Link href="/log" className={buttonClass({ variant: 'secondary' })}>
             {t.logAnother}
           </Link>
@@ -75,7 +76,6 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
           {t.change}
         </Link>
       </div>
-      <p className="font-display text-lg">{t.prompt}</p>
       <VerdictButtons onSelect={save} disabled={pending} />
       <VisibilityPicker
         value={visibility}

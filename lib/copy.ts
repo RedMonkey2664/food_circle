@@ -153,7 +153,9 @@ export const copy = {
   },
   log: {
     title: 'Log a place',
+    pickTitle: 'Where did you eat?',
     prompt: 'Aap-ne kaisa paaya?',
+    close: 'Close',
     change: 'Change',
     visibleTo: 'Visible to:',
     edit: 'Edit',

@@ -101,3 +101,11 @@ export function GoogleIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}

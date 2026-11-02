@@ -119,3 +119,63 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+  Circle reveal (lib/motion/circle-transition.ts). The browser snapshots the old screen;
+  we clip the snapshots with a circle centred on the tapped element (--vt-x, --vt-y).
+  Reference timing: the circle covers the screen in ~0.3 s, very fast then settling (open),
+  and shrinks back into its origin a little quicker with an ease-in (close).
+  Tune here: durations and easings.
+*/
+:root {
+  --vt-open-duration: 520ms;
+  --vt-open-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --vt-close-duration: 340ms;
+  --vt-close-ease: cubic-bezier(0.55, 0, 0.75, 0.25);
+}
+
+html[data-vt]::view-transition-old(root),
+html[data-vt]::view-transition-new(root) {
+  /* default crossfade blends the two snapshots; we want a hard circular edge instead */
+  mix-blend-mode: normal;
+}
+
+html[data-vt='open']::view-transition-old(root) {
+  animation: none;
+}
+html[data-vt='open']::view-transition-new(root) {
+  animation: vt-circle-grow var(--vt-open-duration) var(--vt-open-ease) both;
+}
+
+html[data-vt='close']::view-transition-new(root) {
+  animation: none;
+}
+html[data-vt='close']::view-transition-old(root) {
+  z-index: 1;
+  animation: vt-circle-shrink var(--vt-close-duration) var(--vt-close-ease) both;
+}
+
+@keyframes vt-circle-grow {
+  from {
+    clip-path: circle(0 at var(--vt-x) var(--vt-y));
+  }
+  to {
+    clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+  }
+}
+
+@keyframes vt-circle-shrink {
+  from {
+    clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+  }
+  to {
+    clip-path: circle(0 at var(--vt-x) var(--vt-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-vt]::view-transition-old(root),
+  html[data-vt]::view-transition-new(root) {
+    animation: none !important;
+  }
+}
