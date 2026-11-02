@@ -151,3 +151,13 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Blocking redirects to /friends with a note (their profile disappears for you). Mute (optional in Phase 1) is not built; table and RLS exist.
 - DEFERRED: an "unblock" UI. Blocked profiles are hidden from the blocker by RLS, so a blocked-people list needs a small RPC; planned with a Settings page.
 - Bottom nav sits in <Suspense> with a static fallback (it reads the URL; Cache Components requires this on dynamic routes).
+
+### P1-06, P1-07, P1-08 (2026-11-03)
+- RPCs get_place (follows merged_into), get_place_summary and get_place_verdicts share one internal function (latest visible visit per author) so the counts and the list can never disagree. Tiers: 0 you, 1 friends, 2 following, 3 everyone. The domain module deliberately has no function that adds tiers together (unit-tested).
+- "Latest" visit per author = latest visited_on, then logged_at, everywhere. A private or otherwise invisible newer visit never replaces a visible older one for that viewer.
+- get_place_verdicts returns up to 200 rows (no cursor yet); the Everyone tier is collapsed behind "Show N more". Cursor pagination can come when a place has hundreds of verdicts.
+- Place page: summary always shows all three tiers; the filter toggle (default Friends + Following) only changes the list. Sticky "I ate here" opens /log?place=…
+- Swiggy/Zomato handoff: rules + link builder in lib/handoff.ts with tests; templates are null until the human verifies real link formats, so the buttons never render yet.
+- Search: plain GET form, server-rendered results via search_places; "recently viewed" kept in localStorage only (never sent anywhere). "Can't find it?" says adding places is coming soon (Phase 5).
+- Log flow is a page (/log) styled as a sheet; tapping GO or SKIP saves immediately, ONLY FOR saves after the short text. The visibility line always says who can see it, using real friend/follower counts. Daily cap of 60 logs per IST day (trigger).
+- Measured locally: the save round trip is ~0.2 s; verdict-only logging is one tap after the sheet opens.

@@ -19,6 +19,9 @@ export default function HomePage() {
       <header className="flex items-center justify-between py-2">
         <h1 className="font-display text-primary text-2xl font-semibold">{copy.app.name}</h1>
         <div className="flex items-center gap-1">
+          <Link href="/search" className={buttonClass({ variant: 'ghost', className: 'text-sm' })}>
+            {copy.nav.search}
+          </Link>
           <Link href="/friends" className={buttonClass({ variant: 'ghost', className: 'text-sm' })}>
             {copy.friends.title}
           </Link>

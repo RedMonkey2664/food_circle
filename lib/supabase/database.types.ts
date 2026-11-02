@@ -680,6 +680,21 @@ isOneToOne: false
               "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string
             }[]
                            },
+"get_place":
+{ Args: { "p_place": string }; Returns: {
+              "area_name": string,"area_slug": string,"brand_name": string,"cuisine_tags": (string)[],"diet_flags": (string)[],"id": string,"lat": number,"lng": number,"merged_into": string,"name": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"]
+            }[]
+                           },
+"get_place_summary":
+{ Args: { "p_place": string }; Returns: {
+              "go_count": number,"only_for_count": number,"skip_count": number,"tier": number,"went": number
+            }[]
+                           },
+"get_place_verdicts":
+{ Args: { "p_limit"?: number,"p_place": string,"p_tier_filter"?: string }; Returns: {
+              "author_id": string,"avatar_url": string,"display_name": string,"group_name": string,"logged_at": string,"only_for_text": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
+            }[]
+                           },
 "get_profile_stats":
 { Args: { "p_user": string }; Returns: {
               "followers": number,"following": number,"friends": number,"places_visible": number,"visits_visible": number

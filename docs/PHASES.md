@@ -52,9 +52,9 @@ Goal: the whole product sentence works end to end, with relationship labels on e
 - [x] P1-03 (M) Invite links: create, revoke, expire after 7 days, max 20 uses. `/invite/[code]` creates a friendship immediately (inviter pre-consented by creating the link). WhatsApp share via `wa.me` prefilled text with Web Share API fallback.
 - [x] P1-04 (M) Follow system: follow, unfollow, follow requests for private accounts, approve/reject, followers and following lists.
 - [x] P1-05 (M) Block and report: block hides both directions everywhere; report a user or a visit with a reason; `/admin/reports` list behind an admin flag.
-- [ ] P1-06 (M) Place search over our own `places` table: trigram name match plus proximity bias if location is granted (optional). Recent searches stored locally. Google fallback exists behind env flag `GOOGLE_PLACES_ENABLED`, off by default.
-- [ ] P1-07 (L) Place page per UI_UX.md: header (name, area, diet badges), TierSummary (Friends / Following / Everyone, separate counts), filter toggle, VerdictCards with RelationshipTag, Everyone tier collapsed, empty states with nudges, handoff button per PLACES_DATA.md.
-- [ ] P1-08 (L) Log flow (bottom sheet): pick place, tap Go / Skip / Only for (with one short free-text for "only for"), visibility selector showing who can see it, save. Success state. Repeat visits allowed. Only the verdict is required.
+- [x] P1-06 (M) Place search over our own `places` table: trigram name match plus proximity bias if location is granted (optional). Recent searches stored locally. Google fallback exists behind env flag `GOOGLE_PLACES_ENABLED`, off by default.
+- [x] P1-07 (L) Place page per UI_UX.md: header (name, area, diet badges), TierSummary (Friends / Following / Everyone, separate counts), filter toggle, VerdictCards with RelationshipTag, Everyone tier collapsed, empty states with nudges, handoff button per PLACES_DATA.md.
+- [x] P1-08 (L) Log flow (bottom sheet): pick place, tap Go / Skip / Only for (with one short free-text for "only for"), visibility selector showing who can see it, save. Success state. Repeat visits allowed. Only the verdict is required.
 - [ ] P1-09 (M) Hook `recompute_visit_flags(user_id)` (SCORING_BADGES.md) to run after visit insert/delete so the flags are correct from day one. No score UI yet.
 - [ ] P1-10 (M) Home feed: tabs Friends and Following, cursor pagination, relationship tags, empty states that explain how to add friends.
 - [x] P1-11 (M) Profile pages (own and others): header, relationship buttons by state, recent verdicts (RLS-filtered), counts.
