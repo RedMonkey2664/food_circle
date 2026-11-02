@@ -195,3 +195,11 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Gotcha fixed: the "new route committed" signal must not use requestAnimationFrame. Rendering is suppressed while a view transition waits for its update callback, so rAF never fired and every reveal stalled until the 1.5 s safety timeout.
 - Edge cases verified on a production build: double-tap open (one transition), double-tap close (one), close mid-open (open skipped, close plays), reduced motion (no transition), same-URL navigation (no transition). Circle starts 9-21 ms after the tap; open finishes ~535 ms, close ~360 ms. No console errors.
 - Tuning lives in app/globals.css (--vt-open-duration, --vt-open-ease, --vt-close-duration, --vt-close-ease).
+
+### Phase 1 approved and deployed (2026-11-03)
+- Human approved Phase 1. main fast-forwarded to phase-1-core-loop; Vercel production: https://food-circle-xi.vercel.app
+- Hosted DB: the 7 Phase 1 migrations applied through the SQL editor in one transaction and recorded in supabase_migrations (20 total). Verified 0 functions executable by anon.
+- Hosted places: new `pnpm seed:osm:sql <file>` writes the cached OSM seed as idempotent SQL (same mapping as seed:osm; existing places keep location/area/status), so a hosted DB can be seeded through the SQL editor without the secret key. Hosted now has 2185 places (2182 with an area) and 684 areas, matching local.
+- Gotcha: copying a UTF-8 file to the Windows clipboard needs `Get-Content -Raw -Encoding UTF8`; without it Devanagari names became mojibake and the first seed run failed (rolled back). The earlier migration bundles had non-ASCII only in comments, so the applied SQL was unaffected.
+- Supabase Auth: Site URL is now the production URL; redirect allowlist = production, all food-circle previews, localhost.
+- Repo hygiene: `ui_designing/` (personal reference images, some third-party) was accidentally committed in 3095b6d via `git add -A`; it is now untracked and gitignored. It remains in public git history until the human decides whether to rewrite history. Agent now stages explicit paths only.

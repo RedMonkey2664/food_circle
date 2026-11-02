@@ -18,7 +18,8 @@
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --local --schema public > lib/supabase/database.types.ts",
-    "seed:osm": "tsx scripts/seed-osm.ts"
+    "seed:osm": "tsx scripts/seed-osm.ts",
+    "seed:osm:sql": "tsx scripts/osm-to-sql.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
