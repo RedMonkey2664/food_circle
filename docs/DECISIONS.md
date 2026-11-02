@@ -179,3 +179,11 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - PWA: app/manifest.ts (standalone, portrait, en-IN, cream theme), icons generated at build time by next/og from one mark in lib/icon.tsx (cream ring + dot on spice orange): /icon/32, /icon/192, /icon/512, /icon/maskable, /apple-icon. No binary icons in the repo, no service worker (Phase 7). Proxy skips icon routes so signed-out visitors and installers can fetch them. The default Next favicon was removed.
 - P1-14 matrix: rls_visits_matrix (every visibility x self / friend / accepted follower / pending follower / stranger / blocked / anon, plus private account), rls_groups_places (audience groups), rpc_summary_feed and rpc_home_feed (RPCs respect the same rules), rpc_profile_stats, rls_meta (RLS on every table, no anon table or function access). 163 pgTAP assertions.
 - Production build: every app route is partially prerendered; secret key absent from client bundles.
+
+### Phase 1 close-out (2026-11-03)
+- Done-when steps 1-5 are automated in supabase/tests/done_when_phase1.test.sql (three fresh users A, B, C; invite link, follows, three visits, tier labels, private/followers visibility, block). 14/14 pass.
+- Step 5b (new user, zero friends): browser-verified with the not-onboarded seed user: onboarding -> search -> place page with Everyone counts and an "Add friends" nudge in ~40 s including tool overhead. Added a "See everyone" button to that nudge, and the Everyone tier opens automatically when it is the only content under the Everyone filter.
+- Step 6 (verdict-only log under 10 s): one tap after the sheet opens; save round trip ~0.2 s locally.
+- NOT DONE: Playwright smoke tests (TESTING.md §4: auth, log-flow, tiers, friends, a11y) are not written yet, so `pnpm test:e2e` has nothing to run. Needs `playwright install chromium` (a ~150 MB browser download). Waiting on the human's go-ahead.
+- NOT DONE: real-phone check (Android Chrome + iPhone Safari) and Lighthouse numbers. Needs the human's devices / the hosted preview with Phase 1 migrations applied.
+- Phase 1 database changes are not on the hosted project yet; they go up when Phase 1 is approved.

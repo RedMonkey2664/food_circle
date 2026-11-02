@@ -154,7 +154,10 @@ async function PlaceContent({
         <Section title={TIER_SUMMARY_HEADING.friend} items={friends} />
         <Section title={TIER_SUMMARY_HEADING.following} items={following} />
         {everyone.length > 0 ? (
-          <details className="group">
+          <details
+            className="group"
+            open={filter === 'everyone' && friends.length + following.length === 0}
+          >
             <summary
               className={buttonClass({
                 variant: 'ghost',
@@ -192,9 +195,19 @@ async function PlaceContent({
               title={t.noFriendsTitle}
               body={t.noFriendsBody}
               action={
-                <Link href="/friends?tab=find" className={buttonClass()}>
-                  {copy.home.findFriends}
-                </Link>
+                <div className="flex flex-wrap gap-2">
+                  <Link href="/friends?tab=find" className={buttonClass()}>
+                    {copy.home.findFriends}
+                  </Link>
+                  {filter !== 'everyone' && summary.tiers.public ? (
+                    <Link
+                      href={`/place/${place.id}?filter=everyone`}
+                      className={buttonClass({ variant: 'secondary' })}
+                    >
+                      {t.seeEveryone}
+                    </Link>
+                  ) : null}
+                </div>
               }
             />
           )
