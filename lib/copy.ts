@@ -22,11 +22,20 @@ export const copy = {
   },
   home: {
     title: 'Home',
+    feedLabel: 'Feed',
+    tabs: { friends: 'Friends', following: 'Following' },
     emptyTitle: "Your friends' picks will show up here.",
-    emptyBody: 'Add friends or follow people to see where they eat. The feed arrives soon.',
+    emptyFriendsBody: 'Add friends to see where they eat, or log your first place.',
+    emptyFollowingTitle: 'Nobody you follow has posted yet.',
+    emptyFollowingBody:
+      'Follow people whose taste you like. Their public and followers-only picks show up here.',
     findFriends: 'Find friends',
+    findPeople: 'Find people to follow',
+    logFirst: 'Log your first place',
+    older: 'Show older',
     signedInAs: (name: string) => `Signed in as ${name}`,
   },
+
   nav: {
     home: 'Home',
     search: 'Search',

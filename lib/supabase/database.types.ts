@@ -675,6 +675,11 @@ isOneToOne: false
 "follow_user":
 { Args: { "p_target": string }; Returns: string
                            },
+"get_home_feed":
+{ Args: { "p_cursor_id"?: string,"p_cursor_ts"?: string,"p_limit"?: number,"p_tab": string }; Returns: {
+              "area_name": string,"author_id": string,"avatar_url": string,"display_name": string,"logged_at": string,"only_for_text": string,"place_id": string,"place_name": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
+            }[]
+                           },
 "get_invite_preview":
 { Args: { "p_code": string }; Returns: {
               "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string

@@ -168,3 +168,9 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Streak: a gap of exactly one missed week is forgiven and doesn't add length; it's "current" if the last active week is this week, last week, or the week before (grace).
 - Visits inserted in the same transaction share `logged_at` (now() is frozen), so their order falls back to id. Real logs are one per request; bulk imports should set increasing logged_at. Tests do this explicitly.
 - pgTAP scoring.test.sql covers repeats, daily cap 5 vs 6, chain cap 3 vs 4 and the next-month reset, backdating (yesterday vs two days ago), private visits (own score yes, shared score no), and delete -> recompute promoting the next place into the daily cap. Merge recompute is tested with the merge tool in Phase 5.
+
+### P1-10 feed + function privilege fix (2026-11-03)
+- get_home_feed(tab, limit, cursor_ts, cursor_id): Friends tab = accepted friends; Following tab = people you follow who are NOT friends (tiers are disjoint, FRIEND wins). Starts from the author list (fast), applies can_view_visit, excludes muted people, cursor on (logged_at, id). The page shows 20 and a "Show older" link with an opaque cursor.
+- SECURITY FIX: every RPC added after 0012 was executable by `anon`, because `alter default privileges IN SCHEMA` cannot revoke PostgreSQL's global "EXECUTE to PUBLIC" default. No data leaked (every RPC checks auth.uid()), but the grant layer is now fixed for real (global default revoked, existing functions swept) and a pgTAP meta test fails if any public/private function is ever executable by anon again.
+- Dev seed now spreads logged_at by visit date and recomputes flags (one INSERT statement otherwise gives all rows the same logged_at).
+- Sign out moved to your own profile page (home header now: Search, Friends).

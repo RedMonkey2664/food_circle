@@ -106,3 +106,16 @@ insert into public.visits (user_id, place_id, verdict, only_for_text, visibility
   ('00000000-0000-4000-a000-00000000000f', '00000000-0000-4000-b000-000000000003', 'only_for', 'the chutney','public',    current_date - 2),
   -- zoya (blocked by asha)
   ('00000000-0000-4000-a000-000000000010', '00000000-0000-4000-b000-000000000001', 'skip',     null,         'public',    current_date - 1);
+
+-- Realistic logged_at: one statement gives every row the same now(), so spread them out by
+-- visit date (around lunchtime IST), then recompute scoring flags for the seed users.
+update public.visits
+   set logged_at = ((visited_on::timestamp + interval '13 hours') at time zone 'Asia/Kolkata')
+                   + (random() * interval '2 hours');
+do $$
+declare u uuid;
+begin
+  for u in select distinct user_id from public.visits loop
+    perform private.recompute_visit_flags(u);
+  end loop;
+end $$;

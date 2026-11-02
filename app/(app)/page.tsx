@@ -1,19 +1,98 @@
-import { Suspense } from 'react';
 import Link from 'next/link';
-import { Button, buttonClass } from '@/components/ui/Button';
+import { Suspense } from 'react';
+import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Footer } from '@/components/ui/Footer';
-import { requireUser } from '@/lib/auth';
-import { signOut } from '@/lib/actions/auth';
+import { VerdictCard } from '@/components/verdict/VerdictCard';
+import { requireOnboardedUser } from '@/lib/auth';
+import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
+import { homeFeed, type FeedTab } from '@/lib/data/feed';
 
-async function Greeting() {
-  const user = await requireUser();
-  return <p className="text-muted text-sm">{copy.home.signedInAs(user.displayName)}</p>;
+const TABS: FeedTab[] = ['friends', 'following'];
+
+function Tabs({ active }: { active: FeedTab }) {
+  return (
+    <nav aria-label={copy.home.feedLabel} className="border-line grid grid-cols-2 border-b">
+      {TABS.map((t) => (
+        <Link
+          key={t}
+          href={t === 'friends' ? '/' : '/?tab=following'}
+          aria-current={active === t ? 'page' : undefined}
+          className={cn(
+            'flex min-h-11 items-center justify-center border-b-2 font-medium',
+            active === t ? 'border-primary text-primary' : 'text-muted border-transparent',
+          )}
+        >
+          {copy.home.tabs[t]}
+        </Link>
+      ))}
+    </nav>
+  );
 }
 
-// Phase 0: an empty home screen. The Friends / Following feed arrives in Phase 1.
-export default function HomePage() {
+async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchParams'] }) {
+  const sp = await searchParams;
+  const tab: FeedTab = sp.tab === 'following' ? 'following' : 'friends';
+  const cursor = typeof sp.cursor === 'string' ? sp.cursor : undefined;
+  await requireOnboardedUser();
+  const page = await homeFeed(tab, cursor);
+  const t = copy.home;
+
+  return (
+    <>
+      <Tabs active={tab} />
+      {page.items.length === 0 && !cursor ? (
+        <div className="mt-6">
+          {tab === 'friends' ? (
+            <EmptyState
+              title={t.emptyTitle}
+              body={t.emptyFriendsBody}
+              action={
+                <div className="flex flex-wrap gap-2">
+                  <Link href="/friends?tab=find" className={buttonClass()}>
+                    {t.findFriends}
+                  </Link>
+                  <Link href="/log" className={buttonClass({ variant: 'secondary' })}>
+                    {t.logFirst}
+                  </Link>
+                </div>
+              }
+            />
+          ) : (
+            <EmptyState
+              title={t.emptyFollowingTitle}
+              body={t.emptyFollowingBody}
+              action={
+                <Link href="/friends?tab=find" className={buttonClass()}>
+                  {t.findPeople}
+                </Link>
+              }
+            />
+          )}
+        </div>
+      ) : (
+        <ul className="mt-4 space-y-2">
+          {page.items.map((item) => (
+            <li key={item.visitId}>
+              <VerdictCard data={item} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {page.nextCursor ? (
+        <Link
+          href={`/?${new URLSearchParams({ ...(tab === 'following' ? { tab } : {}), cursor: page.nextCursor })}`}
+          className={buttonClass({ variant: 'ghost', fullWidth: true, className: 'mt-4' })}
+        >
+          {t.older}
+        </Link>
+      ) : null}
+    </>
+  );
+}
+
+export default function HomePage(props: PageProps<'/'>) {
   return (
     <main>
       <header className="flex items-center justify-between py-2">
@@ -25,29 +104,19 @@ export default function HomePage() {
           <Link href="/friends" className={buttonClass({ variant: 'ghost', className: 'text-sm' })}>
             {copy.friends.title}
           </Link>
-          <form action={signOut}>
-            <Button type="submit" variant="ghost" className="text-muted text-sm">
-              {copy.auth.signOut}
-            </Button>
-          </form>
         </div>
       </header>
-      <Suspense fallback={<p className="h-5" />}>
-        <Greeting />
+      <Suspense
+        fallback={
+          <div aria-busy="true" className="mt-4 space-y-2">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="bg-line/60 h-24 animate-pulse rounded-[var(--radius-card)]" />
+            ))}
+          </div>
+        }
+      >
+        <Feed searchParams={props.searchParams} />
       </Suspense>
-
-      <div className="mt-6">
-        <EmptyState
-          title={copy.home.emptyTitle}
-          body={copy.home.emptyBody}
-          action={
-            <Link href="/friends?tab=find" className={buttonClass()}>
-              {copy.home.findFriends}
-            </Link>
-          }
-        />
-      </div>
-
       <Footer className="mt-10" />
     </main>
   );
