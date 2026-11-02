@@ -106,3 +106,9 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Google Cloud project "Food Circle" (food-circle-513514) on billing account "CloudSpace". Only the Google Auth Platform is used (no paid APIs). Budget "Food Circle zero spend": Rs 10/month, email alerts at 10% / 90% / 100%. Consent screen External, Testing mode, test user = owner. OAuth web client redirect URIs: hosted Supabase callback + local 127.0.0.1:54321 callback.
 - Google Cloud identity verification for the billing account is due by 2026-12-24 (human to complete).
 - Vercel project `food-circle` (Hobby). Production branch `main` (docs only until Phase 0 is approved and merged); Phase 0 is tested on the `phase-0-foundations` preview deployment.
+
+### Phase 0 close-out (2026-11-02)
+- Done-when: (2) pass, 220 places in bandra-west locally; (3) pass, lint/typecheck/test/db:test green; (4) flagged, 6/11 favourites found; (1) DEFERRED: hosted Google sign-in fails with "Unable to exchange external code" (likely client secret mismatch or Google propagation) and hosted migrations are not pushed yet (needs the human's DB password). P0-10 stays unticked.
+- Human asked to continue building; Phase 1 starts on branch `phase-1-core-loop`, branched from `phase-0-foundations` (Phase 0 not merged to main yet).
+- Pin-drop stays in Phase 5 (no decision to move it yet).
+- P1-13 (dev seed) is done early: local testing needs signed-in users and Google sign-in is hosted-only. A localhost-only dev sign-in uses seed users' test passwords (never available in production).
