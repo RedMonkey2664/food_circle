@@ -8,6 +8,7 @@ select is(normalize_name('Kyani & Co.'), 'kyani and co', 'normalize_name lowerca
 select is(normalize_name('  Britannia   &   Co. '), 'britannia and co', 'normalize_name collapses whitespace');
 
 -- Start from an empty places/areas set so seeded OSM data cannot affect results (rolled back).
+delete from visits;
 delete from places;
 delete from areas;
 

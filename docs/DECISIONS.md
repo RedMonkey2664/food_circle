@@ -112,3 +112,12 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Human asked to continue building; Phase 1 starts on branch `phase-1-core-loop`, branched from `phase-0-foundations` (Phase 0 not merged to main yet).
 - Pin-drop stays in Phase 5 (no decision to move it yet).
 - P1-13 (dev seed) is done early: local testing needs signed-in users and Google sign-in is hosted-only. A localhost-only dev sign-in uses seed users' test passwords (never available in production).
+
+### P1-01, P1-13 (2026-11-03)
+- Onboarding completes through RPC `complete_onboarding` (the only writer of `onboarded_at`). `username_available` is a cheap existence check for the live field. Reserved names (admin, settings, route names, the `user_` placeholder prefix) are refused.
+- Private accounts cannot pick Public as their default (also enforced in the RPC). Switching account type resets the default to that type's default unless "Only me" was chosen.
+- `(app)` layout now requires a completed onboarding (`requireOnboardedUser`); `/onboarding` lives outside `(app)` (no bottom nav).
+- `lib/supabase/server.ts` calls `await connection()` before creating the client: Cache Components otherwise flags the Supabase client reading `Date.now()` during prerender.
+- Dev seed (`supabase/seed.sql`): 8 fake `@example.test` users covering friend / follower / pending follower / private / stranger / blocked / not-onboarded, 5 dev places, 12 visits across every visibility. Local test password lives in the seed file; `/dev/login` signs in as a seed user and 404s unless running `next dev` against a localhost Supabase.
+- After `pnpm db:reset`, run `pnpm seed:osm` again (it uses the cached OSM download).
+- OneDrive keeps serving stale modules to `next dev`; restarting the dev server fixes it. Strongly recommend moving the repo out of OneDrive.

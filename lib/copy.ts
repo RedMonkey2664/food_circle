@@ -14,6 +14,12 @@ export const copy = {
     error: 'Sign-in did not finish. Please try again.',
     providerOff: 'Google sign-in is not set up on this server yet. Please try again later.',
   },
+  onboarding: {
+    title: 'Set up your profile',
+    intro: 'Takes a minute. Only your username and name are required.',
+    submit: "Let's eat",
+    saving: 'Saving…',
+  },
   home: {
     title: 'Home',
     emptyTitle: "Your friends' picks will show up here.",

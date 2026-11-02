@@ -5,6 +5,7 @@ import { GoogleIcon } from '@/components/ui/icons';
 import { PromisePreview } from '@/components/verdict/PromisePreview';
 import { signInWithGoogle } from '@/lib/actions/auth';
 import { copy } from '@/lib/copy';
+import { devToolsEnabled } from '@/lib/dev';
 
 export const metadata = { title: 'Sign in' };
 
@@ -63,6 +64,13 @@ export default function LoginPage(props: PageProps<'/login'>) {
           <LoginForm searchParams={props.searchParams} />
         </Suspense>
         <p className="text-muted mt-3 text-sm">{copy.login.privacy}</p>
+        {devToolsEnabled() ? (
+          <p className="mt-3 text-sm">
+            <a href="/dev/login" className="text-primary underline underline-offset-2">
+              Dev sign-in (local only)
+            </a>
+          </p>
+        ) : null}
         <Footer className="mt-6" />
       </div>
     </main>

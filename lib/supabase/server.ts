@@ -1,5 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
+import { connection } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { publicEnv } from '@/lib/env';
 import type { Database } from './database.types';
@@ -9,6 +10,9 @@ import type { Database } from './database.types';
  * Uses the signed-in user's session, so Row Level Security applies.
  */
 export async function createClient() {
+  // Session-bound data is per request. connection() tells Cache Components not to prerender
+  // this work (the Supabase client reads the clock while restoring the session).
+  await connection();
   const cookieStore = await cookies();
   const env = publicEnv();
   return createServerClient<Database>(

@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { BottomNav } from '@/components/nav/BottomNav';
-import { requireUser } from '@/lib/auth';
+import { requireOnboardedUser } from '@/lib/auth';
 
 // Session guard. The shell (nav, column) prerenders instantly; the session check streams in
 // behind Suspense (Cache Components). Signed-out users are redirected to /login.
 async function AuthGate({ children }: { children: React.ReactNode }) {
-  await requireUser();
+  await requireOnboardedUser();
   return <>{children}</>;
 }
 

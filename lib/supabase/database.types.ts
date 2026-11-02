@@ -650,6 +650,9 @@ isOneToOne: false
             "admin_refresh_place_areas":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
+"complete_onboarding":
+{ Args: { "p_default_visibility": Database["public"]['Enums']["visibility"],"p_diet_prefs": (string)[],"p_display_name": string,"p_home_area": string,"p_is_private": boolean,"p_username": string }; Returns: undefined
+                           },
 "find_place_candidates":
 { Args: { "p_lat": number,"p_lng": number,"p_name": string,"p_radius_m"?: number }; Returns: {
               "area_name": string,"distance_m": number,"id": string,"name": string,"name_similarity": number,"status": Database["public"]['Enums']["place_status"]
@@ -662,6 +665,9 @@ isOneToOne: false
 { Args: { "p_lat"?: number,"p_limit"?: number,"p_lng"?: number,"p_query": string }; Returns: {
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
             }[]
+                           },
+"username_available":
+{ Args: { "p_username": string }; Returns: boolean
                            }
           }
           Enums: {
