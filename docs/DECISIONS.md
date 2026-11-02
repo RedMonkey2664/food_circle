@@ -174,3 +174,8 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - SECURITY FIX: every RPC added after 0012 was executable by `anon`, because `alter default privileges IN SCHEMA` cannot revoke PostgreSQL's global "EXECUTE to PUBLIC" default. No data leaked (every RPC checks auth.uid()), but the grant layer is now fixed for real (global default revoked, existing functions swept) and a pgTAP meta test fails if any public/private function is ever executable by anon again.
 - Dev seed now spreads logged_at by visit date and recomputes flags (one INSERT statement otherwise gives all rows the same logged_at).
 - Sign out moved to your own profile page (home header now: Search, Friends).
+
+### P1-12, P1-14 (2026-11-03)
+- PWA: app/manifest.ts (standalone, portrait, en-IN, cream theme), icons generated at build time by next/og from one mark in lib/icon.tsx (cream ring + dot on spice orange): /icon/32, /icon/192, /icon/512, /icon/maskable, /apple-icon. No binary icons in the repo, no service worker (Phase 7). Proxy skips icon routes so signed-out visitors and installers can fetch them. The default Next favicon was removed.
+- P1-14 matrix: rls_visits_matrix (every visibility x self / friend / accepted follower / pending follower / stranger / blocked / anon, plus private account), rls_groups_places (audience groups), rpc_summary_feed and rpc_home_feed (RPCs respect the same rules), rpc_profile_stats, rls_meta (RLS on every table, no anon table or function access). 163 pgTAP assertions.
+- Production build: every app route is partially prerendered; secret key absent from client bundles.

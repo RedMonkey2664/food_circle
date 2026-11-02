@@ -58,9 +58,9 @@ Goal: the whole product sentence works end to end, with relationship labels on e
 - [x] P1-09 (M) Hook `recompute_visit_flags(user_id)` (SCORING_BADGES.md) to run after visit insert/delete so the flags are correct from day one. No score UI yet.
 - [x] P1-10 (M) Home feed: tabs Friends and Following, cursor pagination, relationship tags, empty states that explain how to add friends.
 - [x] P1-11 (M) Profile pages (own and others): header, relationship buttons by state, recent verdicts (RLS-filtered), counts.
-- [ ] P1-12 (S) PWA manifest, icons, theme colour, install-friendly meta. No service worker yet.
+- [x] P1-12 (S) PWA manifest, icons, theme colour, install-friendly meta. No service worker yet.
 - [x] P1-13 (M) Dev seed (`supabase/seed.sql` or script): users covering every relationship type (friend, following, blocked, private account, stranger) and visits at every visibility level.
-- [ ] P1-14 (M) RLS test matrix: for each visibility level x each viewer relationship, assert allowed or denied. Also blocked and private-account cases.
+- [x] P1-14 (M) RLS test matrix: for each visibility level x each viewer relationship, assert allowed or denied. Also blocked and private-account cases.
 
 Done when (manual scenario, three test accounts A, B, C):
 1. A and B become friends via an invite link. C follows A (public account).
