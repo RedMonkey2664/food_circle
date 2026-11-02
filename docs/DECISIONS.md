@@ -61,3 +61,13 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - `prettier`, `prettier-plugin-tailwindcss`: consistent formatting and class order.
 - `supabase` (CLI): local stack, migrations, pgTAP, type generation.
 - `tsx`, `dotenv`: run TypeScript scripts (OSM seed) with `.env.local`.
+
+### P0-02 to P0-04 (2026-11-02)
+- Security helpers (`are_friends`, `is_following`, `is_blocked_between`, `is_admin`, `relationship_tier`, `can_view_visit`, plus new `is_active_user`, `is_group_member`, `can_view_memory`) and internal functions (`resolve_area`, trigger functions) live in schema `private`, not `public`. Reason: `public` is exposed by the Data API, so any signed-in user could call e.g. `are_friends(x, y)` or `is_blocked_between(x, y)` and probe other people's relationships. RLS policies still use them.
+- Migration layout differs slightly from DATABASE.md: 0008 security helpers, 0009 place functions, 0010 triggers, 0011 badge rows, 0012 RLS. Scoring (0010 in the docs) and feed functions (0011 in the docs) come as new migrations in Phase 1.
+- Deny-by-default grants: anon has no table access; `authenticated` gets SELECT (RLS filters rows) plus explicit column-level writes. Default privileges for future tables/functions are revoked, so every new table/RPC must grant explicitly.
+- `profiles.onboarded_at` is not client-writable; onboarding completion will be an RPC (Phase 1).
+- Extra integrity checks beyond the docs: diet/occasion arrays limited to known values; `merged_into` set iff status is merged; friendship `accepted_at` set iff accepted; invite `group_id` set iff kind is group; invite code format `[A-Za-z0-9_-]{22,}`.
+- OSM places will be seeded with status `confirmed` (they come from a curated source); the unverified -> confirmed flow is for user pin-drops.
+- Badges: Phase 6 set inserted active, Phase 7 set inserted inactive (no evaluator exists yet).
+- pgTAP: 78 assertions across 7 files. Mutation check done: opening `visits_select` to `using (true)` made 8 assertions fail, then reset.

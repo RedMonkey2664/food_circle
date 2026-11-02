@@ -1,0 +1,62 @@
+-- Shared pgTAP helpers. Included at the top of each test file with:  \ir _helpers.psql
+-- Everything here is created inside the test's transaction and rolled back with it.
+-- The .psql extension keeps `supabase test db` from running this file as a test.
+
+create extension if not exists pgtap with schema extensions;
+set search_path = public, extensions;
+
+create schema if not exists tests;
+
+-- Create an auth user (the on_auth_user_created trigger creates the profile).
+create or replace function tests.create_user(p_username text, p_private boolean default false)
+returns uuid language plpgsql as $$
+declare uid uuid := gen_random_uuid();
+begin
+  insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, created_at, updated_at)
+  values (uid, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated',
+          p_username || '@example.test', jsonb_build_object('full_name', initcap(p_username)), now(), now());
+  update public.profiles set username = p_username, is_private = p_private where id = uid;
+  return uid;
+end $$;
+
+-- Act as a signed-in user: switch to the authenticated role with that user's JWT claims.
+create or replace function tests.authenticate_as(p_user uuid) returns void language plpgsql as $$
+begin
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', p_user, 'role', 'authenticated')::text, true);
+  perform set_config('role', 'authenticated', true);
+end $$;
+
+-- Act as an anonymous visitor.
+create or replace function tests.authenticate_anon() returns void language plpgsql as $$
+begin
+  perform set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
+  perform set_config('role', 'anon', true);
+end $$;
+
+-- To go back to the owner role for more setup, use plain SQL in the test:  reset role;
+-- (a function running as `authenticated` cannot switch itself back to postgres).
+
+-- Setup shortcuts (run as owner).
+create or replace function tests.make_friends(a uuid, b uuid) returns void language sql as $$
+  insert into public.friendships (user_low, user_high, requested_by, status, accepted_at)
+  values (least(a,b), greatest(a,b), a, 'accepted', now());
+$$;
+
+create or replace function tests.make_follow(follower uuid, followed uuid, p_status request_status default 'accepted')
+returns void language sql as $$
+  insert into public.follows (follower_id, following_id, status) values (follower, followed, p_status);
+$$;
+
+create or replace function tests.make_block(blocker uuid, blocked uuid) returns void language sql as $$
+  insert into public.blocks (blocker_id, blocked_id) values (blocker, blocked);
+$$;
+
+create or replace function tests.make_place(p_name text default 'Test Cafe') returns uuid language sql as $$
+  insert into public.places (name, geom, source)
+  values (p_name, st_setsrid(st_makepoint(72.8347, 19.0596), 4326)::geography, 'user')
+  returning id;
+$$;
+
+grant usage on schema tests to authenticated, anon;
+grant execute on all functions in schema tests to authenticated, anon;
