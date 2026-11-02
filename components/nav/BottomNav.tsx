@@ -1,0 +1,66 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { HomeIcon, PersonIcon, PlusIcon } from '@/components/ui/icons';
+import { cn } from '@/lib/cn';
+import { copy } from '@/lib/copy';
+
+// Shell only. Discover (Phase 2) and Diary (Phase 5) slots are added in their phases.
+const items = [
+  { href: '/', label: copy.nav.home, Icon: HomeIcon },
+  { href: '/me', label: copy.nav.me, Icon: PersonIcon },
+] as const;
+
+export function BottomNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav
+      aria-label="Main"
+      className="border-line bg-surface/95 fixed inset-x-0 bottom-0 z-20 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur"
+    >
+      <ul className="mx-auto grid max-w-[480px] grid-cols-3 items-center px-4">
+        <NavItem {...items[0]} active={pathname === '/'} />
+        <li className="flex justify-center">
+          <Link
+            href="/log"
+            aria-label={copy.nav.log}
+            className="bg-primary text-on-primary -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(194_65_12/0.6)] transition-transform duration-150 active:scale-[0.94]"
+          >
+            <PlusIcon size={26} strokeWidth={2.5} />
+          </Link>
+        </li>
+        <NavItem {...items[1]} active={pathname.startsWith('/me')} />
+      </ul>
+    </nav>
+  );
+}
+
+function NavItem({
+  href,
+  label,
+  Icon,
+  active,
+}: {
+  href: string;
+  label: string;
+  Icon: typeof HomeIcon;
+  active: boolean;
+}) {
+  return (
+    <li className="flex justify-center">
+      <Link
+        href={href}
+        aria-current={active ? 'page' : undefined}
+        className={cn(
+          'flex min-h-14 min-w-16 flex-col items-center justify-center gap-0.5 text-xs font-medium',
+          active ? 'text-primary' : 'text-muted',
+        )}
+      >
+        <Icon size={22} strokeWidth={active ? 2.4 : 2} />
+        {label}
+      </Link>
+    </li>
+  );
+}

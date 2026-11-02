@@ -1,1 +1,121 @@
 @import 'tailwindcss';
+
+/*
+  Design tokens (docs/UI_UX.md §2). Colours are CSS variables so dark mode can be added later
+  by redefining them; Tailwind utilities read them through @theme.
+  Contrast-adjusted values are recorded in docs/DECISIONS.md (P0-06).
+*/
+:root {
+  --c-bg: #fffbf5;
+  --c-surface: #ffffff;
+  --c-ink: #1f1b16;
+  --c-muted: #6b635a;
+  --c-line: #e9e1d6;
+  --c-primary: #c2410c;
+  --c-primary-press: #9a3412;
+  --c-on-primary: #ffffff;
+  --c-primary-soft: #fdebdf;
+  --c-go: #15803d;
+  --c-go-soft: #e6f4ea;
+  --c-skip: #c92a2a;
+  --c-skip-soft: #fbe9e9;
+  --c-onlyfor: #a16207;
+  --c-onlyfor-soft: #fbf1dc;
+  --c-following-bg: #e7eef7;
+  --c-following-fg: #2b4c7e;
+  --c-public-bg: #efefef;
+  --c-public-fg: #555555;
+  --c-warn: #b54708;
+  --c-veg: #15803d;
+  --c-focus: #1d4ed8;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-line: var(--c-line);
+  --color-primary: var(--c-primary);
+  --color-primary-press: var(--c-primary-press);
+  --color-on-primary: var(--c-on-primary);
+  --color-primary-soft: var(--c-primary-soft);
+  --color-go: var(--c-go);
+  --color-go-soft: var(--c-go-soft);
+  --color-skip: var(--c-skip);
+  --color-skip-soft: var(--c-skip-soft);
+  --color-onlyfor: var(--c-onlyfor);
+  --color-onlyfor-soft: var(--c-onlyfor-soft);
+  --color-following-bg: var(--c-following-bg);
+  --color-following-fg: var(--c-following-fg);
+  --color-public-bg: var(--c-public-bg);
+  --color-public-fg: var(--c-public-fg);
+  --color-warn: var(--c-warn);
+  --color-veg: var(--c-veg);
+  --color-focus: var(--c-focus);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Type scale 12 / 14 / 16 / 18 / 22 / 28 (+ 40 for the one hero number) */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-hero: 2.5rem;
+  --text-hero--line-height: 2.75rem;
+
+  --radius-card: 14px;
+  --radius-button: 12px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* In the base layer so component utilities can override these defaults. */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--c-bg);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Visible focus for keyboard users only, on every interactive element. */
+  :focus-visible {
+    outline: 3px solid var(--c-focus);
+    outline-offset: 2px;
+  }
+
+  /* Inputs at 16px minimum so iOS Safari does not zoom on focus. */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -71,3 +71,15 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - OSM places will be seeded with status `confirmed` (they come from a curated source); the unverified -> confirmed flow is for user pin-drops.
 - Badges: Phase 6 set inserted active, Phase 7 set inserted inactive (no evaluator exists yet).
 - pgTAP: 78 assertions across 7 files. Mutation check done: opening `visits_select` to `using (true)` made 8 assertions fail, then reset.
+
+### P0-05, P0-06, P0-08 (2026-11-02)
+- Auth: Google OAuth via a server action (`signInWithOAuth` + redirect), PKCE code exchange at `/auth/callback`, session refresh and optimistic redirect in `proxy.ts`, real check in the `(app)` layout via `getClaims()`. `next` redirect targets are validated (no open redirects). Onboarding redirect waits for Phase 1 (P1-01).
+- Design tokens (UI_UX.md values, contrast-adjusted for WCAG AA small text): primary #C2410C (was #D9480F, ~4.3:1 -> ~5.2:1), go #15803D (was #1E8E4E, ~4.2:1 -> ~5.0:1), onlyfor #A16207 (was #B7791F, ~3.6:1 -> ~4.9:1). Skip #C92A2A kept (~5.4:1). Focus ring #1D4ED8.
+- Fonts: Inter (UI) + Fraunces (display) via next/font, self-hosted at build time, variable fonts, no runtime request to Google.
+- Icons are inline SVG (no icon library). No animation library: only a 150 ms press scale, disabled under prefers-reduced-motion.
+- Diet badges use India's vegetarian mark (green dot in a square) for pure veg, veg-friendly and Jain.
+- BottomNav shows Home, Log, Me only; Discover (Phase 2) and Diary (Phase 5) slots are added in their phases. Log and Me routes are Phase 1.
+- `/dev/components` gallery is dev-only (404 in production; proxy skips the session check for /dev/ in development only).
+- Supabase keys: publishable key (`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) and secret key (`SUPABASE_SECRET_KEY`) replace the docs' anon/service_role names.
+- Base CSS lives in `@layer base` so Tailwind utilities can override it (unlayered CSS beats utilities in Tailwind v4).
+- Dev note: inside OneDrive, `next dev` occasionally serves stale CSS; restart the dev server (and delete `.next`) if styles look wrong.
