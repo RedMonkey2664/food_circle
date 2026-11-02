@@ -100,3 +100,9 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Partial (1): Naturals Now; only generic "Naturals" outlets (18+), branch ambiguous.
 - Missing (4): Dough and Joe, My Oh My, Not Far, Doolally.
 - 6/11 (55%) is at the "fewer than 6 of 10" threshold. FLAGGED: recommend moving pin-drop (P5-01, P5-02) to right after Phase 1. Decision pending with the human; nothing moved yet.
+
+### P0-10 hosted setup (2026-11-02)
+- Supabase project `food-circle` (ref etxkzuujniozrnixnklg), region ap-south-1 (Mumbai), Free plan. "Automatically expose new tables" OFF (we grant per table), "automatic RLS" ON as a safety net.
+- Google Cloud project "Food Circle" (food-circle-513514) on billing account "CloudSpace". Only the Google Auth Platform is used (no paid APIs). Budget "Food Circle zero spend": Rs 10/month, email alerts at 10% / 90% / 100%. Consent screen External, Testing mode, test user = owner. OAuth web client redirect URIs: hosted Supabase callback + local 127.0.0.1:54321 callback.
+- Google Cloud identity verification for the billing account is due by 2026-12-24 (human to complete).
+- Vercel project `food-circle` (Hobby). Production branch `main` (docs only until Phase 0 is approved and merged); Phase 0 is tested on the `phase-0-foundations` preview deployment.
