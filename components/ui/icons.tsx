@@ -109,3 +109,22 @@ export function CloseIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function CompassIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="m15.5 8.5-2 5-5 2 2-5z" />
+    </svg>
+  );
+}
+
+export function UsersIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20c.8-3.2 3.3-5 6.5-5s5.7 1.8 6.5 5" />
+      <path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 15.3c1.5.8 2.6 2.4 3 4.7" />
+    </svg>
+  );
+}

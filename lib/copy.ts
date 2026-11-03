@@ -19,6 +19,9 @@ export const copy = {
     intro: 'Takes a minute. Only your username and name are required.',
     submit: "Let's eat",
     saving: 'Saving…',
+    followTitle: 'Follow a few people',
+    followIntro: 'Their picks show up in your Following feed. Follow as many as you like, or none.',
+    followContinue: 'Continue',
   },
   home: {
     title: 'Home',
@@ -40,6 +43,7 @@ export const copy = {
     home: 'Home',
     search: 'Search',
     discover: 'Discover',
+    friends: 'Friends',
     log: 'Log a place',
     diary: 'Diary',
     me: 'Me',
@@ -111,7 +115,14 @@ export const copy = {
     privacy: 'Your entries are only visible to the people you choose.',
   },
   profile: {
-    stats: { places: 'places', friends: 'friends', followers: 'followers', following: 'following' },
+    stats: {
+      places: 'places',
+      areas: 'areas',
+      friends: 'friends',
+      followers: 'followers',
+      following: 'following',
+    },
+    match: (rate: number, shared: number) => `${Math.round(rate)}% taste match (${shared} places)`,
     privateTitle: 'This account is private.',
     privateBody: 'Follow or become friends to see their picks.',
     emptySelf: 'Your verdicts will show up here once you log a place.',
@@ -164,6 +175,10 @@ export const copy = {
     logged: 'Logged. Thanks!',
     moreLater: 'Dishes, price and photos are coming soon.',
     logAnother: 'Log another',
+    othersLogged: (n: number) =>
+      n === 1
+        ? '1 other person logged this. Follow them?'
+        : `${n} others logged this. Follow them?`,
   },
   search: {
     title: 'Search places',
@@ -174,6 +189,29 @@ export const copy = {
     cantFindBody: 'Adding new places (like thelas and stalls) is coming soon.',
     recent: 'Recently viewed',
     hint: 'Type at least 2 letters.',
+  },
+  discover: {
+    title: 'Discover',
+    searchLabel: 'Search people',
+    searchPlaceholder: 'Search people by name or @username',
+    noResults: 'Nobody found. Try another spelling.',
+    tasteHint: 'Log a few more places to see who shares your taste.',
+    emptyTitle: 'Nobody to suggest yet.',
+    emptyBody:
+      'As more people join and log places, suggestions show up here. Invite your friends meanwhile.',
+    sections: {
+      taste: 'Taste twins',
+      near: (area: string) => `People eating around ${area}`,
+      fof: 'People you may know',
+      veg: 'Veg and Jain foodies',
+      vadaPav: 'Vada pav hunters',
+      irani: 'Irani cafe regulars',
+      active: 'Most active',
+    },
+    match: (rate: number) => `${Math.round(rate)}% taste match`,
+    mutual: (n: number) => `${n} mutual friend${n === 1 ? '' : 's'}`,
+    places: (n: number) => `${n} place${n === 1 ? '' : 's'} logged`,
+    placesIn: (n: number, area: string) => `${n} place${n === 1 ? '' : 's'} in ${area}`,
   },
   notFound: {
     title: "We couldn't find that page.",

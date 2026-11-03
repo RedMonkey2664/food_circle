@@ -22,8 +22,9 @@ export function PersonRow({
           <span className="text-muted block truncate text-sm">
             @{person.username}
             {person.isPrivate ? ' · private' : ''}
-            {meta ? ` · ${meta}` : ''}
           </span>
+          {/* The "why" (match, mutuals, places) gets its own line so it never truncates away. */}
+          {meta ? <span className="text-primary block text-xs font-medium">{meta}</span> : null}
         </span>
       </Link>
       {children ? <div className="flex shrink-0 items-start gap-2">{children}</div> : null}
