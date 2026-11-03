@@ -12,3 +12,13 @@ export const FLAGS = {
   handoffZomato: flag(process.env.NEXT_PUBLIC_HANDOFF_ZOMATO_ENABLED),
   leaderboards: flag(process.env.NEXT_PUBLIC_LEADERBOARDS_ENABLED),
 } as const;
+
+/**
+ * Map tiles (Phase 5). Default: OpenFreeMap's OSM-based "liberty" style: free, no API key,
+ * no account (CLAUDE.md: never require a paid map key). Override with NEXT_PUBLIC_MAP_STYLE_URL.
+ */
+export const MAP_STYLE_URL =
+  process.env.NEXT_PUBLIC_MAP_STYLE_URL || 'https://tiles.openfreemap.org/styles/liberty';
+
+/** Greater Mumbai centre, for maps with nothing else to show. */
+export const MUMBAI_CENTER = { lat: 19.076, lng: 72.8777 } as const;
