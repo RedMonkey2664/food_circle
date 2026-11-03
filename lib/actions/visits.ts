@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
 import { logVisitInput, type LogVisitInput } from '@/lib/validation/visit';
 import { createClient } from '@/lib/supabase/server';
@@ -38,4 +39,40 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
   revalidatePath(`/place/${v.placeId}`);
   revalidatePath('/', 'layout');
   return { ok: true, data: { visitId: data.id } };
+}
+
+const placeIdSchema = z.uuid();
+
+export type AfterLogPerson = {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string | null;
+  isPrivate: boolean;
+  verdict: 'go' | 'skip' | 'only_for';
+};
+
+/** P2-04: "N others logged this, follow them?" shown on the success step. */
+export async function afterLogSuggestions(
+  placeId: string,
+): Promise<{ people: AfterLogPerson[]; othersCount: number }> {
+  const parsed = placeIdSchema.safeParse(placeId);
+  if (!parsed.success) return { people: [], othersCount: 0 };
+  const supabase = await createClient();
+  const { data } = await supabase.rpc('suggest_people_after_log', {
+    p_place: parsed.data,
+    p_limit: 3,
+  });
+  const rows = data ?? [];
+  return {
+    people: rows.map((r) => ({
+      id: r.user_id,
+      username: r.username,
+      displayName: r.display_name,
+      avatarUrl: r.avatar_url,
+      isPrivate: r.is_private,
+      verdict: r.verdict,
+    })),
+    othersCount: rows[0]?.others_count ?? 0,
+  };
 }

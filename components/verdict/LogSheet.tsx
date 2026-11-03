@@ -4,7 +4,10 @@ import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { CircleCloseLink } from '@/components/motion/CircleLink';
 import { buttonClass } from '@/components/ui/Button';
-import { logVisit } from '@/lib/actions/visits';
+import { ActionButton } from '@/components/social/ActionButton';
+import { Avatar } from '@/components/social/Avatar';
+import { followUser } from '@/lib/actions/social';
+import { afterLogSuggestions, logVisit, type AfterLogPerson } from '@/lib/actions/visits';
 import { copy } from '@/lib/copy';
 import type { Verdict } from '@/lib/domain/verdict';
 import type { Visibility } from '@/lib/domain/visibility';
@@ -27,6 +30,9 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
   const [visibility, setVisibility] = useState<Visibility>(defaultVisibility);
   const [saved, setSaved] = useState<{ verdict: Verdict; onlyFor?: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [others, setOthers] = useState<{ people: AfterLogPerson[]; othersCount: number } | null>(
+    null,
+  );
   const [pending, startTransition] = useTransition();
   const t = copy.log;
 
@@ -34,8 +40,10 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
     setError(null);
     startTransition(async () => {
       const r = await logVisit({ placeId: place.id, verdict, onlyForText, visibility });
-      if (r.ok) setSaved({ verdict, onlyFor: onlyForText });
-      else setError(r.message);
+      if (!r.ok) return setError(r.message);
+      setSaved({ verdict, onlyFor: onlyForText });
+      // P2-04: who else logged this, that you could follow (never blocks the success state).
+      afterLogSuggestions(place.id).then(setOthers, () => setOthers(null));
     });
   }
 
@@ -50,6 +58,32 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
           {place.name}: <VerdictLabel verdict={saved.verdict} onlyForText={saved.onlyFor} />
         </p>
         <p className="text-muted mt-1 text-sm">{t.moreLater}</p>
+        {others && others.people.length > 0 ? (
+          <div className="border-line mt-5 border-t pt-4">
+            <p className="font-semibold">{t.othersLogged(others.othersCount)}</p>
+            <ul className="mt-2 space-y-2">
+              {others.people.map((p) => (
+                <li key={p.id} className="flex items-center gap-3">
+                  <Avatar name={p.displayName} url={p.avatarUrl} size={36} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold">{p.displayName}</span>
+                    <span className="block text-xs">
+                      <VerdictLabel verdict={p.verdict} />
+                    </span>
+                  </span>
+                  <ActionButton
+                    action={followUser}
+                    fields={{ userId: p.id }}
+                    label={copy.social.follow}
+                    pendingLabel={copy.social.sending}
+                    doneLabel={p.isPrivate ? copy.social.followRequested : copy.social.following}
+                    variant="secondary"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         <div className="mt-5 grid grid-cols-2 gap-2">
           <CircleCloseLink href={`/place/${place.id}`} className={buttonClass()}>
             {t.done}

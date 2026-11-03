@@ -22,6 +22,7 @@ export function ActionButton({
   size = 'md',
   className,
   confirm,
+  doneLabel,
 }: {
   action: ServerAction;
   fields: Record<string, string>;
@@ -32,8 +33,17 @@ export function ActionButton({
   className?: string;
   /** Optional sentence shown in a native confirm() before destructive actions. */
   confirm?: string;
+  /** Shown (disabled) after success, for places the page does not re-render (e.g. the log sheet). */
+  doneLabel?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, null);
+  if (doneLabel && state?.ok) {
+    return (
+      <Button type="button" variant="ghost" size={size} disabled className={className}>
+        {doneLabel}
+      </Button>
+    );
+  }
   return (
     <form
       action={formAction}
