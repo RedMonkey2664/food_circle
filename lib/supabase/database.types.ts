@@ -647,7 +647,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "admin_import_overture":
+            "add_group_member":
+{ Args: { "p_group": string,"p_user": string }; Returns: undefined
+                           },
+"admin_import_overture":
 { Args: { "p_rows": Json }; Returns: {
               "inserted": number,"linked": number,"skipped": number
             }[]
@@ -667,10 +670,16 @@ isOneToOne: false
 "complete_onboarding":
 { Args: { "p_default_visibility": Database["public"]['Enums']["visibility"],"p_diet_prefs": (string)[],"p_display_name": string,"p_home_area": string,"p_is_private": boolean,"p_username": string }; Returns: undefined
                            },
+"create_group":
+{ Args: { "p_kind"?: string,"p_name": string }; Returns: string
+                           },
 "create_invite":
 { Args: { "p_group"?: string,"p_kind"?: Database["public"]['Enums']["invite_kind"] }; Returns: {
               "code": string,"expires_at": string,"id": string,"max_uses": number
             }[]
+                           },
+"delete_group":
+{ Args: { "p_group": string }; Returns: undefined
                            },
 "find_place_candidates":
 { Args: { "p_lat": number,"p_lng": number,"p_name": string,"p_radius_m"?: number }; Returns: {
@@ -685,14 +694,24 @@ isOneToOne: false
               "avatar_url": string,"display_name": string,"follow_state": string,"home_area": string,"is_private": boolean,"match_rate": number,"score": number,"shared_places": number,"user_id": string,"username": string
             }[]
                            },
+"get_group_members":
+{ Args: { "p_group": string }; Returns: {
+              "avatar_url": string,"display_name": string,"joined_at": string,"role": Database["public"]['Enums']["group_role"],"user_id": string,"username": string
+            }[]
+                           },
 "get_home_feed":
 { Args: { "p_cursor_id"?: string,"p_cursor_ts"?: string,"p_limit"?: number,"p_tab": string }; Returns: {
-              "area_name": string,"author_id": string,"avatar_url": string,"display_name": string,"logged_at": string,"only_for_text": string,"place_id": string,"place_name": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
+              "area_name": string,"author_id": string,"avatar_url": string,"display_name": string,"group_name": string,"logged_at": string,"only_for_text": string,"place_id": string,"place_name": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
             }[]
                            },
 "get_invite_preview":
 { Args: { "p_code": string }; Returns: {
-              "avatar_url": string,"display_name": string,"inviter_id": string,"status": string,"username": string
+              "avatar_url": string,"display_name": string,"group_id": string,"group_name": string,"inviter_id": string,"kind": Database["public"]['Enums']["invite_kind"],"status": string,"username": string
+            }[]
+                           },
+"get_my_groups":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "created_at": string,"id": string,"kind": string,"member_count": number,"name": string,"role": Database["public"]['Enums']["group_role"]
             }[]
                            },
 "get_my_scores":
@@ -720,12 +739,15 @@ isOneToOne: false
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
             }[]
                            },
+"log_visit_for_groups":
+{ Args: { "p_groups": (string)[],"p_only_for_text"?: string,"p_place": string,"p_verdict": Database["public"]['Enums']["verdict"],"p_visited_on"?: string }; Returns: string
+                           },
 "normalize_name":
 { Args: { "n": string }; Returns: string
                            },
 "redeem_invite":
-{ Args: { "p_code": string }; Returns: {
-              "inviter": string,"kind": Database["public"]['Enums']["invite_kind"]
+{ Args: { "p_befriend"?: boolean,"p_code": string }; Returns: {
+              "group_id": string,"inviter": string,"kind": Database["public"]['Enums']["invite_kind"]
             }[]
                            },
 "refresh_all_taste_matches":
@@ -739,6 +761,12 @@ isOneToOne: false
                            },
 "remove_friend":
 { Args: { "p_other": string }; Returns: undefined
+                           },
+"remove_group_member":
+{ Args: { "p_group": string,"p_user": string }; Returns: undefined
+                           },
+"rename_group":
+{ Args: { "p_group": string,"p_name": string }; Returns: undefined
                            },
 "report_content":
 { Args: { "p_id": string,"p_reason": string,"p_type": Database["public"]['Enums']["report_target"] }; Returns: string
@@ -759,6 +787,9 @@ isOneToOne: false
 { Args: { "p_lat"?: number,"p_limit"?: number,"p_lng"?: number,"p_query": string }; Returns: {
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
             }[]
+                           },
+"set_visit_audience_groups":
+{ Args: { "p_groups": (string)[],"p_visit": string }; Returns: undefined
                            },
 "suggest_people_after_log":
 { Args: { "p_limit"?: number,"p_place": string }; Returns: {
