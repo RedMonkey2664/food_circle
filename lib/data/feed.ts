@@ -3,7 +3,8 @@ import type { VerdictCardData } from '@/components/verdict/VerdictCard';
 import { tierFromNumber } from '@/lib/domain/tiers';
 import { createClient } from '@/lib/supabase/server';
 
-export type FeedTab = 'friends' | 'following';
+/** 'friends', 'following', or one of my groups as 'group:<uuid>' (P3-05). */
+export type FeedTab = 'friends' | 'following' | `group:${string}`;
 export type FeedPage = { items: VerdictCardData[]; nextCursor: string | null };
 
 const PAGE = 20;
@@ -39,6 +40,7 @@ export async function homeFeed(tab: FeedTab, cursorRaw?: string): Promise<FeedPa
       place: { id: r.place_id, name: r.place_name, areaName: r.area_name },
       author: { username: r.username, displayName: r.display_name, avatarUrl: r.avatar_url },
       tier: tierFromNumber(r.tier) ?? undefined,
+      groupName: tab.startsWith('group:') ? null : r.group_name,
     })),
     nextCursor: rows.length > PAGE && last ? `${last.logged_at}_${last.visit_id}` : null,
   };

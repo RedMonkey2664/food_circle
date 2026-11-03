@@ -8,43 +8,78 @@ import { requireOnboardedUser } from '@/lib/auth';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import { homeFeed, type FeedTab } from '@/lib/data/feed';
+import { myGroups, type MyGroup } from '@/lib/data/groups';
 
-const TABS: FeedTab[] = ['friends', 'following'];
+function tabHref(tab: FeedTab): string {
+  if (tab === 'friends') return '/';
+  if (tab === 'following') return '/?tab=following';
+  return `/?group=${tab.slice('group:'.length)}`;
+}
 
-function Tabs({ active }: { active: FeedTab }) {
+/** Friends and Following, then one tab per group (P3-05). Tiers stay separate feeds. */
+function Tabs({ active, groups }: { active: FeedTab; groups: MyGroup[] }) {
+  const tabs: { tab: FeedTab; label: string }[] = [
+    { tab: 'friends', label: copy.home.tabs.friends },
+    { tab: 'following', label: copy.home.tabs.following },
+    ...groups.map((g) => ({ tab: `group:${g.id}` as FeedTab, label: g.name })),
+  ];
   return (
-    <nav aria-label={copy.home.feedLabel} className="border-line grid grid-cols-2 border-b">
-      {TABS.map((t) => (
+    <nav
+      aria-label={copy.home.feedLabel}
+      className="border-line -mx-4 flex [scrollbar-width:none] overflow-x-auto border-b px-4"
+    >
+      {tabs.map(({ tab, label }) => (
         <Link
-          key={t}
-          href={t === 'friends' ? '/' : '/?tab=following'}
-          aria-current={active === t ? 'page' : undefined}
+          key={tab}
+          href={tabHref(tab)}
+          aria-current={active === tab ? 'page' : undefined}
           className={cn(
-            'flex min-h-11 items-center justify-center border-b-2 font-medium',
-            active === t ? 'border-primary text-primary' : 'text-muted border-transparent',
+            'flex min-h-11 shrink-0 grow basis-0 items-center justify-center border-b-2 px-3 font-medium whitespace-nowrap',
+            active === tab ? 'border-primary text-primary' : 'text-muted border-transparent',
           )}
         >
-          {copy.home.tabs[t]}
+          {label}
         </Link>
       ))}
     </nav>
   );
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchParams'] }) {
   const sp = await searchParams;
-  const tab: FeedTab = sp.tab === 'following' ? 'following' : 'friends';
   const cursor = typeof sp.cursor === 'string' ? sp.cursor : undefined;
   await requireOnboardedUser();
+  const groups = await myGroups();
+  const groupId =
+    typeof sp.group === 'string' && UUID_RE.test(sp.group) && groups.some((g) => g.id === sp.group)
+      ? sp.group
+      : null;
+  const tab: FeedTab = groupId
+    ? `group:${groupId}`
+    : sp.tab === 'following'
+      ? 'following'
+      : 'friends';
   const page = await homeFeed(tab, cursor);
   const t = copy.home;
 
   return (
     <>
-      <Tabs active={tab} />
+      <Tabs active={tab} groups={groups} />
       {page.items.length === 0 && !cursor ? (
         <div className="mt-6">
-          {tab === 'friends' ? (
+          {groupId ? (
+            <EmptyState
+              title={t.emptyGroupTitle}
+              body={t.emptyGroupBody}
+              action={
+                <Link href={`/groups/${groupId}`} className={buttonClass({ variant: 'secondary' })}>
+                  {copy.groups.manage}
+                </Link>
+              }
+            />
+          ) : tab === 'friends' ? (
             <EmptyState
               title={t.emptyTitle}
               body={t.emptyFriendsBody}
@@ -82,7 +117,11 @@ async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchPara
       )}
       {page.nextCursor ? (
         <Link
-          href={`/?${new URLSearchParams({ ...(tab === 'following' ? { tab } : {}), cursor: page.nextCursor })}`}
+          href={`/?${new URLSearchParams({
+            ...(tab === 'following' ? { tab } : {}),
+            ...(groupId ? { group: groupId } : {}),
+            cursor: page.nextCursor,
+          })}`}
           className={buttonClass({ variant: 'ghost', fullWidth: true, className: 'mt-4' })}
         >
           {t.older}
