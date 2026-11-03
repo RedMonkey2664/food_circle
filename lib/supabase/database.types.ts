@@ -47,14 +47,14 @@ isOneToOne: false
                   ]
                 },"badges": {
                   Row: {
-                    "category": string,"description": string,"id": string,"is_active": boolean,"name": string,"rule": NonNullable<Json>,"slug": string,"tier": number
+                    "category": string,"description": string,"icon": string,"id": string,"is_active": boolean,"is_secret": boolean,"name": string,"rule": NonNullable<Json>,"slug": string,"sort": number,"tier": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "category": string,"description": string,"id"?: string,"is_active"?: boolean,"name": string,"rule": NonNullable<Json>,"slug": string,"tier"?: number
+                    "category": string,"description": string,"icon"?: string,"id"?: string,"is_active"?: boolean,"is_secret"?: boolean,"name": string,"rule": NonNullable<Json>,"slug": string,"sort"?: number,"tier"?: number
                   }
                   Update: {
-                    "category"?: string,"description"?: string,"id"?: string,"is_active"?: boolean,"name"?: string,"rule"?: NonNullable<Json>,"slug"?: string,"tier"?: number
+                    "category"?: string,"description"?: string,"icon"?: string,"id"?: string,"is_active"?: boolean,"is_secret"?: boolean,"name"?: string,"rule"?: NonNullable<Json>,"slug"?: string,"sort"?: number,"tier"?: number
                   }
                   Relationships: [
                     
@@ -362,6 +362,32 @@ isOneToOne: false
       columns: ["merged_into"]
 isOneToOne: false
       referencedRelation: "places"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"profile_badges": {
+                  Row: {
+                    "badge_id": string,"position": number,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "badge_id": string,"position": number,"user_id": string
+                  }
+                  Update: {
+                    "badge_id"?: string,"position"?: number,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "profile_badges_badge_id_fkey"
+      columns: ["badge_id"]
+isOneToOne: false
+      referencedRelation: "badges"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "profile_badges_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
       referencedColumns: ["id"]
     }
                   ]
@@ -729,9 +755,9 @@ isOneToOne: false
 "follow_user":
 { Args: { "p_target": string }; Returns: string
                            },
-"get_badges_for_users":
-{ Args: { "p_users": (string)[] }; Returns: {
-              "name": string,"slug": string,"user_id": string
+"get_achievements":
+{ Args: { "p_user": string }; Returns: {
+              "category": string,"description": string,"earned_at": string,"icon": string,"is_secret": boolean,"name": string,"progress": number,"showcased": number,"slug": string,"threshold": number
             }[]
                            },
 "get_discover_people":
@@ -752,11 +778,6 @@ isOneToOne: false
 "get_invite_preview":
 { Args: { "p_code": string }; Returns: {
               "avatar_url": string,"display_name": string,"group_id": string,"group_name": string,"inviter_id": string,"kind": Database["public"]['Enums']["invite_kind"],"status": string,"username": string
-            }[]
-                           },
-"get_leaderboard":
-{ Args: { "p_group"?: string,"p_period"?: Database["public"]['Enums']["score_period"],"p_period_start"?: string,"p_scope": string }; Returns: {
-              "ahead_by": number,"avatar_url": string,"display_name": string,"is_me": boolean,"rank": number,"score": number,"user_id": string,"username": string,"verified": number
             }[]
                            },
 "get_my_companion_tags":
@@ -781,7 +802,7 @@ isOneToOne: false
                            },
 "get_my_progress":
 { Args: Record<PropertyKey, never>; Returns: {
-              "all_time": number,"best_streak": number,"current_streak": number,"in_grace": boolean,"last_active_week": string,"level": number,"this_month": number,"this_week": number
+              "all_time": number,"badges_earned": number,"badges_total": number,"best_streak": number,"current_streak": number,"in_grace": boolean,"level": number,"this_month": number
             }[]
                            },
 "get_my_scores":
@@ -824,9 +845,9 @@ isOneToOne: false
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
             }[]
                            },
-"get_user_badges":
-{ Args: { "p_user": string }; Returns: {
-              "category": string,"description": string,"earned_at": string,"level": number,"name": string,"places": number,"slug": string
+"get_showcases":
+{ Args: { "p_users": (string)[] }; Returns: {
+              "icon": string,"name": string,"slot": number,"slug": string,"user_id": string
             }[]
                            },
 "get_visit_details":
@@ -836,7 +857,7 @@ isOneToOne: false
                            },
 "get_visit_feedback":
 { Args: { "p_visit": string }; Returns: {
-              "counted": boolean,"counts_in_periods": boolean,"month_score": number,"reason": string,"rival_ahead_by": number,"rival_name": string
+              "reason": string,"unlocked": Json
             }[]
                            },
 "log_visit_for_groups":
@@ -899,8 +920,8 @@ isOneToOne: false
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
             }[]
                            },
-"set_group_leaderboard":
-{ Args: { "p_enabled": boolean,"p_group": string }; Returns: undefined
+"set_showcase":
+{ Args: { "p_slugs": (string)[] }; Returns: undefined
                            },
 "set_visit_audience_groups":
 { Args: { "p_groups": (string)[],"p_visit": string }; Returns: undefined
@@ -921,9 +942,6 @@ isOneToOne: false
                            },
 "username_available":
 { Args: { "p_username": string }; Returns: boolean
-                           },
-"verify_visit":
-{ Args: { "p_lat": number,"p_lng": number,"p_visit": string }; Returns: boolean
                            }
           }
           Enums: {
