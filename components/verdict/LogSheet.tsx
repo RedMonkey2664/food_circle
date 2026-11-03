@@ -16,6 +16,11 @@ import { VerdictButtons } from './VerdictButtons';
 import { VerdictLabel } from './VerdictLabel';
 import { VisibilityPicker, type PickerGroup } from './VisibilityPicker';
 
+/** Today's date in IST (the product day), for the date picker's max. */
+function todayIst(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+}
+
 type Props = {
   place: { id: string; name: string; areaName: string | null };
   defaultVisibility: Visibility;
@@ -24,6 +29,8 @@ type Props = {
   groups?: PickerGroup[];
   /** Top dishes here, offered as one-tap chips after saving (P4-01). */
   dishSuggestions?: string[];
+  /** P5-09: log an earlier day (YYYY-MM-DD, IST). Counts toward all-time only. */
+  initialDate?: string;
 };
 
 /**
@@ -37,7 +44,10 @@ export function LogSheet({
   counts,
   groups = [],
   dishSuggestions = [],
+  initialDate,
 }: Props) {
+  const [visitedOn, setVisitedOn] = useState<string | undefined>(initialDate);
+  const [pickDate, setPickDate] = useState(Boolean(initialDate));
   const [visibility, setVisibility] = useState<Visibility>(defaultVisibility);
   const [groupIds, setGroupIds] = useState<string[]>([]);
   const [saved, setSaved] = useState<{
@@ -60,6 +70,7 @@ export function LogSheet({
         verdict,
         onlyForText,
         visibility,
+        ...(visitedOn ? { visitedOn } : {}),
         ...(visibility === 'friends' && groupIds.length ? { groupIds } : {}),
       });
       if (!r.ok) return setError(r.message);
@@ -133,6 +144,29 @@ export function LogSheet({
         </Link>
       </div>
       <VerdictButtons onSelect={save} disabled={pending} />
+      {pickDate ? (
+        <div className="flex items-center gap-2">
+          <label htmlFor="visited-on" className="text-sm font-semibold">
+            {copy.diary.backdated}
+          </label>
+          <input
+            id="visited-on"
+            type="date"
+            value={visitedOn ?? ''}
+            max={todayIst()}
+            onChange={(e) => setVisitedOn(e.target.value || undefined)}
+            className="border-line bg-bg min-h-11 rounded-[var(--radius-button)] border-2 px-2 text-sm"
+          />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPickDate(true)}
+          className="text-muted min-h-11 text-sm font-medium underline-offset-2 hover:underline"
+        >
+          {copy.diary.backdated}?
+        </button>
+      )}
       <VisibilityPicker
         value={visibility}
         onChange={setVisibility}

@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { MemoryEditor } from '@/components/review/MemoryEditor';
 import { ReviewEditor } from '@/components/review/ReviewEditor';
 import { VerdictLabel } from '@/components/verdict/VerdictLabel';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { visitDetails } from '@/lib/data/details';
+import { myGraph, peopleById } from '@/lib/data/social';
 import { OCCASIONS, type Occasion } from '@/lib/domain/review';
 import { createClient } from '@/lib/supabase/server';
 
@@ -27,7 +29,38 @@ async function VisitEditor({ params }: { params: PageProps<'/visit/[id]'>['param
     .eq('user_id', me.id)
     .maybeSingle();
   if (!visit?.place) notFound();
-  const details = (await visitDetails([id])).get(id);
+  const [detailsMap, memoryRes, companionsRes, memPhotosRes, graph] = await Promise.all([
+    visitDetails([id]),
+    supabase
+      .from('memories')
+      .select('private_note, mood, occasion, visibility')
+      .eq('visit_id', id)
+      .maybeSingle(),
+    supabase.from('visit_companions').select('user_id').eq('visit_id', id),
+    supabase
+      .from('visit_photos')
+      .select('storage_path')
+      .eq('visit_id', id)
+      .eq('kind', 'memory')
+      .order('position'),
+    myGraph(),
+  ]);
+  const details = detailsMap.get(id);
+  const memory = memoryRes.data;
+  const memPaths = (memPhotosRes.data ?? []).map((p) => p.storage_path);
+  const signed = memPaths.length
+    ? ((await supabase.storage.from('review-photos').createSignedUrls(memPaths, 3600)).data ?? [])
+    : [];
+  const memPhotos = signed.flatMap((s) =>
+    s.path && s.signedUrl ? [{ path: s.path, url: s.signedUrl }] : [],
+  );
+  const friendIds = graph.friendships
+    .filter((f) => f.status === 'accepted')
+    .map((f) => (f.user_low === me.id ? f.user_high : f.user_low));
+  const friends = [...(await peopleById(friendIds)).values()].map((p) => ({
+    id: p.id,
+    name: p.displayName,
+  }));
 
   return (
     <>
@@ -54,6 +87,24 @@ async function VisitEditor({ params }: { params: PageProps<'/visit/[id]'>['param
           }}
         />
       </div>
+
+      <section className="border-line bg-surface mt-6 rounded-[var(--radius-card)] border p-4 md:p-6">
+        <h2 className="font-display text-xl font-semibold">{copy.memory.title}</h2>
+        <p className="text-muted mt-1 mb-4 text-sm">{copy.memory.intro}</p>
+        <MemoryEditor
+          visitId={id}
+          userId={me.id}
+          friends={friends}
+          initial={{
+            privateNote: memory?.private_note ?? '',
+            mood: memory?.mood ?? '',
+            occasion: memory?.occasion ?? '',
+            visibility: memory?.visibility === 'friends' ? 'friends' : 'private',
+            companions: (companionsRes.data ?? []).map((c) => c.user_id),
+            photos: memPhotos,
+          }}
+        />
+      </section>
     </>
   );
 }

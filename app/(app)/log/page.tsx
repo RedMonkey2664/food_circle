@@ -27,7 +27,10 @@ function Heading({ children }: { children: React.ReactNode }) {
 }
 
 async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['searchParams'] }) {
-  const { place: placeParam, q } = await searchParams;
+  const { place: placeParam, q, date } = await searchParams;
+  // P5-08/P5-09: a companion tag opens the sheet on that day (validated again on save).
+  const initialDate =
+    typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined;
   const me = await requireOnboardedUser();
 
   // Step 0: pick the place.
@@ -63,6 +66,7 @@ async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['s
         <LogSheet
           place={{ id: place.id, name: place.name, areaName: place.areaName }}
           defaultVisibility={me.defaultVisibility}
+          initialDate={initialDate}
           isPrivateAccount={me.isPrivate}
           counts={{ friends: stats.friends, followers: stats.followers }}
           groups={groups.map((g) => ({ id: g.id, name: g.name }))}

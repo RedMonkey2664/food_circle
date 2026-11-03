@@ -40,6 +40,7 @@ export async function addPhoto(input: {
   path: string;
   width: number;
   height: number;
+  kind?: 'review' | 'memory';
 }): Promise<ActionResult<null>> {
   const parsed = z
     .object({
@@ -47,6 +48,7 @@ export async function addPhoto(input: {
       path: photoPath,
       width: z.number().int().min(1).max(4096),
       height: z.number().int().min(1).max(4096),
+      kind: z.enum(['review', 'memory']).default('review'),
     })
     .safeParse(input);
   if (!parsed.success) return fail('invalid_input');
@@ -57,7 +59,7 @@ export async function addPhoto(input: {
     .eq('visit_id', parsed.data.visitId);
   const { error } = await supabase.from('visit_photos').insert({
     visit_id: parsed.data.visitId,
-    kind: 'review',
+    kind: parsed.data.kind,
     storage_path: parsed.data.path,
     width: parsed.data.width,
     height: parsed.data.height,
