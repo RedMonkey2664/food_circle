@@ -78,13 +78,13 @@ Checkpoint for the human: do friends log a second visit unprompted? If not, fix 
 
 Goal: a user with no friends can find relevant people to follow in minute one.
 
-- [ ] P2-01 (M) Discover tab: people search by name or username.
-- [ ] P2-02 (M) Browse people by area, by food type (cuisine tags from their visits), by diet. Computed from visit data, respecting visibility.
-- [ ] P2-03 (L) Taste match: agreement rate on places both users visited, shown only after 5 or more shared places. Computed by SQL function plus nightly refresh and lazy refresh on profile view. Used to rank the Following tier.
-- [ ] P2-04 (M) Suggestions: after logging a place, "N others logged this, follow them?"; friends-of-friends "people you may know".
-- [ ] P2-05 (S) Profile stats: visits count, areas covered, followers and following counts.
-- [ ] P2-06 (S) Onboarding step: follow 5 suggested accounts (suggestions come from real users only; if there are fewer than 5, show fewer and skip).
-- [ ] P2-07 (S) Contacts match: NOT building on web for now. The Contact Picker API is limited to some Android browsers and phone-number matching needs phone auth. Replace with invite links and friends-of-friends. Record this in DECISIONS.md.
+- [x] P2-01 (M) Discover tab: people search by name or username.
+- [x] P2-02 (M) Browse people by area, by food type (cuisine tags from their visits), by diet. Computed from visit data, respecting visibility.
+- [x] P2-03 (L) Taste match: agreement rate on places both users visited, shown only after 5 or more shared places. Computed by SQL function plus nightly refresh and lazy refresh on profile view. Used to rank the Following tier. (Ranking deferred, see DECISIONS.md, Phase 2.)
+- [x] P2-04 (M) Suggestions: after logging a place, "N others logged this, follow them?"; friends-of-friends "people you may know".
+- [x] P2-05 (S) Profile stats: visits count, areas covered, followers and following counts.
+- [x] P2-06 (S) Onboarding step: follow 5 suggested accounts (suggestions come from real users only; if there are fewer than 5, show fewer and skip).
+- [x] P2-07 (S) Contacts match: NOT building on web for now. The Contact Picker API is limited to some Android browsers and phone-number matching needs phone auth. Replace with invite links and friends-of-friends. Record this in DECISIONS.md.
 
 Done when: a new user finds and follows 5 relevant people without being told whom, and taste match never shows below the 5-place threshold.
 
