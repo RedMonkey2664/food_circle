@@ -127,17 +127,17 @@ Done when: verdict-only logging is still under 10 seconds, a detailed review tak
 
 Goal: a reason to open the app when not searching, and data quality for scoring.
 
-- [ ] P5-01 (L) Pin-drop to add a place (MapLibre): name, type, diet flags, cuisine tags, area auto-resolved from the pin.
-- [ ] P5-02 (L) Duplicate detection per PLACES_DATA.md: nearby (about 50 m) plus fuzzy name match, "Is this the same as X?" prompt before creating.
-- [ ] P5-03 (S) Place status flow: unverified becomes confirmed after 2 different users log it.
-- [ ] P5-04 (M) Admin merge tool `/admin/places/merge`: merge A into B, move visits, recompute affected users' flags.
-- [ ] P5-05 (S) "Report closed or moved" and "Know this? Suggest" (diet flags, cuisine, type) on places via `place_suggestions`, with an admin screen to apply or dismiss.
-- [ ] P5-06 (M) Diary timeline (newest first), diary map (pins across Mumbai), "On this day".
-- [ ] P5-07 (M) Memory layer on a visit: companions, occasion, private note, photos, mood. Default Private.
-- [ ] P5-08 (M) Companion tagging: tagged friend gets "Add to your log?". Tagging alone gives no points.
-- [ ] P5-09 (M) Backdating: allowed, flagged, counts toward all-time only (rules live in SQL already).
-- [ ] P5-10 (M) Logbook counts: places by area, areas covered, places by cuisine.
-- [ ] P5-11 (M) "Want to go" list (added 2026-11-03 at the human's request): save a place from its page or from a friend's verdict; private by default; never earns points; logging a visit moves it from Want to go to Been. The diary map (P5-06) shows both, distinguished by colour plus a text label/icon, with a Been / Want to go / Both toggle.
+- [x] P5-01 (L) Pin-drop to add a place (MapLibre): name, type, diet flags, cuisine tags, area auto-resolved from the pin.
+- [x] P5-02 (L) Duplicate detection per PLACES_DATA.md: nearby (about 50 m) plus fuzzy name match, "Is this the same as X?" prompt before creating.
+- [x] P5-03 (S) Place status flow: unverified becomes confirmed after 2 different users log it.
+- [x] P5-04 (M) Admin merge tool `/admin/places/merge`: merge A into B, move visits, recompute affected users' flags.
+- [x] P5-05 (S) "Report closed or moved" and "Know this? Suggest" (diet flags, cuisine, type) on places via `place_suggestions`, with an admin screen to apply or dismiss.
+- [x] P5-06 (M) Diary timeline (newest first), diary map (pins across Mumbai), "On this day".
+- [x] P5-07 (M) Memory layer on a visit: companions, occasion, private note, photos, mood. Default Private.
+- [x] P5-08 (M) Companion tagging: tagged friend gets "Add to your log?". Tagging alone gives no points.
+- [x] P5-09 (M) Backdating: allowed, flagged, counts toward all-time only (rules live in SQL already).
+- [x] P5-10 (M) Logbook counts: places by area, areas covered, places by cuisine.
+- [x] P5-11 (M) "Want to go" list (added 2026-11-03 at the human's request): save a place from its page or from a friend's verdict; private by default; never earns points; logging a visit moves it from Want to go to Been. The diary map (P5-06) shows both, distinguished by colour plus a text label/icon, with a Been / Want to go / Both toggle.
 
 Done when: a user drops a pin for a vada pav stall, sees it on their map, saves another place as Want to go and sees it as a different pin, and a second user logging the same stall is matched to it instead of creating a duplicate; an admin merge moves visits and fixes counts.
 
