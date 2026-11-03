@@ -10,6 +10,7 @@ select is(normalize_name('  Britannia   &   Co. '), 'britannia and co', 'normali
 -- Start from an empty places/areas set so seeded OSM data cannot affect results (rolled back).
 delete from visits;
 delete from places;
+update profiles set home_area_id = null;  -- rolled back; lets the dev data go
 delete from areas;
 
 insert into areas (slug, name, kind, centroid) values

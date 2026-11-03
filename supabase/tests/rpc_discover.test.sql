@@ -18,6 +18,7 @@ select tests.make_friends(:'me', :'pal');
 select tests.make_friends(:'pal', :'fof');
 select tests.make_block(:'me', :'blk');
 
+update profiles set home_area_id = null;  -- rolled back; lets the dev data go
 delete from visits; delete from places; delete from areas;
 insert into areas (id, slug, name, kind) values
   ('77777777-0000-0000-0000-000000000001', 'test-region', 'Test Region', 'region');
