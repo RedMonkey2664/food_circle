@@ -71,9 +71,11 @@ const sqlString = (s: string) => `'${s.replace(/'/g, "''")}'`;
 
 function writeSql(rows: ImportRow[], dir: string) {
   mkdirSync(dir, { recursive: true });
-  const batches = Math.ceil(rows.length / 5000);
+  // The Supabase SQL editor rejects very large queries (~1 MB); 2000 rows is ~460 KB.
+  const size = 2000;
+  const batches = Math.ceil(rows.length / size);
   for (let i = 0; i < batches; i++) {
-    const part = rows.slice(i * 5000, (i + 1) * 5000).map(toPayload);
+    const part = rows.slice(i * size, (i + 1) * size).map(toPayload);
     const file = join(dir, `overture-${String(i + 1).padStart(2, '0')}-of-${batches}.sql`);
     writeFileSync(
       file,
