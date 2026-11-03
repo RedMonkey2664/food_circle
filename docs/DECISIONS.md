@@ -213,3 +213,8 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Bottom nav is now 5 slots: Home, Discover, + (log), Friends, Me.
 - P2-06: after onboarding, /onboarding/follow shows up to 5 real people (home area first, then most active) and skips itself when there are none. Follow is optional; Continue always works.
 - After logging (P2-04): up to 3 people outside your friends/follows who logged the same place publicly, with a count of the rest.
+
+### Phase 2 approved and deployed (2026-11-03)
+- Human approved Phase 2. main fast-forwarded to phase-2-discover (c1ced09); Vercel production deployment Ready.
+- Hosted DB: both Phase 2 migrations applied in one transaction through the SQL editor and recorded (22 total). pg_cron job `refresh-taste-matches` scheduled at 21:30 UTC; a manual run of refresh_all_taste_matches succeeded (0 pairs, not enough shared places yet). Still 0 functions executable by anon.
+- Signed-in check of the live Discover / follow step is left to the human (the agent does not sign in with the human's Google account).
