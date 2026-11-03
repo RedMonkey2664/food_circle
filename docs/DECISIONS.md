@@ -314,3 +314,6 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Showcase: profile_badges (up to 3, ordered, earned only, writes only via set_showcase). Shown under the name on profiles and beside the author on verdict cards (1 on phones, 2 from 640px).
 - Kept as personal-only: level, place counts, weekly streak (grace week). Removed: leaderboard page and nav, group boards, leaderboard opt-in, "X is ahead of you", verify button.
 - Caps still apply to counted places (5 new per day, 3 outlets per chain per month), so achievements can't be farmed by logging a whole street in one go.
+
+### Phase 6 (achievements) approved and deployed (2026-11-03)
+- Human approved. Achievements migration applied to the hosted DB via the SQL editor, copied as UTF-8 (emoji icons): 29 migrations recorded, 0 anon-callable functions, 37 active achievements, existing users' badges awarded. main fast-forwarded and pushed to Vercel. The leaderboard migration never reached the hosted DB.
