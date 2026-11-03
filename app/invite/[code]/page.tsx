@@ -46,6 +46,8 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
     ? (await supabase.rpc('get_invite_preview', { p_code: code })).data?.[0]
     : undefined;
   const status = (preview?.status ?? 'not_found') as Status;
+  const groupName = preview?.kind === 'group' ? preview.group_name : null;
+  const inviter = preview?.display_name ?? '';
 
   return (
     <Card>
@@ -54,7 +56,9 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
           <Avatar name={preview.display_name} url={preview.avatar_url} size={56} />
           <div>
             <h1 className="font-display text-xl font-semibold">
-              {copy.invite.pageTitle(preview.display_name)}
+              {groupName
+                ? copy.invite.groupTitle(groupName)
+                : copy.invite.pageTitle(preview.display_name)}
             </h1>
             <p className="text-muted text-sm">@{preview.username}</p>
           </div>
@@ -63,7 +67,17 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
         <h1 className="font-display text-xl font-semibold">{copy.app.name}</h1>
       )}
 
-      {status === 'ok' ? (
+      {status === 'ok' && groupName ? (
+        <>
+          <p className="text-muted mt-4">{copy.invite.groupBody(inviter)}</p>
+          <AcceptInvite code={code} label={copy.invite.joinGroup} />
+        </>
+      ) : status === 'needs_friendship' && groupName ? (
+        <>
+          <p className="text-muted mt-4">{copy.invite.groupNeedsFriend(inviter)}</p>
+          <AcceptInvite code={code} label={copy.invite.befriendAndJoin(inviter)} befriend />
+        </>
+      ) : status === 'ok' ? (
         <>
           <p className="text-muted mt-4">{copy.invite.pageBody}</p>
           <AcceptInvite code={code} />
@@ -72,10 +86,14 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
         <>
           <p className="mt-4">{copy.invite.status[status]}</p>
           <Link
-            href="/friends"
+            href={
+              status === 'already_member' && preview?.group_id
+                ? `/groups/${preview.group_id}`
+                : '/friends'
+            }
             className={buttonClass({ variant: 'secondary', fullWidth: true, className: 'mt-6' })}
           >
-            {copy.friends.title}
+            {status === 'already_member' ? copy.groups.title : copy.friends.title}
           </Link>
         </>
       )}

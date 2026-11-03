@@ -90,13 +90,20 @@ export const unblockUser: FormAction = async (p, f) => userAction('unblock_user'
 
 // Invites -----------------------------------------------------------------------------------
 
-export async function createInvite(): Promise<ActionResult<{ code: string; expiresAt: string }>> {
+export async function createInvite(
+  groupId?: string,
+): Promise<ActionResult<{ code: string; expiresAt: string }>> {
+  const group = groupId === undefined ? null : z.uuid().safeParse(groupId);
+  if (group && !group.success) return fail('invalid_input');
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc('create_invite', { p_kind: 'friend' });
+  const { data, error } = await supabase.rpc(
+    'create_invite',
+    group ? { p_kind: 'group', p_group: group.data } : { p_kind: 'friend' },
+  );
   if (error) return { ok: false, ...fromDbError(error) };
   const row = data[0];
   if (!row) return fail('generic');
-  revalidatePath('/friends');
+  revalidatePath(group ? `/groups/${group.data}` : '/friends');
   return { ok: true, data: { code: row.code, expiresAt: row.expires_at } };
 }
 
@@ -111,10 +118,19 @@ const inviteCode = z.string().regex(/^[A-Za-z0-9_-]{22,64}$/);
 export async function redeemInvite(_prev: ActionResult<unknown> | null, formData: FormData) {
   const code = inviteCode.safeParse(formData.get('code'));
   if (!code.success) return fail('not_found');
+  const befriend = formData.get('befriend') === '1';
   const supabase = await createClient();
-  const { error } = await supabase.rpc('redeem_invite', { p_code: code.data });
+  const { data, error } = await supabase.rpc('redeem_invite', {
+    p_code: code.data,
+    p_befriend: befriend,
+  });
   if (error) return { ok: false as const, ...fromDbError(error) };
   refresh();
+  const groupId = data[0]?.group_id;
+  if (groupId) {
+    revalidatePath('/groups');
+    redirect(`/groups/${groupId}?joined=1`);
+  }
   redirect('/friends?added=1');
 }
 

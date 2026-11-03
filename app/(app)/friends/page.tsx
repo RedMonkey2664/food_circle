@@ -4,6 +4,7 @@ import { ActionButton } from '@/components/social/ActionButton';
 import { InviteBlock } from '@/components/social/InviteBlock';
 import { PersonRow } from '@/components/social/PersonRow';
 import { RelationshipActions } from '@/components/social/RelationshipActions';
+import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { cancelFriendRequest, respondFollow, respondFriend } from '@/lib/actions/social';
 import { requireOnboardedUser } from '@/lib/auth';
@@ -265,7 +266,15 @@ async function InviteSection() {
 export default function FriendsPage(props: PageProps<'/friends'>) {
   return (
     <main>
-      <h1 className="font-display pt-2 text-2xl font-semibold">{copy.friends.title}</h1>
+      <div className="flex items-center justify-between pt-2">
+        <h1 className="font-display text-2xl font-semibold">{copy.friends.title}</h1>
+        <Link
+          href="/groups"
+          className={buttonClass({ variant: 'secondary', className: 'text-sm' })}
+        >
+          {copy.groups.manage}
+        </Link>
+      </div>
       <Suspense
         fallback={
           <div

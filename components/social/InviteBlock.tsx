@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/Button';
 import { createInvite } from '@/lib/actions/social';
 import { copy } from '@/lib/copy';
 
-type Props = { siteUrl: string; existing: { code: string; expiresAt: string } | null };
+type Props = {
+  siteUrl: string;
+  existing: { code: string; expiresAt: string } | null;
+  /** Group mode: invite to this group instead of a plain friend invite. */
+  group?: { id: string; name: string };
+};
 
 function inviteUrl(siteUrl: string, code: string) {
   return `${siteUrl.replace(/\/$/, '')}/invite/${code}`;
@@ -15,7 +20,7 @@ function inviteUrl(siteUrl: string, code: string) {
  * Invite link block: create a link, share on WhatsApp (wa.me with prefilled text) or the
  * Web Share sheet, or copy it. Links expire after 7 days and work for up to 20 people.
  */
-export function InviteBlock({ siteUrl, existing }: Props) {
+export function InviteBlock({ siteUrl, existing, group }: Props) {
   const [link, setLink] = useState(existing ? inviteUrl(siteUrl, existing.code) : null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -25,7 +30,7 @@ export function InviteBlock({ siteUrl, existing }: Props) {
   function create() {
     setError(null);
     startTransition(async () => {
-      const r = await createInvite();
+      const r = await createInvite(group?.id);
       if (r.ok) setLink(inviteUrl(siteUrl, r.data.code));
       else setError(r.message);
     });
@@ -33,7 +38,7 @@ export function InviteBlock({ siteUrl, existing }: Props) {
 
   async function share() {
     if (!link) return;
-    const text = t.shareText(link);
+    const text = group ? copy.groups.inviteShare(group.name, link) : t.shareText(link);
     if (typeof navigator !== 'undefined' && 'share' in navigator) {
       try {
         await navigator.share({ text });
@@ -58,8 +63,10 @@ export function InviteBlock({ siteUrl, existing }: Props) {
 
   return (
     <section className="border-line bg-surface rounded-[var(--radius-card)] border p-4">
-      <h2 className="font-display text-lg font-semibold">{t.title}</h2>
-      <p className="text-muted mt-1 text-sm">{t.body}</p>
+      <h2 className="font-display text-lg font-semibold">
+        {group ? copy.groups.inviteTitle : t.title}
+      </h2>
+      <p className="text-muted mt-1 text-sm">{group ? copy.groups.inviteBody : t.body}</p>
       {link ? (
         <>
           <p

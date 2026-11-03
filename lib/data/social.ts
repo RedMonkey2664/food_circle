@@ -57,12 +57,11 @@ export type Invite = {
   maxUses: number;
 };
 
-/** Invites the viewer created that still work. */
-export async function myActiveInvites(): Promise<Invite[]> {
+/** Invites the viewer created that still work: friend invites, or one group's invites. */
+export async function myActiveInvites(groupId?: string): Promise<Invite[]> {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from('invites')
-    .select('id, code, expires_at, uses, max_uses, revoked_at')
+  const base = supabase.from('invites').select('id, code, expires_at, uses, max_uses, revoked_at');
+  const { data } = await (groupId ? base.eq('group_id', groupId) : base.eq('kind', 'friend'))
     .is('revoked_at', null)
     .gt('expires_at', new Date().toISOString())
     .order('created_at', { ascending: false })
