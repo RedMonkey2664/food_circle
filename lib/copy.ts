@@ -168,6 +168,18 @@ export const copy = {
     legendWant: 'Want to go (star)',
     mapLabel: 'Map of places you have been and want to go',
     mapEmpty: 'Log a place or save one as Want to go to see it here.',
+    explore: 'Explore new places',
+    exploreHint: 'Places you haven’t been to or saved, in the area you’re looking at.',
+    exploreZoom: 'Zoom in to see places to explore.',
+    exploreLoading: 'Finding places…',
+    exploreCount: (n: number) =>
+      n >= 300
+        ? 'Showing 300 places here. Zoom in or filter to see others.'
+        : `${n} places to explore here.`,
+    exploreNone: 'Nothing new here with these filters. Try another area or type.',
+    legendExplore: 'To explore (plus)',
+    pureVeg: 'Pure veg',
+    saveFailed: 'Could not save. Try again.',
     wantList: 'Want to go',
     wantEmpty: 'Save places from their page or from a friend’s verdict.',
     logbookTotal: 'Places',

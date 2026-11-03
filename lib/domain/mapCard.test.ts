@@ -48,6 +48,15 @@ describe('mapCard', () => {
   });
 });
 
+describe('mapCard explore', () => {
+  it('describes a place you have not tried, with no verdict or visit line', () => {
+    const c = mapCard({ ...base, kind: 'explore', verdict: null, visits: 0, lastVisited: null });
+    expect(c.badge).toBe('To explore');
+    expect(c.verdict).toBeNull();
+    expect(c.lines).toEqual(['Kalbadevi · Cafe', 'Irani cafe · Egg']);
+  });
+});
+
 describe('formatDay', () => {
   it('reads plain dates as IST days', () => {
     expect(formatDay('2026-01-05')).toBe('5 Jan 2026');

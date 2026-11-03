@@ -10,12 +10,21 @@ export type MapPin = {
   id: string;
   lat: number;
   lng: number;
-  kind: 'been' | 'want';
+  /** been = ✓, want = ★, explore = + (a place you haven't tried). */
+  kind: 'been' | 'want' | 'explore';
   name: string;
   subtitle?: string;
   href: string;
   /** Full details for the hover (PC) / tap (touch) card. */
   card?: MapCard;
+};
+
+export type MapViewport = {
+  minLat: number;
+  minLng: number;
+  maxLat: number;
+  maxLng: number;
+  zoom: number;
 };
 
 const VERDICT_COLOR = {
@@ -24,13 +33,37 @@ const VERDICT_COLOR = {
   only_for: 'var(--c-onlyfor)',
 } as const;
 
+const PIN_STYLE: Record<
+  MapPin['kind'],
+  { bg: string; fg: string; border: string; glyph: string; label: string; size: number }
+> = {
+  been: { bg: 'var(--c-primary)', fg: '#fff', border: '#fff', glyph: '✓', label: 'Been', size: 32 },
+  want: {
+    bg: 'var(--c-following-fg)',
+    fg: '#fff',
+    border: '#fff',
+    glyph: '★',
+    label: 'Want to go',
+    size: 32,
+  },
+  explore: {
+    bg: '#fff',
+    fg: 'var(--c-ink)',
+    border: 'var(--c-muted)',
+    glyph: '+',
+    label: 'To explore',
+    size: 26,
+  },
+};
+
 /** The card's DOM, built with textContent only (place names are user content: no innerHTML). */
-function cardElement(pin: MapPin): HTMLElement {
+function cardElement(pin: MapPin, onSave?: (pin: MapPin) => void, close?: () => void): HTMLElement {
+  const s = PIN_STYLE[pin.kind];
   const root = document.createElement('div');
   root.className = 'fc-map-card';
   const badge = document.createElement('span');
   badge.className = `fc-map-badge fc-map-badge-${pin.kind}`;
-  badge.textContent = `${pin.kind === 'been' ? '✓' : '★'} ${pin.card?.badge ?? PIN_STYLE[pin.kind].label}`;
+  badge.textContent = `${s.glyph} ${pin.card?.badge ?? s.label}`;
   const title = document.createElement('p');
   title.className = 'fc-map-title';
   title.textContent = pin.card?.title ?? pin.name;
@@ -48,27 +81,28 @@ function cardElement(pin: MapPin): HTMLElement {
     p.textContent = line;
     root.append(p);
   }
+  const actions = document.createElement('div');
+  actions.className = 'fc-map-actions';
+  if (pin.kind === 'explore' && onSave) {
+    const save = document.createElement('button');
+    save.type = 'button';
+    save.className = 'fc-map-save';
+    save.textContent = '★ Save to Want to go';
+    save.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onSave(pin);
+      close?.();
+    });
+    actions.append(save);
+  }
   const link = document.createElement('a');
   link.className = 'fc-map-link';
   link.href = pin.href;
   link.textContent = 'Open place ›';
-  root.append(link);
+  actions.append(link);
+  root.append(actions);
   return root;
 }
-
-type Props = {
-  pins?: MapPin[];
-  /** Pin-drop mode: a draggable marker; tapping the map moves it. */
-  pick?: { lat: number; lng: number } | null;
-  onPick?: (p: { lat: number; lng: number }) => void;
-  className?: string;
-  ariaLabel: string;
-};
-
-const PIN_STYLE: Record<MapPin['kind'], { bg: string; glyph: string; label: string }> = {
-  been: { bg: 'var(--c-primary)', glyph: '✓', label: 'Been' },
-  want: { bg: 'var(--c-following-fg)', glyph: '★', label: 'Want to go' },
-};
 
 function pinElement(pin: MapPin): HTMLButtonElement {
   const s = PIN_STYLE[pin.kind];
@@ -77,29 +111,55 @@ function pinElement(pin: MapPin): HTMLButtonElement {
   const el = document.createElement('button');
   el.type = 'button';
   el.setAttribute('aria-label', `${s.label}: ${pin.name}. Show details`);
-  // Glyph + colour, so the two kinds never rely on colour alone. 32px + 6px hit padding = 44px.
-  el.style.cssText = `display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9999px;background:${s.bg};color:#fff;font:700 15px/1 system-ui;border:2px solid #fff;box-shadow:0 2px 6px rgb(0 0 0/.35);cursor:pointer;padding:0;outline-offset:3px`;
+  // Glyph + colour + size, so the kinds never rely on colour alone.
+  el.style.cssText = `display:flex;align-items:center;justify-content:center;width:${s.size}px;height:${s.size}px;border-radius:9999px;background:${s.bg};color:${s.fg};font:700 ${s.size > 28 ? 15 : 16}px/1 system-ui;border:2px solid ${s.border};box-shadow:0 2px 6px rgb(0 0 0/.3);cursor:pointer;padding:0;outline-offset:3px`;
   el.textContent = s.glyph;
   return el;
 }
+
+type Props = {
+  pins?: MapPin[];
+  /** Pin-drop mode: a draggable marker; tapping the map moves it. */
+  pick?: { lat: number; lng: number } | null;
+  onPick?: (p: { lat: number; lng: number }) => void;
+  /** Called after the map stops moving (and once when it loads). */
+  onViewChange?: (v: MapViewport) => void;
+  /** Shown as "Save to Want to go" on explore pins. */
+  onSave?: (pin: MapPin) => void;
+  className?: string;
+  ariaLabel: string;
+};
 
 /**
  * MapLibre map with OSM-based tiles (no paid key). The library loads only when this
  * component mounts, so pages without a map never download it (CLAUDE.md rule 6).
  */
-export function MapView({ pins = [], pick = null, onPick, className, ariaLabel }: Props) {
+export function MapView({
+  pins = [],
+  pick = null,
+  onPick,
+  onViewChange,
+  onSave,
+  className,
+  ariaLabel,
+}: Props) {
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<MlMap | null>(null);
   const markers = useRef<Marker[]>([]);
   const popup = useRef<Popup | null>(null);
   const picker = useRef<Marker | null>(null);
+  const fitted = useRef(false);
   const onPickRef = useRef(onPick);
+  const onViewRef = useRef(onViewChange);
+  const onSaveRef = useRef(onSave);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     onPickRef.current = onPick;
-  }, [onPick]);
+    onViewRef.current = onViewChange;
+    onSaveRef.current = onSave;
+  }, [onPick, onViewChange, onSave]);
 
   // Create the map once.
   useEffect(() => {
@@ -118,7 +178,21 @@ export function MapView({ pins = [], pick = null, onPick, className, ariaLabel }
         });
         m.addControl(new ml.NavigationControl({ showCompass: false }), 'top-right');
         m.on('click', (e) => onPickRef.current?.({ lat: e.lngLat.lat, lng: e.lngLat.lng }));
-        m.on('load', () => setReady(true));
+        const report = () => {
+          const b = m.getBounds();
+          onViewRef.current?.({
+            minLat: b.getSouth(),
+            minLng: b.getWest(),
+            maxLat: b.getNorth(),
+            maxLng: b.getEast(),
+            zoom: m.getZoom(),
+          });
+        };
+        m.on('moveend', report);
+        m.on('load', () => {
+          setReady(true);
+          report();
+        });
         map.current = m;
       })
       .catch(() => setFailed(true));
@@ -151,11 +225,18 @@ export function MapView({ pins = [], pick = null, onPick, className, ariaLabel }
       popup.current = card;
       let pinnedId: string | null = null;
       const show = (p: MapPin) =>
-        card.setLngLat([p.lng, p.lat]).setDOMContent(cardElement(p)).addTo(m);
+        card
+          .setLngLat([p.lng, p.lat])
+          .setDOMContent(cardElement(p, onSaveRef.current, () => card.remove()))
+          .addTo(m);
       card.on('close', () => {
         pinnedId = null;
       });
-      markers.current = pins.map((p) => {
+      // Explore pins first, so your own ✓/★ pins sit on top of them.
+      const ordered = [...pins].sort(
+        (a, b) => Number(b.kind === 'explore') - Number(a.kind === 'explore'),
+      );
+      markers.current = ordered.map((p) => {
         const el = pinElement(p);
         el.addEventListener('mouseenter', () => {
           if (!pinnedId) show(p);
@@ -171,11 +252,14 @@ export function MapView({ pins = [], pick = null, onPick, className, ariaLabel }
         });
         return new ml.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(m);
       });
-      if (pins.length > 1) {
+      // Fit to your own pins once; never jump around while exploring.
+      const own = pins.filter((p) => p.kind !== 'explore');
+      if (!fitted.current && own.length > 1) {
         const b = new ml.LngLatBounds();
-        for (const p of pins) b.extend([p.lng, p.lat]);
+        for (const p of own) b.extend([p.lng, p.lat]);
         m.fitBounds(b, { padding: 48, maxZoom: 15, duration: 0 });
       }
+      if (own.length > 0) fitted.current = true;
     });
     return () => {
       cancelled = true;

@@ -799,6 +799,11 @@ isOneToOne: false
               "author_id": string,"avatar_url": string,"display_name": string,"group_name": string,"logged_at": string,"only_for_text": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
             }[]
                            },
+"get_places_in_view":
+{ Args: { "p_limit"?: number,"p_max_lat": number,"p_max_lng": number,"p_min_lat": number,"p_min_lng": number,"p_pure_veg"?: boolean,"p_types"?: (Database["public"]['Enums']["place_type"])[] }; Returns: {
+              "area_name": string,"cuisine_tags": (string)[],"diet_flags": (string)[],"lat": number,"lng": number,"name": string,"place_id": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"]
+            }[]
+                           },
 "get_profile_stats":
 { Args: { "p_user": string }; Returns: {
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number

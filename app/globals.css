@@ -253,3 +253,28 @@ html[data-vt='close']::view-transition-old(root) {
   font-weight: 600;
   color: var(--c-primary);
 }
+.fc-map-badge-explore {
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1.5px solid var(--c-muted);
+}
+.fc-map-actions {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+.fc-map-actions .fc-map-link {
+  margin-top: 0;
+}
+.fc-map-save {
+  min-height: 36px;
+  border-radius: var(--radius-button);
+  background: var(--c-following-bg);
+  color: var(--c-following-fg);
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}

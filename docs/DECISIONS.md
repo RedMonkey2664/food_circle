@@ -282,3 +282,8 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 
 ### Phase 5 approved and deployed (2026-11-03)
 - Human approved Phase 5 (incl. map pin details). Diary/places migration applied to the hosted DB via the SQL editor (27 recorded; 0 anon-callable functions; want_to_go RLS on; 3 new triggers). main fast-forwarded and pushed to Vercel. Map tiles: OpenFreeMap (no key or env var needed).
+
+### Explore layer on the diary map (2026-11-03, human request)
+- "Explore new places" switch on Diary > Map: shows places in the visible area that you have not been to or saved, as smaller white "+" pins under your own ✓/★ pins. Filters: type chips (default Cafe) and Pure veg. The pin card has "★ Save to Want to go" (the pin turns into a star at once) and "Open place".
+- Data: get_places_in_view (signed-in only) over the places table with a bounding box; refuses boxes larger than about 0.25 x 0.25 degrees (the UI says "Zoom in"), at most 300 places, confirmed first then a stable shuffle so they spread across the view; excludes merged/closed places and your own visits and Want to go. Served by GET /api/places/in-view so panning can cancel stale requests (debounced 250 ms). About 40 ms locally for a Bandra-sized view.
+- The map fits to your own pins only once, so it never jumps while exploring.

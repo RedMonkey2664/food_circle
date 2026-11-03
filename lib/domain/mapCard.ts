@@ -4,7 +4,7 @@ import { PLACE_TYPE_LABEL, cuisineLabel, type PlaceType } from './place';
 import { verdictText, type Verdict } from './verdict';
 
 export type MapCardInput = {
-  kind: 'been' | 'want';
+  kind: 'been' | 'want' | 'explore';
   name: string;
   areaName: string | null;
   type: PlaceType;
@@ -19,7 +19,7 @@ export type MapCardInput = {
 
 export type MapCard = {
   title: string;
-  /** Text badge, never colour alone: "Been" / "Want to go". */
+  /** Text badge, never colour alone: "Been" / "Want to go" / "To explore". */
   badge: string;
   verdict: { text: string; tone: Verdict } | null;
   lines: string[];
@@ -56,7 +56,7 @@ export function mapCard(p: MapCardInput): MapCard {
 
   return {
     title: p.name,
-    badge: p.kind === 'been' ? 'Been' : 'Want to go',
+    badge: p.kind === 'been' ? 'Been' : p.kind === 'want' ? 'Want to go' : 'To explore',
     verdict:
       p.kind === 'been' && p.verdict
         ? { text: `Your verdict: ${verdictText(p.verdict, p.onlyForText)}`, tone: p.verdict }
