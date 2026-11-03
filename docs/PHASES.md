@@ -111,13 +111,13 @@ Done when: a family group can be created, and a verdict shared to Family only is
 
 Goal: detail exists but never slows the 10-second flow.
 
-- [ ] P4-01 (M) Optional step after the verdict: best-dish chips, price-per-head slider (INR, budget / mid / splurge labels), occasion chips (family dinner, date, group of 10, late night, post-exam, pure-veg family).
-- [ ] P4-02 (M) "Add more" screen: free note (Hinglish allowed, no language restriction), per-dish verdicts, photos.
-- [ ] P4-03 (M) Photo upload to Supabase Storage with client-side compression (WebP, max 1280px long edge, target under 300 KB).
-- [ ] P4-04 (M) Collapsed VerdictCard expands on tap to show note, dishes, photos.
-- [ ] P4-05 (M) Top dishes per tier on the place page (aggregated from dish verdicts; tiers still separate).
-- [ ] P4-06 (S) Edit and delete own review layer. Deleting a review keeps the visit and its point.
-- [ ] P4-07 (S) Remember last visibility choice per user.
+- [x] P4-01 (M) Optional step after the verdict: best-dish chips, price-per-head slider (INR, budget / mid / splurge labels), occasion chips (family dinner, date, group of 10, late night, post-exam, pure-veg family).
+- [x] P4-02 (M) "Add more" screen: free note (Hinglish allowed, no language restriction), per-dish verdicts, photos.
+- [x] P4-03 (M) Photo upload to Supabase Storage with client-side compression (WebP, max 1280px long edge, target under 300 KB).
+- [x] P4-04 (M) Collapsed VerdictCard expands on tap to show note, dishes, photos.
+- [x] P4-05 (M) Top dishes per tier on the place page (aggregated from dish verdicts; tiers still separate).
+- [x] P4-06 (S) Edit and delete own review layer. Deleting a review keeps the visit and its point.
+- [x] P4-07 (S) Remember last visibility choice per user.
 
 Done when: verdict-only logging is still under 10 seconds, a detailed review takes under 60 seconds, and photos never exceed the size target.
 
