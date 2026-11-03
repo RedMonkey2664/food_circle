@@ -43,5 +43,7 @@ export async function completeOnboarding(
   });
   if (error) return { ok: false, ...fromDbError(error) };
   const next = formData.get('next');
-  redirect(safeNextPath(typeof next === 'string' ? next : null));
+  // P2-06: suggest people to follow before landing (that page skips itself if there's nobody).
+  const nextPath = safeNextPath(typeof next === 'string' ? next : null);
+  redirect(`/onboarding/follow?next=${encodeURIComponent(nextPath)}`);
 }
