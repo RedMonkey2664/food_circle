@@ -729,6 +729,11 @@ isOneToOne: false
 "follow_user":
 { Args: { "p_target": string }; Returns: string
                            },
+"get_badges_for_users":
+{ Args: { "p_users": (string)[] }; Returns: {
+              "name": string,"slug": string,"user_id": string
+            }[]
+                           },
 "get_discover_people":
 { Args: { "p_kind": string,"p_limit"?: number,"p_param"?: string }; Returns: {
               "avatar_url": string,"display_name": string,"follow_state": string,"home_area": string,"is_private": boolean,"match_rate": number,"score": number,"shared_places": number,"user_id": string,"username": string
@@ -749,6 +754,11 @@ isOneToOne: false
               "avatar_url": string,"display_name": string,"group_id": string,"group_name": string,"inviter_id": string,"kind": Database["public"]['Enums']["invite_kind"],"status": string,"username": string
             }[]
                            },
+"get_leaderboard":
+{ Args: { "p_group"?: string,"p_period"?: Database["public"]['Enums']["score_period"],"p_period_start"?: string,"p_scope": string }; Returns: {
+              "ahead_by": number,"avatar_url": string,"display_name": string,"is_me": boolean,"rank": number,"score": number,"user_id": string,"username": string,"verified": number
+            }[]
+                           },
 "get_my_companion_tags":
 { Args: Record<PropertyKey, never>; Returns: {
               "by_display_name": string,"by_username": string,"place_id": string,"place_name": string,"visit_id": string,"visited_on": string
@@ -767,6 +777,11 @@ isOneToOne: false
 "get_my_map":
 { Args: Record<PropertyKey, never>; Returns: {
               "area_name": string,"cuisine_tags": (string)[],"diet_flags": (string)[],"kind": string,"last_visited": string,"lat": number,"lng": number,"name": string,"only_for_text": string,"place_id": string,"saved_at": string,"type": Database["public"]['Enums']["place_type"],"verdict": Database["public"]['Enums']["verdict"],"visits": number
+            }[]
+                           },
+"get_my_progress":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "all_time": number,"best_streak": number,"current_streak": number,"in_grace": boolean,"last_active_week": string,"level": number,"this_month": number,"this_week": number
             }[]
                            },
 "get_my_scores":
@@ -809,9 +824,19 @@ isOneToOne: false
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
             }[]
                            },
+"get_user_badges":
+{ Args: { "p_user": string }; Returns: {
+              "category": string,"description": string,"earned_at": string,"level": number,"name": string,"places": number,"slug": string
+            }[]
+                           },
 "get_visit_details":
 { Args: { "p_visits": (string)[] }; Returns: {
               "dishes": Json,"note": string,"occasion_tags": (string)[],"photo_paths": (string)[],"price_per_head": number,"visit_id": string
+            }[]
+                           },
+"get_visit_feedback":
+{ Args: { "p_visit": string }; Returns: {
+              "counted": boolean,"counts_in_periods": boolean,"month_score": number,"reason": string,"rival_ahead_by": number,"rival_name": string
             }[]
                            },
 "log_visit_for_groups":
@@ -874,6 +899,9 @@ isOneToOne: false
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
             }[]
                            },
+"set_group_leaderboard":
+{ Args: { "p_enabled": boolean,"p_group": string }; Returns: undefined
+                           },
 "set_visit_audience_groups":
 { Args: { "p_groups": (string)[],"p_visit": string }; Returns: undefined
                            },
@@ -893,6 +921,9 @@ isOneToOne: false
                            },
 "username_available":
 { Args: { "p_username": string }; Returns: boolean
+                           },
+"verify_visit":
+{ Args: { "p_lat": number,"p_lng": number,"p_visit": string }; Returns: boolean
                            }
           }
           Enums: {
