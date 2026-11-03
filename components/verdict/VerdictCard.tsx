@@ -17,7 +17,9 @@ export type VerdictCardData = {
   onlyForText: string | null;
   visitedOn: string;
   place?: { id: string; name: string; areaName: string | null };
-  author?: { username: string; displayName: string; avatarUrl: string | null };
+  author?: { id?: string; username: string; displayName: string; avatarUrl: string | null };
+  /** Phase 6: up to 2 of the author's badges (credibility signals), shown beside the name. */
+  authorBadges?: string[];
   /** Relationship of the author to the viewer; omit on your own cards. */
   tier?: Tier;
   groupName?: string | null;
@@ -44,6 +46,18 @@ export function VerdictCard({ data }: { data: VerdictCardData }) {
             <span className="truncate font-semibold">{data.author.displayName}</span>
           </Link>
           {data.tier ? <RelationshipTag tier={data.tier} group={data.groupName} /> : null}
+          {data.authorBadges?.length ? (
+            <span className="inline-flex gap-1">
+              {data.authorBadges.slice(0, 2).map((b, i) => (
+                <span
+                  key={b}
+                  className={`border-line text-muted rounded-[var(--radius-pill)] border px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap ${i > 0 ? 'hidden sm:inline' : ''}`}
+                >
+                  {b}
+                </span>
+              ))}
+            </span>
+          ) : null}
           <span className="text-muted ml-auto shrink-0 text-sm">{visitAge(data.visitedOn)}</span>
         </div>
       ) : null}

@@ -8,6 +8,9 @@ import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { VerdictCard } from '@/components/verdict/VerdictCard';
 import { addGroupMember, deleteGroup, removeGroupMember } from '@/lib/actions/groups';
+import { setGroupLeaderboard } from '@/lib/actions/competition';
+import { FLAGS } from '@/lib/config';
+import { createClient } from '@/lib/supabase/server';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { homeFeed } from '@/lib/data/feed';
@@ -144,6 +147,7 @@ async function GroupContent({
               <div className="mt-6">
                 <GroupInvite group={{ id, name: group.name }} />
               </div>
+              {FLAGS.leaderboards ? <GroupBoardSwitch groupId={id} /> : null}
             </>
           ) : null}
 
@@ -169,6 +173,39 @@ async function GroupContent({
         </aside>
       </div>
     </>
+  );
+}
+
+async function GroupBoardSwitch({ groupId }: { groupId: string }) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('groups')
+    .select('leaderboard_enabled')
+    .eq('id', groupId)
+    .maybeSingle();
+  const on = Boolean(data?.leaderboard_enabled);
+  const t = copy.compete;
+  return (
+    <section className="border-line bg-surface mt-6 rounded-[var(--radius-card)] border p-4">
+      <h2 className="font-semibold">{t.groupBoard}</h2>
+      <p className="text-muted mt-1 text-sm">{t.groupBoardHint}</p>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <ActionButton
+          action={setGroupLeaderboard}
+          fields={{ groupId, on: on ? '0' : '1' }}
+          label={on ? 'Turn off' : 'Turn on'}
+          variant={on ? 'secondary' : 'primary'}
+        />
+        {on ? (
+          <Link
+            href={`/leaderboard?group=${groupId}`}
+            className="text-primary text-sm font-semibold"
+          >
+            {t.openBoard} ›
+          </Link>
+        ) : null}
+      </div>
+    </section>
   );
 }
 

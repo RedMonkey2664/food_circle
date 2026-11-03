@@ -11,7 +11,9 @@ import { afterLogSuggestions, logVisit, type AfterLogPerson } from '@/lib/action
 import { copy } from '@/lib/copy';
 import type { Verdict } from '@/lib/domain/verdict';
 import type { Visibility } from '@/lib/domain/visibility';
+import { LogFeedback } from '@/components/compete/LogFeedback';
 import { QuickExtras } from '@/components/review/QuickExtras';
+import { FLAGS } from '@/lib/config';
 import { VerdictButtons } from './VerdictButtons';
 import { VerdictLabel } from './VerdictLabel';
 import { VisibilityPicker, type PickerGroup } from './VisibilityPicker';
@@ -90,6 +92,7 @@ export function LogSheet({
         <p className="mt-2">
           {place.name}: <VerdictLabel verdict={saved.verdict} onlyForText={saved.onlyFor} />
         </p>
+        <LogFeedback visitId={saved.visitId} enabled={FLAGS.leaderboards} />
         <QuickExtras visitId={saved.visitId} suggestions={dishSuggestions} />
         {others && others.people.length > 0 ? (
           <div className="border-line mt-5 border-t pt-4">

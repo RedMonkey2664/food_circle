@@ -11,6 +11,10 @@ import { signOut } from '@/lib/actions/auth';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { profileByUsername, profileStats, recentVisitsBy } from '@/lib/data/profile';
+import { myProgress, userBadges } from '@/lib/data/competition';
+import { ProgressCard } from '@/components/compete/ProgressCard';
+import { OptInToggle } from '@/components/compete/OptInToggle';
+import { FLAGS } from '@/lib/config';
 import { refreshMyTasteMatches } from '@/lib/data/discover';
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith } from '@/lib/domain/relationship';
@@ -43,10 +47,12 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
   const isSelf = profile.id === me.id;
   // Lazy taste-match refresh on profile view (P2-03).
   if (!isSelf) await refreshMyTasteMatches();
-  const [stats, graph, visits] = await Promise.all([
+  const [stats, graph, visits, badges, progress] = await Promise.all([
     profileStats(profile.id),
     myGraph(),
     recentVisitsBy(profile.id),
+    userBadges(profile.id),
+    isSelf ? myProgress() : Promise.resolve(null),
   ]);
   const rel = relationshipWith(me.id, profile.id, graph.friendships, graph.follows);
   const canSeeEntries =
@@ -65,6 +71,9 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
             {profile.homeArea ? `, ${profile.homeArea}` : ''}
           </p>
           <div className="mt-1 flex flex-wrap gap-1.5">
+            <span className="bg-ink text-bg rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-semibold">
+              {copy.compete.level(badges.level)}
+            </span>
             {rel.friend === 'friends' ? (
               <span className="bg-primary text-on-primary rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-bold">
                 {t.friendsBadge}
@@ -135,6 +144,51 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
           </>
         )}
       </div>
+
+      {progress ? (
+        <div className="mt-4">
+          <ProgressCard progress={progress} />
+        </div>
+      ) : null}
+
+      <section className="mt-6">
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-display text-lg font-semibold">{copy.compete.badges}</h2>
+          {isSelf && FLAGS.leaderboards ? (
+            <Link href="/leaderboard" className="text-primary text-sm font-semibold">
+              {copy.compete.openBoard} ›
+            </Link>
+          ) : null}
+        </div>
+        {badges.badges.length === 0 ? (
+          <p className="text-muted mt-1 text-sm">{copy.compete.noBadges}</p>
+        ) : (
+          <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+            {badges.badges.map((b) => (
+              <li
+                key={b.slug}
+                className="border-line bg-surface flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
+              >
+                <span
+                  aria-hidden
+                  className="bg-primary-soft text-primary flex size-9 shrink-0 items-center justify-center rounded-full text-lg"
+                >
+                  {b.category === 'behaviour' ? '★' : b.category === 'culture' ? '🍽' : '🧭'}
+                </span>
+                <span>
+                  <span className="block font-semibold">{b.name}</span>
+                  <span className="text-muted text-sm">{b.description}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {isSelf && FLAGS.leaderboards ? (
+          <div className="mt-3">
+            <OptInToggle on={profile.leaderboardsOptIn} />
+          </div>
+        ) : null}
+      </section>
 
       <section className="mt-8">
         <h2 className="font-display text-lg font-semibold">{t.recent}</h2>

@@ -2,7 +2,7 @@ import 'server-only';
 import type { VerdictCardData } from '@/components/verdict/VerdictCard';
 import type { PlaceType } from '@/lib/domain/place';
 import { summaryFromRows, type PlaceSummary } from '@/lib/domain/summary';
-import { withDetails } from '@/lib/data/details';
+import { withAuthorBadges, withDetails } from '@/lib/data/details';
 import { tierFromNumber } from '@/lib/domain/tiers';
 import { createClient } from '@/lib/supabase/server';
 
@@ -55,12 +55,17 @@ export async function getPlaceVerdicts(id: string, filter: TierFilter): Promise<
     verdict: v.verdict,
     onlyForText: v.only_for_text,
     visitedOn: v.visited_on,
-    author: { username: v.username, displayName: v.display_name, avatarUrl: v.avatar_url },
+    author: {
+      id: v.author_id,
+      username: v.username,
+      displayName: v.display_name,
+      avatarUrl: v.avatar_url,
+    },
     tier: tierFromNumber(v.tier) ?? undefined,
     groupName: v.group_name,
     tierNumber: v.tier,
   }));
-  return withDetails(rows);
+  return withDetails(rows).then(withAuthorBadges);
 }
 
 export type PlaceSearchResult = {

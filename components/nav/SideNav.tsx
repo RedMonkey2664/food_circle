@@ -10,6 +10,7 @@ import {
   PersonIcon,
   PlusIcon,
   SearchIcon,
+  TrophyIcon,
   UsersIcon,
 } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
@@ -32,6 +33,12 @@ const ITEMS: Item[] = [
     match: (p) => p.startsWith('/discover'),
   },
   { href: '/diary', label: copy.nav.diary, Icon: BookIcon, match: (p) => p.startsWith('/diary') },
+  {
+    href: '/leaderboard',
+    label: copy.compete.title,
+    Icon: TrophyIcon,
+    match: (p) => p.startsWith('/leaderboard'),
+  },
   {
     href: '/friends',
     label: copy.nav.friends,

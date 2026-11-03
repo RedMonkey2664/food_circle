@@ -1,4 +1,5 @@
 import 'server-only';
+import { badgesFor } from '@/lib/data/competition';
 import { createClient } from '@/lib/supabase/server';
 
 export type VisitPhoto = { path: string; url: string };
@@ -75,4 +76,17 @@ export async function placeTopDishes(placeId: string): Promise<Map<number, TopDi
     out.set(r.tier, list);
   }
   return out;
+}
+
+/** Phase 6: attach up to 2 badge names per author (cards that carry author.id). */
+export async function withAuthorBadges<T extends { author?: { id?: string } }>(
+  items: T[],
+): Promise<(T & { authorBadges?: string[] })[]> {
+  const ids = items.flatMap((i) => (i.author?.id ? [i.author.id] : []));
+  if (ids.length === 0) return items;
+  const map = await badgesFor(ids);
+  return items.map((i) => {
+    const b = i.author?.id ? map.get(i.author.id) : undefined;
+    return b?.length ? { ...i, authorBadges: b } : i;
+  });
 }
