@@ -189,3 +189,67 @@ html[data-vt='close']::view-transition-old(root) {
     animation: none !important;
   }
 }
+
+/* Diary map pin card (hover on PC, tap on touch). Built in components/map/MapView.tsx. */
+.fc-map-popup .maplibregl-popup-content {
+  border-radius: var(--radius-card);
+  padding: 12px 14px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  box-shadow: 0 12px 32px -12px rgb(40 20 5 / 0.45);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+.fc-map-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.fc-map-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.fc-map-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: var(--c-surface);
+}
+.fc-map-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.fc-map-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.fc-map-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: var(--c-surface);
+}
+.fc-map-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+.fc-map-badge {
+  align-self: flex-start;
+  border-radius: 9999px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+.fc-map-badge-been {
+  background: var(--c-primary);
+}
+.fc-map-badge-want {
+  background: var(--c-following-fg);
+}
+.fc-map-title {
+  margin-top: 4px;
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.fc-map-verdict {
+  font-size: 13px;
+  font-weight: 700;
+}
+.fc-map-line {
+  font-size: 12px;
+  color: var(--c-muted);
+}
+.fc-map-link {
+  margin-top: 6px;
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-primary);
+}

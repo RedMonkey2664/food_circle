@@ -766,7 +766,7 @@ isOneToOne: false
                            },
 "get_my_map":
 { Args: Record<PropertyKey, never>; Returns: {
-              "area_name": string,"kind": string,"last_visited": string,"lat": number,"lng": number,"name": string,"place_id": string,"verdict": Database["public"]['Enums']["verdict"],"visits": number
+              "area_name": string,"cuisine_tags": (string)[],"diet_flags": (string)[],"kind": string,"last_visited": string,"lat": number,"lng": number,"name": string,"only_for_text": string,"place_id": string,"saved_at": string,"type": Database["public"]['Enums']["place_type"],"verdict": Database["public"]['Enums']["verdict"],"visits": number
             }[]
                            },
 "get_my_scores":

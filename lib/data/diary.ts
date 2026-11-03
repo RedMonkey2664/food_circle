@@ -3,6 +3,7 @@ import type { MapPin } from '@/components/map/MapView';
 import type { VerdictCardData } from '@/components/verdict/VerdictCard';
 import { withDetails } from '@/lib/data/details';
 import { parseCursor } from '@/lib/data/feed';
+import { mapCard } from '@/lib/domain/mapCard';
 import { VISIBILITIES, type Visibility } from '@/lib/domain/visibility';
 import { createClient } from '@/lib/supabase/server';
 
@@ -52,15 +53,31 @@ export async function myTimeline(
 export async function myMapPins(): Promise<MapPin[]> {
   const supabase = await createClient();
   const { data } = await supabase.rpc('get_my_map');
-  return (data ?? []).map((r) => ({
-    id: `${r.kind}-${r.place_id}`,
-    lat: r.lat,
-    lng: r.lng,
-    kind: r.kind === 'want' ? 'want' : 'been',
-    name: r.name,
-    subtitle: r.area_name ?? undefined,
-    href: `/place/${r.place_id}`,
-  }));
+  return (data ?? []).map((r) => {
+    const kind = r.kind === 'want' ? ('want' as const) : ('been' as const);
+    return {
+      id: `${kind}-${r.place_id}`,
+      lat: r.lat,
+      lng: r.lng,
+      kind,
+      name: r.name,
+      subtitle: r.area_name ?? undefined,
+      href: `/place/${r.place_id}`,
+      card: mapCard({
+        kind,
+        name: r.name,
+        areaName: r.area_name,
+        type: r.type,
+        cuisineTags: r.cuisine_tags,
+        dietFlags: r.diet_flags,
+        verdict: r.verdict,
+        onlyForText: r.only_for_text,
+        visits: r.visits,
+        lastVisited: r.last_visited,
+        savedAt: r.saved_at,
+      }),
+    };
+  });
 }
 
 export type OnThisDay = { visitId: string; placeId: string; placeName: string; verdict: 'go' | 'skip' | 'only_for'; yearsAgo: number };

@@ -203,23 +203,27 @@ create trigger want_to_go_limit before insert on public.want_to_go
 -- P5-06, P5-10: diary map, on this day, logbook (own data only)
 -- ---------------------------------------------------------------------------------------
 
--- Pins for my map: places I've been (latest verdict, visit count) and places I want to go.
+-- Pins for my map: places I've been (latest verdict, visit count) and places I want to go,
+-- with enough detail for the pin's hover/tap card.
 create or replace function public.get_my_map()
 returns table (place_id uuid, name text, area_name text, lat double precision, lng double precision,
-               kind text, verdict verdict, visits int, last_visited date)
+               kind text, verdict verdict, only_for_text text, visits int, last_visited date,
+               saved_at timestamptz, type place_type, cuisine_tags text[], diet_flags text[])
 language sql stable security definer set search_path = public, extensions as $$
   with mine as (
-    select distinct on (v.place_id) v.place_id, v.verdict, v.visited_on,
+    select distinct on (v.place_id) v.place_id, v.verdict, v.only_for_text, v.visited_on,
            count(*) over (partition by v.place_id)::int as n
     from public.visits v where v.user_id = auth.uid()
     order by v.place_id, v.visited_on desc, v.logged_at desc
   )
   select p.id, p.name, a.name, st_y(p.geom::geometry), st_x(p.geom::geometry),
-         'been', m.verdict, m.n, m.visited_on
+         'been', m.verdict, m.only_for_text, m.n, m.visited_on, null::timestamptz,
+         p.type, p.cuisine_tags, p.diet_flags
   from mine m join public.places p on p.id = m.place_id left join public.areas a on a.id = p.area_id
   union all
   select p.id, p.name, a.name, st_y(p.geom::geometry), st_x(p.geom::geometry),
-         'want', null, 0, null
+         'want', null, null, 0, null, w.created_at,
+         p.type, p.cuisine_tags, p.diet_flags
   from public.want_to_go w join public.places p on p.id = w.place_id left join public.areas a on a.id = p.area_id
   where w.user_id = auth.uid() and p.status <> 'merged';
 $$;
