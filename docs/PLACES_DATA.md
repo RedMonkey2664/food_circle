@@ -17,10 +17,13 @@ A vendor changing pricing or terms must never break scores. Never use a vendor i
 
 ```
 OpenStreetMap (Overpass)  seed Mumbai. Free, storable (ODbL, attribution required), patchy on small places.
+Overture Maps Places      second seed (pnpm seed:overture), added 2026-11-03. Open data (CDLA-Permissive-2.0,
+                          Apache-2.0 for Foursquare-sourced rows, CC0), attribution in the footer. Fills gaps
+                          OSM misses; deduped against existing places. See DECISIONS.md.
 User pin-drop             thelas, stalls, anything unlisted (Phase 5).
 Google Places             OFF by default. See section 8.
 Zomato / Swiggy           no public data API known; never scrape; link-out only (section 9).
-Foursquare                not used in v1; check India coverage and terms before considering.
+Foursquare                not used directly; its open places reach us through Overture (Apache-2.0).
 ```
 
 ## 3. OSM seed (`pnpm seed:osm`, Phase 0)
