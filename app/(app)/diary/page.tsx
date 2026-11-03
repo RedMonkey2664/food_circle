@@ -9,9 +9,8 @@ import { requireOnboardedUser } from '@/lib/auth';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import { myLogbook, myMapPins, myTimeline, onThisDay } from '@/lib/data/diary';
-import { myProgress } from '@/lib/data/competition';
+import { myProgress } from '@/lib/data/achievements';
 import { ProgressCard } from '@/components/compete/ProgressCard';
-import { FLAGS } from '@/lib/config';
 import { cuisineLabel } from '@/lib/domain/place';
 
 export const metadata = { title: 'Diary' };
@@ -137,19 +136,13 @@ async function DiaryContent({
 
   const cursor = typeof sp.cursor === 'string' ? sp.cursor : undefined;
   const page = await myTimeline(me.id, cursor);
-  const progress = FLAGS.leaderboards && !cursor ? await myProgress() : null;
+  const progress = !cursor ? await myProgress() : null;
   return (
     <>
       <Tabs active={view} />
       {progress ? (
         <div className="mt-4 md:max-w-2xl">
           <ProgressCard progress={progress} />
-          <Link
-            href="/leaderboard"
-            className="text-primary mt-2 inline-flex min-h-11 items-center text-sm font-semibold"
-          >
-            {copy.compete.openBoard} ›
-          </Link>
         </div>
       ) : null}
       {!cursor ? <OnThisDay /> : null}

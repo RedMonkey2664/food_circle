@@ -10,8 +10,6 @@ export const FLAGS = {
   googlePlaces: flag(process.env.GOOGLE_PLACES_ENABLED),
   handoffSwiggy: flag(process.env.NEXT_PUBLIC_HANDOFF_SWIGGY_ENABLED),
   handoffZomato: flag(process.env.NEXT_PUBLIC_HANDOFF_ZOMATO_ENABLED),
-  // Phase 6: on unless explicitly turned off.
-  leaderboards: process.env.NEXT_PUBLIC_LEADERBOARDS_ENABLED !== 'false',
 } as const;
 
 /**

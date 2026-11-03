@@ -10,7 +10,6 @@ export type Profile = {
   avatarUrl: string | null;
   isPrivate: boolean;
   homeArea: string | null;
-  leaderboardsOptIn: boolean;
 };
 
 export type ProfileStats = {
@@ -31,7 +30,7 @@ export async function profileByUsername(username: string): Promise<Profile | nul
   const supabase = await createClient();
   const { data } = await supabase
     .from('profiles')
-    .select('id, username, display_name, bio, avatar_url, is_private, onboarded_at, leaderboards_opt_in, home_area:areas(name)')
+    .select('id, username, display_name, bio, avatar_url, is_private, onboarded_at, home_area:areas(name)')
     .eq('username', username.toLowerCase())
     .maybeSingle();
   if (!data || !data.onboarded_at) return null;
@@ -43,7 +42,6 @@ export async function profileByUsername(username: string): Promise<Profile | nul
     avatarUrl: data.avatar_url,
     isPrivate: data.is_private,
     homeArea: data.home_area?.name ?? null,
-    leaderboardsOptIn: data.leaderboards_opt_in,
   };
 }
 

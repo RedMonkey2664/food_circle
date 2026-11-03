@@ -11,10 +11,9 @@ import { signOut } from '@/lib/actions/auth';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { profileByUsername, profileStats, recentVisitsBy } from '@/lib/data/profile';
-import { myProgress, userBadges } from '@/lib/data/competition';
+import { achievements, myProgress } from '@/lib/data/achievements';
+import { AchievementGrid } from '@/components/compete/AchievementGrid';
 import { ProgressCard } from '@/components/compete/ProgressCard';
-import { OptInToggle } from '@/components/compete/OptInToggle';
-import { FLAGS } from '@/lib/config';
 import { refreshMyTasteMatches } from '@/lib/data/discover';
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith } from '@/lib/domain/relationship';
@@ -51,9 +50,13 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
     profileStats(profile.id),
     myGraph(),
     recentVisitsBy(profile.id),
-    userBadges(profile.id),
+    achievements(profile.id),
     isSelf ? myProgress() : Promise.resolve(null),
   ]);
+  const earned = badges.filter((b) => b.earnedAt !== null);
+  const pinned = earned
+    .filter((b) => b.showcased !== null)
+    .sort((a, b) => (a.showcased ?? 0) - (b.showcased ?? 0));
   const rel = relationshipWith(me.id, profile.id, graph.friendships, graph.follows);
   const canSeeEntries =
     isSelf || !profile.isPrivate || rel.friend === 'friends' || rel.follow === 'following';
@@ -71,9 +74,11 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
             {profile.homeArea ? `, ${profile.homeArea}` : ''}
           </p>
           <div className="mt-1 flex flex-wrap gap-1.5">
-            <span className="bg-ink text-bg rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-semibold">
-              {copy.compete.level(badges.level)}
-            </span>
+            {progress ? (
+              <span className="bg-ink text-bg rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-semibold">
+                {copy.achieve.level(progress.level)}
+              </span>
+            ) : null}
             {rel.friend === 'friends' ? (
               <span className="bg-primary text-on-primary rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-bold">
                 {t.friendsBadge}
@@ -92,6 +97,23 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
           </div>
         </div>
       </header>
+
+      {pinned.length ? (
+        <ul className="mt-3 flex flex-wrap gap-2" aria-label={copy.achieve.showcase}>
+          {pinned.map((b) => (
+            <li
+              key={b.slug}
+              title={b.description}
+              className="border-primary/30 bg-primary-soft inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-semibold"
+            >
+              <span aria-hidden className="text-base">
+                {b.icon}
+              </span>
+              {b.name}
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {profile.bio ? <p className="mt-3 whitespace-pre-wrap">{profile.bio}</p> : null}
 
@@ -147,47 +169,28 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
 
       {progress ? (
         <div className="mt-4">
-          <ProgressCard progress={progress} />
+          <ProgressCard progress={progress} link={false} />
         </div>
       ) : null}
 
       <section className="mt-6">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-lg font-semibold">{copy.compete.badges}</h2>
-          {isSelf && FLAGS.leaderboards ? (
-            <Link href="/leaderboard" className="text-primary text-sm font-semibold">
-              {copy.compete.openBoard} ›
+          <h2 className="font-display text-lg font-semibold">{copy.achieve.title}</h2>
+          {isSelf ? (
+            <Link href="/achievements" className="text-primary text-sm font-semibold">
+              {copy.achieve.seeAll} ›
             </Link>
           ) : null}
         </div>
-        {badges.badges.length === 0 ? (
-          <p className="text-muted mt-1 text-sm">{copy.compete.noBadges}</p>
-        ) : (
-          <ul className="mt-2 grid gap-2 sm:grid-cols-2">
-            {badges.badges.map((b) => (
-              <li
-                key={b.slug}
-                className="border-line bg-surface flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
-              >
-                <span
-                  aria-hidden
-                  className="bg-primary-soft text-primary flex size-9 shrink-0 items-center justify-center rounded-full text-lg"
-                >
-                  {b.category === 'behaviour' ? '★' : b.category === 'culture' ? '🍽' : '🧭'}
-                </span>
-                <span>
-                  <span className="block font-semibold">{b.name}</span>
-                  <span className="text-muted text-sm">{b.description}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {isSelf && FLAGS.leaderboards ? (
-          <div className="mt-3">
-            <OptInToggle on={profile.leaderboardsOptIn} />
-          </div>
-        ) : null}
+        <div className="mt-2">
+          {earned.length ? (
+            <AchievementGrid items={earned} />
+          ) : (
+            <p className="text-muted text-sm">
+              {isSelf ? copy.achieve.none : copy.achieve.noneOther}
+            </p>
+          )}
+        </div>
       </section>
 
       <section className="mt-8">

@@ -34,10 +34,10 @@ const ITEMS: Item[] = [
   },
   { href: '/diary', label: copy.nav.diary, Icon: BookIcon, match: (p) => p.startsWith('/diary') },
   {
-    href: '/leaderboard',
-    label: copy.compete.title,
+    href: '/achievements',
+    label: copy.achieve.title,
     Icon: TrophyIcon,
-    match: (p) => p.startsWith('/leaderboard'),
+    match: (p) => p.startsWith('/achievements'),
   },
   {
     href: '/friends',
