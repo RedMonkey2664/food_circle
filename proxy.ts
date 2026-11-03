@@ -12,6 +12,6 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // Skip static assets, images and PWA files.
   matcher: [
-    '/((?!api/cron/|_next/static|_next/image|favicon.ico|manifest.webmanifest|icon/|icon$|apple-icon|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|icon/|icon$|apple-icon|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)',
   ],
 };
