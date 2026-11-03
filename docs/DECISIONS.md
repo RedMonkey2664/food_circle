@@ -247,3 +247,9 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Same routes, layout chosen by width (no user-agent sniffing): phones < 768px keep the original single 480px column + bottom nav; iPad (md, >= 768px) gets an 84px icon rail with the Log button and a 720px column; PC (lg, >= 1024px) gets a 248px labelled sidebar and up to 1080px of content.
 - Two-column pages on PC: Home (feed + side panel with search, your groups, people to follow), place page (summary + "I ate here" pinned left, verdicts right), group page (feed + members/add/invite), groups list (list + create form), login (pitch + sign-in card). Discover shows section cards (1 column on iPad, 2 on PC). Friends, profiles and search stay at a reading width (max 672px).
 - iPad/PC show "I ate here" inline instead of the phone's floating bar; the log takeover drops the sidebar and centres the sheet. Side nav adds Search and Groups (room the phone bar doesn't have).
+
+### Want to go list (2026-11-03)
+- Human asked for a map of places visited and places still to visit. Visited pins were already planned (P5-06); a "Want to go" list was not in any phase. Added as P5-11 with the map showing both, and extended Phase 5's Done-when. Private by default, no points (the Visit stays the only scoring unit).
+
+### Phase 3 approved and deployed (2026-11-03)
+- Human approved Phase 3 (groups + device layouts). Groups migration applied to the hosted DB via the SQL editor (25 recorded, 4 group triggers, 0 anon-callable functions); main fast-forwarded and pushed to Vercel.

@@ -137,8 +137,9 @@ Goal: a reason to open the app when not searching, and data quality for scoring.
 - [ ] P5-08 (M) Companion tagging: tagged friend gets "Add to your log?". Tagging alone gives no points.
 - [ ] P5-09 (M) Backdating: allowed, flagged, counts toward all-time only (rules live in SQL already).
 - [ ] P5-10 (M) Logbook counts: places by area, areas covered, places by cuisine.
+- [ ] P5-11 (M) "Want to go" list (added 2026-11-03 at the human's request): save a place from its page or from a friend's verdict; private by default; never earns points; logging a visit moves it from Want to go to Been. The diary map (P5-06) shows both, distinguished by colour plus a text label/icon, with a Been / Want to go / Both toggle.
 
-Done when: a user drops a pin for a vada pav stall, sees it on their map, and a second user logging the same stall is matched to it instead of creating a duplicate; an admin merge moves visits and fixes counts.
+Done when: a user drops a pin for a vada pav stall, sees it on their map, saves another place as Want to go and sees it as a different pin, and a second user logging the same stall is matched to it instead of creating a duplicate; an admin merge moves visits and fixes counts.
 
 ---
 

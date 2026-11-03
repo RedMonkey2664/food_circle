@@ -1,4 +1,4 @@
--- Phase 3: optional groups (PHASES.md P3-01..P3-06, DATABASE.md §6, API_SPEC.md Groups).
+-- Phase 3: optional groups (PHASES.md P3-01..P3-06, DATABASE.md section 6, API_SPEC.md Groups).
 -- Groups are named buckets of the owner's friends. A Friends visit can be shared with specific
 -- groups only; can_view_visit (0008) already enforces audience groups in RLS.
 set search_path = public, extensions;
