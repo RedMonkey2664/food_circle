@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CircleOpenLink } from '@/components/motion/CircleLink';
 import {
+  BookIcon,
   CompassIcon,
   HomeIcon,
   PersonIcon,
@@ -30,6 +31,7 @@ const ITEMS: Item[] = [
     Icon: CompassIcon,
     match: (p) => p.startsWith('/discover'),
   },
+  { href: '/diary', label: copy.nav.diary, Icon: BookIcon, match: (p) => p.startsWith('/diary') },
   {
     href: '/friends',
     label: copy.nav.friends,

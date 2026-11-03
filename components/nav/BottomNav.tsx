@@ -3,15 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CircleOpenLink } from '@/components/motion/CircleLink';
-import { CompassIcon, HomeIcon, PersonIcon, PlusIcon, UsersIcon } from '@/components/ui/icons';
+import { BookIcon, CompassIcon, HomeIcon, PersonIcon, PlusIcon } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 
-// Home, Discover, + Log, Friends, Me. Friends sits where Diary arrives in Phase 5.
+// Home, Discover, + Log, Diary, Me (Phase 5). Friends is one tap away from Home and Me.
 const items = {
   home: { href: '/', label: copy.nav.home, Icon: HomeIcon },
   discover: { href: '/discover', label: copy.nav.discover, Icon: CompassIcon },
-  friends: { href: '/friends', label: copy.nav.friends, Icon: UsersIcon },
+  diary: { href: '/diary', label: copy.nav.diary, Icon: BookIcon },
   me: { href: '/me', label: copy.nav.me, Icon: PersonIcon },
 } as const;
 
@@ -45,7 +45,7 @@ function BottomNavView({ pathname }: { pathname: string | null }) {
             <PlusIcon size={26} strokeWidth={2.5} />
           </CircleOpenLink>
         </li>
-        <NavItem {...items.friends} active={!!pathname?.startsWith('/friends')} />
+        <NavItem {...items.diary} active={!!pathname?.startsWith('/diary')} />
         <NavItem
           {...items.me}
           active={!!pathname && (pathname.startsWith('/me') || pathname.startsWith('/u/'))}

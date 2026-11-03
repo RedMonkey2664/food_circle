@@ -224,7 +224,15 @@ export function PlaceSearch({
           <RecentPlaces title={copy.search.recent} hrefFor={(id) => hrefFor(mode, id)} />
         </>
       ) : open && list.length === 0 ? (
-        <p className="text-muted mt-4 text-sm">{copy.search.noMatch(shownFor)}</p>
+        <p className="text-muted mt-4 text-sm">
+          {copy.search.noMatch(shownFor)}{' '}
+          <Link
+            href={`/add-place?name=${encodeURIComponent(shownFor)}`}
+            className="text-primary font-semibold"
+          >
+            {copy.search.addIt}
+          </Link>
+        </p>
       ) : (
         <ul
           id={`${listId}-list`}

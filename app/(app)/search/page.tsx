@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import { Suspense } from 'react';
+import { buttonClass } from '@/components/ui/Button';
 import { PlaceSearch } from '@/components/place/PlaceSearch';
 import { copy } from '@/lib/copy';
 import { searchPlaces } from '@/lib/data/places';
@@ -15,6 +17,12 @@ async function Results({ searchParams }: { searchParams: PageProps<'/search'>['s
       <section className="border-line mt-8 rounded-[var(--radius-card)] border border-dashed p-4">
         <h2 className="font-semibold">{copy.search.cantFind}</h2>
         <p className="text-muted mt-1 text-sm">{copy.search.cantFindBody}</p>
+        <Link
+          href={query.trim() ? `/add-place?name=${encodeURIComponent(query.trim())}` : '/add-place'}
+          className={buttonClass({ variant: 'secondary', className: 'mt-3' })}
+        >
+          {copy.search.addIt}
+        </Link>
       </section>
     </>
   );

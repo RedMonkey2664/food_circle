@@ -6,6 +6,7 @@ import { visitAge } from '@/lib/domain/time';
 import type { Verdict } from '@/lib/domain/verdict';
 import { VISIBILITY_LABEL, type Visibility } from '@/lib/domain/visibility';
 import type { VisitDetails } from '@/lib/data/details';
+import { WantToGoButton } from '@/components/place/WantToGoButton';
 import { RelationshipTag } from './RelationshipTag';
 import { VerdictDetails } from './VerdictDetails';
 import { VerdictLabel } from './VerdictLabel';
@@ -24,6 +25,8 @@ export type VerdictCardData = {
   ownVisibility?: Visibility;
   /** Phase 4: note, dishes, price, photos (only what the viewer may see). */
   details?: VisitDetails;
+  /** Phase 5: show "Save to Want to go" (someone else's verdict, with a place). */
+  saved?: boolean;
 };
 
 /**
@@ -59,7 +62,14 @@ export function VerdictCard({ data }: { data: VerdictCardData }) {
       ) : null}
       <div className="mt-1 flex items-center justify-between gap-2">
         <VerdictLabel verdict={data.verdict} onlyForText={data.onlyForText} />
-        {data.ownVisibility ? (
+        {data.saved !== undefined && data.place && data.tier ? (
+          <WantToGoButton
+            placeId={data.place.id}
+            initialSaved={data.saved}
+            fromVisit={data.visitId}
+            compact
+          />
+        ) : data.ownVisibility ? (
           <span className="text-muted text-xs">{VISIBILITY_LABEL[data.ownVisibility]}</span>
         ) : null}
       </div>

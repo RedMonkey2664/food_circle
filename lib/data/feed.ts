@@ -1,6 +1,7 @@
 import 'server-only';
 import type { VerdictCardData } from '@/components/verdict/VerdictCard';
 import { withDetails } from '@/lib/data/details';
+import { myWantToGoIds } from '@/lib/data/diary';
 import { tierFromNumber } from '@/lib/domain/tiers';
 import { createClient } from '@/lib/supabase/server';
 
@@ -42,8 +43,9 @@ export async function homeFeed(tab: FeedTab, cursorRaw?: string): Promise<FeedPa
       tier: tierFromNumber(r.tier) ?? undefined,
       groupName: tab.startsWith('group:') ? null : r.group_name,
   }));
+  const [withD, saved] = await Promise.all([withDetails(items), myWantToGoIds()]);
   return {
-    items: await withDetails(items),
+    items: withD.map((i) => (i.place ? { ...i, saved: saved.has(i.place.id) } : i)),
     nextCursor: rows.length > PAGE && last ? `${last.logged_at}_${last.visit_id}` : null,
   };
 }

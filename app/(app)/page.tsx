@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { CompanionPrompts } from '@/components/home/CompanionPrompts';
 import { HomeAside } from '@/components/home/HomeAside';
 import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -67,6 +68,7 @@ async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchPara
 
   return (
     <>
+      {!cursor ? <CompanionPrompts /> : null}
       <Tabs active={tab} groups={groups} />
       {page.items.length === 0 && !cursor ? (
         <div className="mt-6">
