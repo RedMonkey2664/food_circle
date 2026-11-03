@@ -295,3 +295,14 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Preconnect (react-dom preconnect) to the Supabase URL, OpenFreeMap tiles and Google avatars.
 - Smooth navigation: app/(app)/template.tsx gives each page a 200 ms fade + 6 px rise (transform/opacity only; off for reduced motion and for the log takeover's circle reveal).
 - Home loads group tabs and the feed in parallel; photos and avatars decode asynchronously with a soft placeholder.
+
+### Phase 6: Competition and badges (2026-11-03)
+- Scoring rules are unchanged (Phase 1 recompute). Added: badge engine (badge_progress + evaluate_badges, JSON rules; the five Phase 6 badges active, Phase 7 rows stay inactive), First Finder re-checked for earlier friends when someone logs a place, level = floor(sqrt(all-time places)) in private.level_for.
+- Leaderboards (P6-02): get_leaderboard for friends, following, or a group (member + owner opt-in via set_group_leaderboard; family groups start off). Week / month / all-time; ranked by shared places, then verified visits, then earliest; excludes blocked people and anyone who opted out (profiles.leaderboards_opt_in, toggle on your own profile). There is no city-wide scope and the RPC rejects anything else. Returns "N more places to pass X".
+- Feature flag: NEXT_PUBLIC_LEADERBOARDS_ENABLED is now on unless set to 'false' (Phase 6 ships it).
+- Post-log feedback (P6-03): get_visit_feedback gives new_place / all_time_only / repeat / daily_cap / chain_cap with neutral copy, plus the month score and the friend just ahead.
+- Streak copy (P6-05): "N weeks of new places", a grace week note, never "you lost your streak".
+- Profile (P6-06): level chip, progress card on your own profile, badge list, leaderboard opt-in. Verdict cards show up to 2 author badges (behaviour badges first): one on phones, two from 640px.
+- Verified visits (P6-07): verify_visit within 150 m of the place and within 12 hours of logging (so old visits can't be verified later); location asked only on tap; never blocks; breaks ties only.
+- Navigation: Leaderboard in the iPad/PC side nav; on phones via Diary (progress card + link) and your profile.
+- Done-when automated in rpc_competition.test.sql (23 assertions: 5-person group board, repeats, private and backdated rules, blocks, opt-out, group permissions, badges incl. caps, feedback, verification). Daily/chain caps also covered by scoring.test.sql. Browser-verified: leaderboard, progress card, "New place! +1" after logging, profile badges section.

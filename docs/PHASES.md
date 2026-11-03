@@ -147,13 +147,13 @@ Done when: a user drops a pin for a vada pav stall, sees it on their map, saves 
 
 Goal: friendly competition that rewards exploring, not review spam.
 
-- [ ] P6-01 (M) Surface scores from the `user_scores` cache. Verify caps and flags with tests (see SCORING_BADGES.md).
-- [ ] P6-02 (L) Leaderboards: friends (default), groups (opt-in per group), followed people (opt-in). Weekly, monthly, all-time. NO Mumbai-wide board.
-- [ ] P6-03 (S) Post-log feedback: "New place! +1. Aarav is 2 ahead of you."
-- [ ] P6-04 (L) Badge engine (rule-based, rules in DB). First set: Bandra Native, Suburb Surveyor, Thela Hunter, First Finder, Honest Critic.
-- [ ] P6-05 (M) Weekly new-place streak with a grace week.
-- [ ] P6-06 (M) Profile page: level, badges, counts. Badges shown beside the name on verdict cards.
-- [ ] P6-07 (M) Optional verified visit (device location near the pin). Never blocks logging; verified visits break ties.
+- [x] P6-01 (M) Surface scores from the `user_scores` cache. Verify caps and flags with tests (see SCORING_BADGES.md).
+- [x] P6-02 (L) Leaderboards: friends (default), groups (opt-in per group), followed people (opt-in). Weekly, monthly, all-time. NO Mumbai-wide board.
+- [x] P6-03 (S) Post-log feedback: "New place! +1. Aarav is 2 ahead of you."
+- [x] P6-04 (L) Badge engine (rule-based, rules in DB). First set: Bandra Native, Suburb Surveyor, Thela Hunter, First Finder, Honest Critic.
+- [x] P6-05 (M) Weekly new-place streak with a grace week.
+- [x] P6-06 (M) Profile page: level, badges, counts. Badges shown beside the name on verdict cards.
+- [x] P6-07 (M) Optional verified visit (device location near the pin). Never blocks logging; verified visits break ties.
 
 Done when: a group of 5+ runs a month-long leaderboard, repeating one cafe does not add points, chain cap and daily cap work, and backdated visits count only toward all-time.
 
