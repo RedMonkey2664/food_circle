@@ -1,7 +1,5 @@
 import { Suspense } from 'react';
-import { PlaceSearchBox } from '@/components/place/PlaceSearchBox';
-import { PlaceSearchResults } from '@/components/place/PlaceSearchResults';
-import { RecentPlaces } from '@/components/place/RecentPlaces';
+import { PlaceSearch } from '@/components/place/PlaceSearch';
 import { copy } from '@/lib/copy';
 import { searchPlaces } from '@/lib/data/places';
 
@@ -13,15 +11,7 @@ async function Results({ searchParams }: { searchParams: PageProps<'/search'>['s
   const results = query.trim().length >= 2 ? await searchPlaces(query) : null;
   return (
     <>
-      <PlaceSearchBox query={query} action="/search" />
-      {results === null ? (
-        <>
-          <p className="text-muted mt-3 text-sm">{copy.search.hint}</p>
-          <RecentPlaces title={copy.search.recent} />
-        </>
-      ) : (
-        <PlaceSearchResults results={results} hrefFor={(id) => `/place/${id}`} />
-      )}
+      <PlaceSearch mode="place" action="/search" initialQuery={query} initialResults={results} />
       <section className="border-line mt-8 rounded-[var(--radius-card)] border border-dashed p-4">
         <h2 className="font-semibold">{copy.search.cantFind}</h2>
         <p className="text-muted mt-1 text-sm">{copy.search.cantFindBody}</p>

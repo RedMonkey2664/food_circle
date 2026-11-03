@@ -43,7 +43,13 @@ export function RememberPlace({ place }: { place: RecentPlace }) {
 
 const subscribe = () => () => {};
 
-export function RecentPlaces({ title }: { title: string }) {
+export function RecentPlaces({
+  title,
+  hrefFor = (id) => `/place/${id}`,
+}: {
+  title: string;
+  hrefFor?: (id: string) => string;
+}) {
   const mounted = useSyncExternalStore(
     subscribe,
     () => true,
@@ -57,7 +63,7 @@ export function RecentPlaces({ title }: { title: string }) {
       <ul className="divide-line mt-1 divide-y">
         {items.map((p) => (
           <li key={p.id}>
-            <Link href={`/place/${p.id}`} className="flex min-h-12 flex-col justify-center py-2">
+            <Link href={hrefFor(p.id)} className="flex min-h-12 flex-col justify-center py-2">
               <span className="font-medium">{p.name}</span>
               {p.areaName ? <span className="text-muted text-sm">{p.areaName}</span> : null}
             </Link>

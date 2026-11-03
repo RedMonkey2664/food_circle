@@ -2,9 +2,7 @@ import type { Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { CircleCloseLink } from '@/components/motion/CircleLink';
-import { PlaceSearchBox } from '@/components/place/PlaceSearchBox';
-import { PlaceSearchResults } from '@/components/place/PlaceSearchResults';
-import { RecentPlaces } from '@/components/place/RecentPlaces';
+import { PlaceSearch } from '@/components/place/PlaceSearch';
 import { CloseIcon } from '@/components/ui/icons';
 import { LogSheet } from '@/components/verdict/LogSheet';
 import { requireOnboardedUser } from '@/lib/auth';
@@ -39,13 +37,8 @@ async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['s
         <Heading>{copy.log.pickTitle}</Heading>
         <section className="bg-surface rounded-[var(--radius-card)] p-4 shadow-[0_18px_40px_-24px_rgb(60_20_5/0.55)]">
           <div className="-mt-3">
-            <PlaceSearchBox query={query} action="/log" />
+            <PlaceSearch mode="log" action="/log" initialQuery={query} initialResults={results} />
           </div>
-          {results === null ? (
-            <RecentPlaces title={copy.search.recent} />
-          ) : (
-            <PlaceSearchResults results={results} hrefFor={(id) => `/log?place=${id}`} />
-          )}
         </section>
       </>
     );

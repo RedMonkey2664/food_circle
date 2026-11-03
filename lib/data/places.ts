@@ -69,11 +69,11 @@ export type PlaceSearchResult = {
   dietFlags: string[];
 };
 
-export async function searchPlaces(query: string): Promise<PlaceSearchResult[]> {
+export async function searchPlaces(query: string, limit = 20): Promise<PlaceSearchResult[]> {
   const q = query.trim().slice(0, 80);
   if (q.length < 2) return [];
   const supabase = await createClient();
-  const { data } = await supabase.rpc('search_places', { p_query: q, p_limit: 20 });
+  const { data } = await supabase.rpc('search_places', { p_query: q, p_limit: limit });
   return (data ?? []).map((r) => ({
     id: r.id,
     name: r.name,

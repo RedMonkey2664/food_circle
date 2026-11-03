@@ -54,6 +54,9 @@
   --color-veg: var(--c-veg);
   --color-focus: var(--c-focus);
 
+  /* Search suggestions: a short rise-and-fade when a list first appears (not per keystroke). */
+  --animate-suggest-in: suggest-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 
@@ -153,6 +156,13 @@ html[data-vt='close']::view-transition-new(root) {
 html[data-vt='close']::view-transition-old(root) {
   z-index: 1;
   animation: vt-circle-shrink var(--vt-close-duration) var(--vt-close-ease) both;
+}
+
+@keyframes suggest-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 @keyframes vt-circle-grow {

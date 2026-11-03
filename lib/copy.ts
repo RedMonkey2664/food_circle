@@ -112,6 +112,7 @@ export const copy = {
   },
   footer: {
     osm: '© OpenStreetMap contributors',
+    overture: 'Overture Maps Foundation',
     privacy: 'Your entries are only visible to the people you choose.',
   },
   profile: {
@@ -189,6 +190,13 @@ export const copy = {
     cantFindBody: 'Adding new places (like thelas and stalls) is coming soon.',
     recent: 'Recently viewed',
     hint: 'Type at least 2 letters.',
+    clear: 'Clear search',
+    searching: 'Searching…',
+    tryTitle: 'Try',
+    tryChips: ['Vada pav', 'Misal', 'Irani cafe', 'Biryani', 'Pav bhaji', 'Dosa', 'Chai', 'Bakery'],
+    resultsCount: (n: number) => (n === 1 ? '1 place' : `${n} places`),
+    noMatch: (q: string) => `No places match “${q}”.`,
+    seeAll: (q: string) => `See all results for “${q}”`,
   },
   discover: {
     title: 'Discover',
