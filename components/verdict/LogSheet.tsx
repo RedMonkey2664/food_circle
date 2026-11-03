@@ -13,21 +13,29 @@ import type { Verdict } from '@/lib/domain/verdict';
 import type { Visibility } from '@/lib/domain/visibility';
 import { VerdictButtons } from './VerdictButtons';
 import { VerdictLabel } from './VerdictLabel';
-import { VisibilityPicker } from './VisibilityPicker';
+import { VisibilityPicker, type PickerGroup } from './VisibilityPicker';
 
 type Props = {
   place: { id: string; name: string; areaName: string | null };
   defaultVisibility: Visibility;
   isPrivateAccount: boolean;
   counts: { friends: number; followers: number };
+  groups?: PickerGroup[];
 };
 
 /**
  * The 10-second log (UI_UX.md §4.5). Step 1: tap a verdict, which saves immediately.
  * Step 2: success, with optional extras later (Phase 4). Only the verdict is required.
  */
-export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }: Props) {
+export function LogSheet({
+  place,
+  defaultVisibility,
+  isPrivateAccount,
+  counts,
+  groups = [],
+}: Props) {
   const [visibility, setVisibility] = useState<Visibility>(defaultVisibility);
+  const [groupIds, setGroupIds] = useState<string[]>([]);
   const [saved, setSaved] = useState<{ verdict: Verdict; onlyFor?: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [others, setOthers] = useState<{ people: AfterLogPerson[]; othersCount: number } | null>(
@@ -39,7 +47,13 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
   function save(verdict: Verdict, onlyForText?: string) {
     setError(null);
     startTransition(async () => {
-      const r = await logVisit({ placeId: place.id, verdict, onlyForText, visibility });
+      const r = await logVisit({
+        placeId: place.id,
+        verdict,
+        onlyForText,
+        visibility,
+        ...(visibility === 'friends' && groupIds.length ? { groupIds } : {}),
+      });
       if (!r.ok) return setError(r.message);
       setSaved({ verdict, onlyFor: onlyForText });
       // P2-04: who else logged this, that you could follow (never blocks the success state).
@@ -116,6 +130,9 @@ export function LogSheet({ place, defaultVisibility, isPrivateAccount, counts }:
         onChange={setVisibility}
         isPrivateAccount={isPrivateAccount}
         counts={counts}
+        groups={groups}
+        selectedGroups={groupIds}
+        onGroupsChange={setGroupIds}
       />
       {pending ? (
         <p className="text-muted text-sm" aria-live="polite">

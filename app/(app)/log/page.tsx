@@ -7,6 +7,7 @@ import { CloseIcon } from '@/components/ui/icons';
 import { LogSheet } from '@/components/verdict/LogSheet';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
+import { myGroups } from '@/lib/data/groups';
 import { getPlace, searchPlaces } from '@/lib/data/places';
 import { profileStats } from '@/lib/data/profile';
 
@@ -47,7 +48,7 @@ async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['s
   if (!UUID_RE.test(placeParam)) notFound();
   const place = await getPlace(placeParam);
   if (!place) notFound();
-  const stats = await profileStats(me.id);
+  const [stats, groups] = await Promise.all([profileStats(me.id), myGroups()]);
 
   return (
     <>
@@ -58,6 +59,7 @@ async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['s
           defaultVisibility={me.defaultVisibility}
           isPrivateAccount={me.isPrivate}
           counts={{ friends: stats.friends, followers: stats.followers }}
+          groups={groups.map((g) => ({ id: g.id, name: g.name }))}
         />
       </div>
     </>

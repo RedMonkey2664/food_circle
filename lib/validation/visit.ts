@@ -13,6 +13,12 @@ export const logVisitInput = z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)
       .optional(), // IST date; the database defaults to today
+    // Phase 3: narrow a Friends entry to some of my groups. Empty/absent = all friends.
+    groupIds: z.array(z.uuid()).max(10).optional(),
+  })
+  .refine((v) => !v.groupIds?.length || v.visibility === 'friends', {
+    message: 'Groups only with Friends visibility',
+    path: ['groupIds'],
   })
   .refine((v) => v.verdict === 'only_for' || !v.onlyForText, {
     message: 'onlyForText only with only_for',

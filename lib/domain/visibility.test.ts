@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defaultVisibility, visibilityOptions, whoCanSee } from './visibility';
+import { defaultVisibility, visibilityOptions, whoCanSee, whoCanSeeGroups } from './visibility';
 
 describe('defaultVisibility', () => {
   it('defaults to the narrower audience', () => {
@@ -31,5 +31,17 @@ describe('whoCanSee', () => {
     expect(whoCanSee('public', true)).toBe(
       'Visible to your friends and your followers (your account is private).',
     );
+  });
+});
+
+describe('whoCanSeeGroups', () => {
+  it('names the groups a Friends entry is narrowed to', () => {
+    expect(whoCanSeeGroups(['Family'])).toBe('Visible only to your friends in Family.');
+    expect(whoCanSeeGroups(['Family', 'College gang', 'Office'])).toBe(
+      'Visible only to your friends in Family, College gang and Office.',
+    );
+  });
+  it('falls back to all friends when no group is picked', () => {
+    expect(whoCanSeeGroups([])).toBe('Visible to your friends.');
   });
 });

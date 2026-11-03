@@ -51,3 +51,14 @@ export function whoCanSee(v: Visibility, isPrivateAccount: boolean, counts: Coun
         : 'Visible to anyone on Food Circle.';
   }
 }
+
+/** Friends visibility narrowed to groups (Phase 3): "Visible only to your friends in Family." */
+export function whoCanSeeGroups(groupNames: readonly string[]): string {
+  const names = groupNames.filter(Boolean);
+  if (names.length === 0) return whoCanSee('friends', false);
+  const list =
+    names.length === 1
+      ? names[0]
+      : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+  return `Visible only to your friends in ${list}.`;
+}

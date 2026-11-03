@@ -22,6 +22,21 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
   const userId = claims?.claims?.sub;
   if (!userId) return fail('not_authenticated');
 
+  // Shared with specific groups: one RPC so the visit is never briefly visible to all friends.
+  if (v.groupIds?.length) {
+    const { data: visitId, error } = await supabase.rpc('log_visit_for_groups', {
+      p_place: v.placeId,
+      p_verdict: v.verdict,
+      p_groups: v.groupIds,
+      ...(v.verdict === 'only_for' && v.onlyForText ? { p_only_for_text: v.onlyForText } : {}),
+      ...(v.visitedOn ? { p_visited_on: v.visitedOn } : {}),
+    });
+    if (error || !visitId) return { ok: false, ...fromDbError(error) };
+    revalidatePath(`/place/${v.placeId}`);
+    revalidatePath('/', 'layout');
+    return { ok: true, data: { visitId } };
+  }
+
   const { data, error } = await supabase
     .from('visits')
     .insert({
