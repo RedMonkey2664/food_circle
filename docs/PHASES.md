@@ -96,12 +96,12 @@ Human to-do before testing: log 50 to 100 real Mumbai places yourself and invite
 
 Goal: named buckets of friends (Family, College gang) layered on top of friendships.
 
-- [ ] P3-01 (M) Create group, invite link, join. Members must already be friends of the owner (DB trigger enforces).
-- [ ] P3-02 (S) Roles: owner, member. Leave group. Owner can remove members and delete group.
-- [ ] P3-03 (M) Group tag on VerdictCards (shows a group the viewer and author share).
-- [ ] P3-04 (M) Audience groups on a visit: share a Friends visit with specific groups only ("Family says Go"). Enforced in RLS.
-- [ ] P3-05 (M) Group feed tab and group page.
-- [ ] P3-06 (S) Family-friendly defaults: groups private, no leaderboard unless the owner enables it later (Phase 6).
+- [x] P3-01 (M) Create group, invite link, join. Members must already be friends of the owner (DB trigger enforces).
+- [x] P3-02 (S) Roles: owner, member. Leave group. Owner can remove members and delete group.
+- [x] P3-03 (M) Group tag on VerdictCards (shows a group the viewer and author share).
+- [x] P3-04 (M) Audience groups on a visit: share a Friends visit with specific groups only ("Family says Go"). Enforced in RLS.
+- [x] P3-05 (M) Group feed tab and group page.
+- [x] P3-06 (S) Family-friendly defaults: groups private, no leaderboard unless the owner enables it later (Phase 6).
 
 Done when: a family group can be created, and a verdict shared to Family only is visible to Family members and nobody else, including other friends.
 
