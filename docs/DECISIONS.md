@@ -263,3 +263,6 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Top dishes (P4-05): `get_place_top_dishes` uses the same latest-visible-visit rows as the tier summary, top 5 per tier, shown as separate Friends / Following / Everyone lists, never merged. Your own dishes are not listed there.
 - P4-06: delete review removes reviews, dishes and review photos (rows and storage objects); the visit and its point stay. P4-07: each log stores the chosen visibility as profiles.default_visibility.
 - Done-when: verdict-only log is still one tap (saved instantly in the browser test); quick extras (dish + price + occasion + save) are four taps; a 2000x1500 8.3 MB PNG was stored as a 1024x768 246 KB WebP. Delete review was not clicked in the browser (it uses a confirm dialog); covered by the code path and RLS tests.
+
+### Phase 4 approved and deployed (2026-11-03)
+- Human approved Phase 4. Depth migration applied to the hosted DB via the SQL editor (26 recorded; 0 anon-callable functions; bucket review-photos private, 400 KB cap; 3 storage policies). main fast-forwarded and pushed to Vercel.
