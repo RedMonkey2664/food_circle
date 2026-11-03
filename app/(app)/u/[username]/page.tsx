@@ -11,6 +11,7 @@ import { signOut } from '@/lib/actions/auth';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { profileByUsername, profileStats, recentVisitsBy } from '@/lib/data/profile';
+import { refreshMyTasteMatches } from '@/lib/data/discover';
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith } from '@/lib/domain/relationship';
 
@@ -40,6 +41,8 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
   if (!profile) notFound();
 
   const isSelf = profile.id === me.id;
+  // Lazy taste-match refresh on profile view (P2-03).
+  if (!isSelf) await refreshMyTasteMatches();
   const [stats, graph, visits] = await Promise.all([
     profileStats(profile.id),
     myGraph(),
@@ -67,6 +70,11 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
                 {t.friendsBadge}
               </span>
             ) : null}
+            {stats.matchRate !== null ? (
+              <span className="bg-go-soft text-go rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-semibold">
+                {t.match(stats.matchRate, stats.sharedPlaces ?? 0)}
+              </span>
+            ) : null}
             {rel.followsYou ? (
               <span className="bg-following-bg text-following-fg rounded-[var(--radius-pill)] px-2 py-0.5 text-xs font-semibold">
                 {t.followsYou}
@@ -78,8 +86,9 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
 
       {profile.bio ? <p className="mt-3 whitespace-pre-wrap">{profile.bio}</p> : null}
 
-      <div className="border-line bg-surface mt-4 grid grid-cols-4 rounded-[var(--radius-card)] border">
+      <div className="border-line bg-surface mt-4 grid grid-cols-5 rounded-[var(--radius-card)] border">
         <Stat value={stats.placesVisible} label={t.stats.places} />
+        <Stat value={stats.areasVisible} label={t.stats.areas} />
         <Stat
           value={stats.friends}
           label={t.stats.friends}

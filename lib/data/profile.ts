@@ -18,6 +18,10 @@ export type ProfileStats = {
   following: number;
   visitsVisible: number;
   placesVisible: number;
+  areasVisible: number;
+  sharedPlaces: number | null;
+  /** Viewer's taste match with this person; null below 5 shared places. */
+  matchRate: number | null;
 };
 
 /** A profile by username. Null when it doesn't exist or either side blocked the other (RLS). */
@@ -51,6 +55,9 @@ export async function profileStats(userId: string): Promise<ProfileStats> {
     following: row?.following ?? 0,
     visitsVisible: row?.visits_visible ?? 0,
     placesVisible: row?.places_visible ?? 0,
+    areasVisible: row?.areas_visible ?? 0,
+    sharedPlaces: row?.shared_places ?? null,
+    matchRate: row?.match_rate == null ? null : Number(row.match_rate),
   };
 }
 
