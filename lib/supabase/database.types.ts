@@ -675,6 +675,11 @@ isOneToOne: false
 "follow_user":
 { Args: { "p_target": string }; Returns: string
                            },
+"get_discover_people":
+{ Args: { "p_kind": string,"p_limit"?: number,"p_param"?: string }; Returns: {
+              "avatar_url": string,"display_name": string,"follow_state": string,"home_area": string,"is_private": boolean,"match_rate": number,"score": number,"shared_places": number,"user_id": string,"username": string
+            }[]
+                           },
 "get_home_feed":
 { Args: { "p_cursor_id"?: string,"p_cursor_ts"?: string,"p_limit"?: number,"p_tab": string }; Returns: {
               "area_name": string,"author_id": string,"avatar_url": string,"display_name": string,"logged_at": string,"only_for_text": string,"place_id": string,"place_name": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
@@ -707,7 +712,7 @@ isOneToOne: false
                            },
 "get_profile_stats":
 { Args: { "p_user": string }; Returns: {
-              "followers": number,"following": number,"friends": number,"places_visible": number,"visits_visible": number
+              "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
             }[]
                            },
 "normalize_name":
@@ -717,6 +722,12 @@ isOneToOne: false
 { Args: { "p_code": string }; Returns: {
               "inviter": string,"kind": Database["public"]['Enums']["invite_kind"]
             }[]
+                           },
+"refresh_all_taste_matches":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"refresh_my_taste_matches":
+{ Args: Record<PropertyKey, never>; Returns: undefined
                            },
 "remove_follower":
 { Args: { "p_follower": string }; Returns: undefined
@@ -742,6 +753,11 @@ isOneToOne: false
 "search_places":
 { Args: { "p_lat"?: number,"p_limit"?: number,"p_lng"?: number,"p_query": string }; Returns: {
               "area_name": string,"diet_flags": (string)[],"distance_m": number,"id": string,"name": string,"rank": number,"type": Database["public"]['Enums']["place_type"]
+            }[]
+                           },
+"suggest_people_after_log":
+{ Args: { "p_limit"?: number,"p_place": string }; Returns: {
+              "avatar_url": string,"display_name": string,"is_private": boolean,"others_count": number,"user_id": string,"username": string,"verdict": Database["public"]['Enums']["verdict"]
             }[]
                            },
 "unblock_user":
