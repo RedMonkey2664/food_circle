@@ -329,14 +329,14 @@ isOneToOne: false
                   ]
                 },"places": {
                   Row: {
-                    "aliases": (string)[],"area_id": string | null,"brand_id": string | null,"created_at": string,"created_by": string | null,"cuisine_tags": (string)[],"diet_flags": (string)[],"geom": unknown,"google_place_id": string | null,"id": string,"merged_into": string | null,"name": string,"name_normalized": string,"osm_id": string | null,"search_text": string,"source": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"],"updated_at": string
+                    "aliases": (string)[],"area_id": string | null,"brand_id": string | null,"created_at": string,"created_by": string | null,"cuisine_tags": (string)[],"diet_flags": (string)[],"geom": unknown,"google_place_id": string | null,"id": string,"merged_into": string | null,"name": string,"name_normalized": string,"osm_id": string | null,"overture_id": string | null,"search_text": string,"source": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"],"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom": unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name": string,"name_normalized"?: string,"osm_id"?: string | null,"search_text"?: string,"source": string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
+                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom": unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name": string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source": string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
                   }
                   Update: {
-                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom"?: unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name"?: string,"name_normalized"?: string,"osm_id"?: string | null,"search_text"?: string,"source"?: string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
+                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom"?: unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name"?: string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source"?: string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -647,7 +647,12 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "admin_refresh_place_areas":
+            "admin_import_overture":
+{ Args: { "p_rows": Json }; Returns: {
+              "inserted": number,"linked": number,"skipped": number
+            }[]
+                           },
+"admin_refresh_place_areas":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
 "admin_resolve_report":
