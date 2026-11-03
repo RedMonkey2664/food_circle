@@ -729,6 +729,11 @@ isOneToOne: false
               "go_count": number,"only_for_count": number,"skip_count": number,"tier": number,"went": number
             }[]
                            },
+"get_place_top_dishes":
+{ Args: { "p_place": string }; Returns: {
+              "go_count": number,"name": string,"skip_count": number,"tier": number
+            }[]
+                           },
 "get_place_verdicts":
 { Args: { "p_limit"?: number,"p_place": string,"p_tier_filter"?: string }; Returns: {
               "author_id": string,"avatar_url": string,"display_name": string,"group_name": string,"logged_at": string,"only_for_text": string,"tier": number,"username": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string
@@ -737,6 +742,11 @@ isOneToOne: false
 "get_profile_stats":
 { Args: { "p_user": string }; Returns: {
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
+            }[]
+                           },
+"get_visit_details":
+{ Args: { "p_visits": (string)[] }; Returns: {
+              "dishes": Json,"note": string,"occasion_tags": (string)[],"photo_paths": (string)[],"price_per_head": number,"visit_id": string
             }[]
                            },
 "log_visit_for_groups":
@@ -782,6 +792,9 @@ isOneToOne: false
                            },
 "revoke_invite":
 { Args: { "p_invite": string }; Returns: undefined
+                           },
+"save_review":
+{ Args: { "p_dishes"?: Json,"p_note"?: string,"p_occasions"?: (string)[],"p_price"?: number,"p_visit": string }; Returns: undefined
                            },
 "search_places":
 { Args: { "p_lat"?: number,"p_limit"?: number,"p_lng"?: number,"p_query": string }; Returns: {

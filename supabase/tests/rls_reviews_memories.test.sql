@@ -19,8 +19,11 @@ values ('11111111-1111-1111-1111-111111111111', :'author', :'place', 'go', 'publ
 insert into reviews (visit_id, note) values ('11111111-1111-1111-1111-111111111111', 'Berry pulao is the move');
 insert into memories (visit_id, private_note) values ('11111111-1111-1111-1111-111111111111', 'Mom''s birthday');
 insert into visit_photos (visit_id, kind, storage_path) values
-  ('11111111-1111-1111-1111-111111111111', 'review', 'a/r.webp'),
-  ('11111111-1111-1111-1111-111111111111', 'memory', 'a/m.webp');
+  -- Real paths: {author}/{visit}/{uuid}.webp (the Phase 4 guard rejects anything else).
+  ('11111111-1111-1111-1111-111111111111', 'review',
+   :'author' || '/11111111-1111-1111-1111-111111111111/00000000-0000-0000-0000-00000000000a.webp'),
+  ('11111111-1111-1111-1111-111111111111', 'memory',
+   :'author' || '/11111111-1111-1111-1111-111111111111/00000000-0000-0000-0000-00000000000b.webp');
 insert into visit_companions (visit_id, user_id) values ('11111111-1111-1111-1111-111111111111', :'friend');
 
 -- review layer follows the public visit
