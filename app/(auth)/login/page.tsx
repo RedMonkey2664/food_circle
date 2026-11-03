@@ -46,20 +46,23 @@ async function LoginForm({ searchParams }: { searchParams: PageProps<'/login'>['
 
 export default function LoginPage(props: PageProps<'/login'>) {
   return (
-    <main className="mx-auto flex min-h-dvh max-w-[480px] flex-col px-4 pt-[max(2.5rem,env(safe-area-inset-top))] pb-6">
-      <header>
-        <p className="font-display text-primary text-xl font-semibold">{copy.login.title}</p>
-        <h1 className="font-display text-hero mt-6 font-semibold tracking-tight text-balance">
-          {copy.login.headline}
-        </h1>
-        <p className="text-muted mt-3 max-w-[34ch] text-lg">{copy.login.pitch}</p>
-      </header>
+    <main className="mx-auto flex min-h-dvh max-w-[480px] flex-col px-4 pt-[max(2.5rem,env(safe-area-inset-top))] pb-6 md:max-w-[560px] md:pt-16 lg:grid lg:max-w-[1080px] lg:grid-cols-[minmax(0,1fr)_420px] lg:content-center lg:items-center lg:gap-16 lg:px-10">
+      {/* PC: pitch + preview on the left, a sign-in card on the right. */}
+      <div>
+        <header>
+          <p className="font-display text-primary text-xl font-semibold">{copy.login.title}</p>
+          <h1 className="font-display text-hero mt-6 font-semibold tracking-tight text-balance">
+            {copy.login.headline}
+          </h1>
+          <p className="text-muted mt-3 max-w-[34ch] text-lg">{copy.login.pitch}</p>
+        </header>
 
-      <div className="mt-8">
-        <PromisePreview />
+        <div className="mt-8 lg:max-w-md">
+          <PromisePreview />
+        </div>
       </div>
 
-      <div className="mt-auto pt-10">
+      <div className="lg:border-line lg:bg-surface mt-auto pt-10 lg:mt-0 lg:rounded-[var(--radius-card)] lg:border lg:p-8 lg:shadow-[0_24px_60px_-40px_rgb(60_20_5/0.45)]">
         <Suspense fallback={<GoogleButton disabled />}>
           <LoginForm searchParams={props.searchParams} />
         </Suspense>

@@ -22,7 +22,7 @@ async function Results({ searchParams }: { searchParams: PageProps<'/search'>['s
 
 export default function SearchPage(props: PageProps<'/search'>) {
   return (
-    <main className="pt-2">
+    <main className="mx-auto w-full pt-2 lg:max-w-2xl">
       <h1 className="font-display text-2xl font-semibold">{copy.search.title}</h1>
       <Suspense
         fallback={

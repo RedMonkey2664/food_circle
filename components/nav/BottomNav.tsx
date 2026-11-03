@@ -31,7 +31,7 @@ function BottomNavView({ pathname }: { pathname: string | null }) {
   return (
     <nav
       aria-label="Main"
-      className="border-line bg-surface/95 fixed inset-x-0 bottom-0 z-20 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur"
+      className="border-line bg-surface/95 fixed inset-x-0 bottom-0 z-20 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
       <ul className="mx-auto grid max-w-[480px] grid-cols-5 items-center px-2">
         <NavItem {...items.home} active={pathname === '/'} />

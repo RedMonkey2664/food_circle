@@ -61,109 +61,113 @@ async function GroupContent({
         </p>
       </header>
 
-      <section className="mt-6">
-        <h2 className="font-display text-lg font-semibold">{t.feed}</h2>
-        {feed.items.length === 0 && !cursor ? (
-          <div className="mt-3">
-            <EmptyState
-              title={t.feedEmpty}
-              body={t.feedEmptyBody}
-              action={
-                <Link href="/log" className={buttonClass()}>
-                  {copy.home.logFirst}
-                </Link>
-              }
-            />
-          </div>
-        ) : (
-          <ul className="mt-3 space-y-2">
-            {feed.items.map((item) => (
-              <li key={item.visitId}>
-                <VerdictCard data={item} />
-              </li>
-            ))}
-          </ul>
-        )}
-        {feed.nextCursor ? (
-          <Link
-            href={`/groups/${id}?cursor=${encodeURIComponent(feed.nextCursor)}`}
-            className={buttonClass({ variant: 'ghost', fullWidth: true, className: 'mt-3' })}
-          >
-            {copy.home.older}
-          </Link>
-        ) : null}
-      </section>
-
-      <section className="mt-8">
-        <h2 className="font-display text-lg font-semibold">{t.membersTitle}</h2>
-        <ul className="divide-line border-line bg-surface mt-2 divide-y rounded-[var(--radius-card)] border px-4">
-          {members.map((m) => (
-            <PersonRow
-              key={m.id}
-              person={{ ...m, isPrivate: false }}
-              meta={m.isOwner ? t.owner : m.id === me.id ? t.you : undefined}
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-10">
+        <section className="mt-6">
+          <h2 className="font-display text-lg font-semibold">{t.feed}</h2>
+          {feed.items.length === 0 && !cursor ? (
+            <div className="mt-3">
+              <EmptyState
+                title={t.feedEmpty}
+                body={t.feedEmptyBody}
+                action={
+                  <Link href="/log" className={buttonClass()}>
+                    {copy.home.logFirst}
+                  </Link>
+                }
+              />
+            </div>
+          ) : (
+            <ul className="mt-3 space-y-2">
+              {feed.items.map((item) => (
+                <li key={item.visitId}>
+                  <VerdictCard data={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {feed.nextCursor ? (
+            <Link
+              href={`/groups/${id}?cursor=${encodeURIComponent(feed.nextCursor)}`}
+              className={buttonClass({ variant: 'ghost', fullWidth: true, className: 'mt-3' })}
             >
-              {group.isOwner && !m.isOwner ? (
-                <ActionButton
-                  action={removeGroupMember}
-                  fields={{ groupId: id, userId: m.id }}
-                  label={t.remove}
-                  variant="ghost"
-                />
-              ) : null}
-            </PersonRow>
-          ))}
-        </ul>
-      </section>
+              {copy.home.older}
+            </Link>
+          ) : null}
+        </section>
 
-      {group.isOwner ? (
-        <>
-          <section className="mt-8">
-            <h2 className="font-display text-lg font-semibold">{t.addTitle}</h2>
-            <p className="text-muted text-sm">{t.addBody}</p>
-            {addable.size === 0 ? (
-              <p className="text-muted mt-2 text-sm">{t.noFriendsToAdd}</p>
-            ) : (
-              <ul className="divide-line border-line bg-surface mt-2 divide-y rounded-[var(--radius-card)] border px-4">
-                {[...addable.values()].map((p) => (
-                  <PersonRow key={p.id} person={p}>
+        <aside className="lg:sticky lg:top-8 lg:mt-6">
+          <section className="mt-8 lg:mt-0">
+            <h2 className="font-display text-lg font-semibold">{t.membersTitle}</h2>
+            <ul className="divide-line border-line bg-surface mt-2 divide-y rounded-[var(--radius-card)] border px-4">
+              {members.map((m) => (
+                <PersonRow
+                  key={m.id}
+                  person={{ ...m, isPrivate: false }}
+                  meta={m.isOwner ? t.owner : m.id === me.id ? t.you : undefined}
+                >
+                  {group.isOwner && !m.isOwner ? (
                     <ActionButton
-                      action={addGroupMember}
-                      fields={{ groupId: id, userId: p.id }}
-                      label={t.add}
-                      pendingLabel={copy.social.sending}
-                      doneLabel={t.added}
+                      action={removeGroupMember}
+                      fields={{ groupId: id, userId: m.id }}
+                      label={t.remove}
+                      variant="ghost"
                     />
-                  </PersonRow>
-                ))}
-              </ul>
+                  ) : null}
+                </PersonRow>
+              ))}
+            </ul>
+          </section>
+
+          {group.isOwner ? (
+            <>
+              <section className="mt-8">
+                <h2 className="font-display text-lg font-semibold">{t.addTitle}</h2>
+                <p className="text-muted text-sm">{t.addBody}</p>
+                {addable.size === 0 ? (
+                  <p className="text-muted mt-2 text-sm">{t.noFriendsToAdd}</p>
+                ) : (
+                  <ul className="divide-line border-line bg-surface mt-2 divide-y rounded-[var(--radius-card)] border px-4">
+                    {[...addable.values()].map((p) => (
+                      <PersonRow key={p.id} person={p}>
+                        <ActionButton
+                          action={addGroupMember}
+                          fields={{ groupId: id, userId: p.id }}
+                          label={t.add}
+                          pendingLabel={copy.social.sending}
+                          doneLabel={t.added}
+                        />
+                      </PersonRow>
+                    ))}
+                  </ul>
+                )}
+              </section>
+              <div className="mt-6">
+                <GroupInvite group={{ id, name: group.name }} />
+              </div>
+            </>
+          ) : null}
+
+          <section className="border-line mt-10 border-t pt-6">
+            {group.isOwner ? (
+              <ActionButton
+                action={deleteGroup}
+                fields={{ groupId: id }}
+                label={t.delete}
+                variant="secondary"
+                confirm={t.deleteConfirm(group.name)}
+              />
+            ) : (
+              <ActionButton
+                action={removeGroupMember}
+                fields={{ groupId: id, userId: me.id, leaving: '1' }}
+                label={t.leave}
+                variant="secondary"
+                confirm={t.leaveConfirm(group.name)}
+              />
             )}
           </section>
-          <div className="mt-6">
-            <GroupInvite group={{ id, name: group.name }} />
-          </div>
-        </>
-      ) : null}
-
-      <section className="border-line mt-10 border-t pt-6">
-        {group.isOwner ? (
-          <ActionButton
-            action={deleteGroup}
-            fields={{ groupId: id }}
-            label={t.delete}
-            variant="secondary"
-            confirm={t.deleteConfirm(group.name)}
-          />
-        ) : (
-          <ActionButton
-            action={removeGroupMember}
-            fields={{ groupId: id, userId: me.id, leaving: '1' }}
-            label={t.leave}
-            variant="secondary"
-            confirm={t.leaveConfirm(group.name)}
-          />
-        )}
-      </section>
+        </aside>
+      </div>
     </>
   );
 }

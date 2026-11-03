@@ -12,41 +12,45 @@ async function GroupsList() {
   const groups = await myGroups();
   const t = copy.groups;
   return (
-    <>
-      {groups.length === 0 ? (
-        <div className="mt-4">
-          <p className="font-semibold">{t.emptyTitle}</p>
-          <p className="text-muted mt-1 text-sm">{t.emptyBody}</p>
-        </div>
-      ) : (
-        <ul className="divide-line border-line bg-surface mt-4 divide-y rounded-[var(--radius-card)] border px-4">
-          {groups.map((g) => (
-            <li key={g.id}>
-              <Link
-                href={`/groups/${g.id}`}
-                className="flex min-h-16 items-center justify-between gap-3 py-3"
-              >
-                <span className="min-w-0">
-                  <span className="block truncate font-semibold">{g.name}</span>
-                  <span className="text-muted block text-sm">
-                    {[t.kinds[g.kind], t.members(g.memberCount), g.isOwner ? t.owner : null]
-                      .filter(Boolean)
-                      .join(' · ')}
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-10">
+      <div>
+        {groups.length === 0 ? (
+          <div className="mt-4">
+            <p className="font-semibold">{t.emptyTitle}</p>
+            <p className="text-muted mt-1 text-sm">{t.emptyBody}</p>
+          </div>
+        ) : (
+          <ul className="divide-line border-line bg-surface mt-4 divide-y rounded-[var(--radius-card)] border px-4">
+            {groups.map((g) => (
+              <li key={g.id}>
+                <Link
+                  href={`/groups/${g.id}`}
+                  className="flex min-h-16 items-center justify-between gap-3 py-3"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate font-semibold">{g.name}</span>
+                    <span className="text-muted block text-sm">
+                      {[t.kinds[g.kind], t.members(g.memberCount), g.isOwner ? t.owner : null]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </span>
                   </span>
-                </span>
-                <span aria-hidden className="text-muted">
-                  ›
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-      <h2 className="font-display mt-8 text-lg font-semibold">{t.create}</h2>
-      <div className="mt-2">
-        <CreateGroupForm />
+                  <span aria-hidden className="text-muted">
+                    ›
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </>
+      <div className="lg:sticky lg:top-8">
+        <h2 className="font-display mt-8 text-lg font-semibold lg:mt-4">{t.create}</h2>
+        <div className="mt-2">
+          <CreateGroupForm />
+        </div>
+      </div>
+    </div>
   );
 }
 

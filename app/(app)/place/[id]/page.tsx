@@ -115,124 +115,143 @@ async function PlaceContent({
   return (
     <>
       <RememberPlace place={{ id: place.id, name: place.name, areaName: place.areaName }} />
-      <header className="pt-2">
-        <h1 className="font-display text-2xl leading-tight font-semibold">{place.name}</h1>
-        <p className="text-muted mt-1">
-          {[
-            place.areaName,
-            PLACE_TYPE_LABEL[place.type],
-            ...place.cuisineTags.slice(0, 2).map(cuisineLabel),
-          ]
-            .filter(Boolean)
-            .join(', ')}
-        </p>
-        {place.status === 'closed' ? (
-          <p className="text-warn mt-1 text-sm font-medium">{t.closed}</p>
-        ) : null}
-        <div className="mt-3">
-          <DietBadges flags={place.dietFlags} />
-        </div>
-      </header>
-
-      {mine ? (
-        <p className="bg-surface border-line mt-4 flex items-center justify-between gap-2 rounded-[var(--radius-button)] border px-3 py-2 text-sm">
-          <span>
-            {t.yourLast} <VerdictLabel verdict={mine.verdict} onlyForText={mine.onlyForText} />
-          </span>
-          <span className="text-muted">{visitAge(mine.visitedOn)}</span>
-        </p>
-      ) : null}
-
-      <div className="mt-4">
-        <TierSummary summary={summary} />
-      </div>
-
-      <div className="mt-4">
-        <FilterToggle placeId={place.id} active={filter} />
-      </div>
-
-      <div className="mt-5 space-y-6">
-        <Section title={TIER_SUMMARY_HEADING.friend} items={friends} />
-        <Section title={TIER_SUMMARY_HEADING.following} items={following} />
-        {everyone.length > 0 ? (
-          <details
-            className="group"
-            open={filter === 'everyone' && friends.length + following.length === 0}
-          >
-            <summary
-              className={buttonClass({
-                variant: 'ghost',
-                fullWidth: true,
-                className: 'list-none [&::-webkit-details-marker]:hidden',
-              })}
-            >
-              <span className="group-open:hidden">{t.showMore(everyone.length)}</span>
-              <span className="hidden group-open:inline">{t.showLess}</span>
-            </summary>
+      {/* PC: summary + action pinned left, verdicts right. iPad/phone: one column. */}
+      <div className="lg:grid lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-10">
+        <div className="lg:sticky lg:top-8">
+          <header className="pt-2">
+            <h1 className="font-display text-2xl leading-tight font-semibold md:text-3xl">
+              {place.name}
+            </h1>
+            <p className="text-muted mt-1">
+              {[
+                place.areaName,
+                PLACE_TYPE_LABEL[place.type],
+                ...place.cuisineTags.slice(0, 2).map(cuisineLabel),
+              ]
+                .filter(Boolean)
+                .join(', ')}
+            </p>
+            {place.status === 'closed' ? (
+              <p className="text-warn mt-1 text-sm font-medium">{t.closed}</p>
+            ) : null}
             <div className="mt-3">
-              <Section title={TIER_SUMMARY_HEADING.public} items={everyone} />
+              <DietBadges flags={place.dietFlags} />
             </div>
-          </details>
-        ) : null}
+          </header>
 
-        {others === 0 ? (
-          friendsExist ? (
-            <EmptyState
-              title={filter === 'friends' ? t.emptyFriends : t.emptyCircle}
-              body={filter === 'everyone' ? t.emptyEveryoneBody : t.emptyCircleBody}
-              action={
-                filter !== 'everyone' ? (
-                  <Link
-                    href={`/place/${place.id}?filter=everyone`}
-                    className={buttonClass({ variant: 'secondary' })}
-                  >
-                    {t.seeEveryone}
-                  </Link>
-                ) : undefined
-              }
-            />
-          ) : (
-            <EmptyState
-              title={t.noFriendsTitle}
-              body={t.noFriendsBody}
-              action={
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/friends?tab=find" className={buttonClass()}>
-                    {copy.home.findFriends}
-                  </Link>
-                  {filter !== 'everyone' && summary.tiers.public ? (
-                    <Link
-                      href={`/place/${place.id}?filter=everyone`}
-                      className={buttonClass({ variant: 'secondary' })}
-                    >
-                      {t.seeEveryone}
-                    </Link>
-                  ) : null}
+          {mine ? (
+            <p className="bg-surface border-line mt-4 flex items-center justify-between gap-2 rounded-[var(--radius-button)] border px-3 py-2 text-sm">
+              <span>
+                {t.yourLast} <VerdictLabel verdict={mine.verdict} onlyForText={mine.onlyForText} />
+              </span>
+              <span className="text-muted">{visitAge(mine.visitedOn)}</span>
+            </p>
+          ) : null}
+
+          <div className="mt-4">
+            <TierSummary summary={summary} />
+          </div>
+
+          {/* iPad/PC: the primary action sits inline (phones get the sticky bar below). */}
+          <div className="mt-5 hidden md:block">
+            <CircleOpenLink
+              href={`/log?place=${place.id}`}
+              className={buttonClass({ size: 'lg', fullWidth: true })}
+            >
+              {t.ateHere}
+            </CircleOpenLink>
+          </div>
+
+          {handoff.length > 0 ? (
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              {handoff.map((h) => (
+                <a
+                  key={h.target}
+                  href={h.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonClass({ variant: 'secondary' })}
+                >
+                  {t.handoff[h.target]}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <div className="mt-4 lg:mt-2">
+            <FilterToggle placeId={place.id} active={filter} />
+          </div>
+
+          <div className="mt-5 space-y-6">
+            <Section title={TIER_SUMMARY_HEADING.friend} items={friends} />
+            <Section title={TIER_SUMMARY_HEADING.following} items={following} />
+            {everyone.length > 0 ? (
+              <details
+                className="group"
+                open={filter === 'everyone' && friends.length + following.length === 0}
+              >
+                <summary
+                  className={buttonClass({
+                    variant: 'ghost',
+                    fullWidth: true,
+                    className: 'list-none [&::-webkit-details-marker]:hidden',
+                  })}
+                >
+                  <span className="group-open:hidden">{t.showMore(everyone.length)}</span>
+                  <span className="hidden group-open:inline">{t.showLess}</span>
+                </summary>
+                <div className="mt-3">
+                  <Section title={TIER_SUMMARY_HEADING.public} items={everyone} />
                 </div>
-              }
-            />
-          )
-        ) : null}
+              </details>
+            ) : null}
+
+            {others === 0 ? (
+              friendsExist ? (
+                <EmptyState
+                  title={filter === 'friends' ? t.emptyFriends : t.emptyCircle}
+                  body={filter === 'everyone' ? t.emptyEveryoneBody : t.emptyCircleBody}
+                  action={
+                    filter !== 'everyone' ? (
+                      <Link
+                        href={`/place/${place.id}?filter=everyone`}
+                        className={buttonClass({ variant: 'secondary' })}
+                      >
+                        {t.seeEveryone}
+                      </Link>
+                    ) : undefined
+                  }
+                />
+              ) : (
+                <EmptyState
+                  title={t.noFriendsTitle}
+                  body={t.noFriendsBody}
+                  action={
+                    <div className="flex flex-wrap gap-2">
+                      <Link href="/friends?tab=find" className={buttonClass()}>
+                        {copy.home.findFriends}
+                      </Link>
+                      {filter !== 'everyone' && summary.tiers.public ? (
+                        <Link
+                          href={`/place/${place.id}?filter=everyone`}
+                          className={buttonClass({ variant: 'secondary' })}
+                        >
+                          {t.seeEveryone}
+                        </Link>
+                      ) : null}
+                    </div>
+                  }
+                />
+              )
+            ) : null}
+          </div>
+        </div>
       </div>
 
-      {handoff.length > 0 ? (
-        <div className="mt-6 grid grid-cols-2 gap-2">
-          {handoff.map((h) => (
-            <a
-              key={h.target}
-              href={h.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonClass({ variant: 'secondary' })}
-            >
-              {t.handoff[h.target]}
-            </a>
-          ))}
-        </div>
-      ) : null}
-
-      {/* Sticky primary action above the bottom nav. */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10">
+      {/* Phones: sticky primary action above the bottom nav. */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 md:hidden">
         <div className="mx-auto max-w-[480px] px-4">
           <CircleOpenLink
             href={`/log?place=${place.id}`}
@@ -246,7 +265,7 @@ async function PlaceContent({
           </CircleOpenLink>
         </div>
       </div>
-      <div className="h-20" aria-hidden />
+      <div className="h-20 md:hidden" aria-hidden />
     </>
   );
 }

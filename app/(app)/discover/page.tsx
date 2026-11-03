@@ -166,9 +166,12 @@ async function DiscoverContent({
           />
         </div>
       ) : (
-        <div className="mt-4 space-y-8">
+        <div className="mt-4 space-y-8 md:mt-6 md:grid md:grid-cols-1 md:gap-5 md:space-y-0 lg:grid-cols-2">
           {sections.map((s) => (
-            <section key={s.key}>
+            <section
+              key={s.key}
+              className="md:border-line md:bg-surface md:rounded-[var(--radius-card)] md:border md:px-4 md:py-3"
+            >
               <h2 className="font-display text-lg font-semibold">{s.title}</h2>
               <PeopleList people={s.people} meta={s.meta} viewerId={me.id} graph={graph} />
             </section>
@@ -181,7 +184,7 @@ async function DiscoverContent({
 
 function SearchBox({ query }: { query: string }) {
   return (
-    <form action="/discover" role="search" className="mt-3">
+    <form action="/discover" role="search" className="mt-3 md:max-w-xl">
       <label htmlFor="discover-q" className="sr-only">
         {copy.discover.searchLabel}
       </label>

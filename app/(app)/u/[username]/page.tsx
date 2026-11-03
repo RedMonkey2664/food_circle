@@ -165,7 +165,7 @@ export async function generateMetadata(props: PageProps<'/u/[username]'>) {
 
 export default function ProfilePage(props: PageProps<'/u/[username]'>) {
   return (
-    <main>
+    <main className="mx-auto w-full lg:max-w-2xl">
       <Suspense
         fallback={
           <div aria-busy="true" className="space-y-3 pt-2">

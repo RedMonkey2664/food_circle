@@ -74,7 +74,7 @@ async function ListContent({ params }: { params: PageProps<'/u/[username]/[list]
 
 export default function FollowListPage(props: PageProps<'/u/[username]/[list]'>) {
   return (
-    <main className="pt-2">
+    <main className="mx-auto w-full pt-2 lg:max-w-2xl">
       <Suspense
         fallback={
           <div

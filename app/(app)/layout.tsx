@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { RouteSettled } from '@/components/motion/RouteSettled';
 import { BottomNav, BottomNavStatic } from '@/components/nav/BottomNav';
+import { SideNav, SideNavStatic } from '@/components/nav/SideNav';
 import { requireOnboardedUser } from '@/lib/auth';
 
 // Session guard. The shell (nav, column) prerenders instantly; the session check streams in
@@ -22,11 +23,18 @@ function ShellSkeleton() {
 export default function AppLayout({ children }: LayoutProps<'/'>) {
   return (
     <>
-      <div className="mx-auto min-h-dvh max-w-[480px] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28">
-        <Suspense fallback={<ShellSkeleton />}>
-          <AuthGate>{children}</AuthGate>
-        </Suspense>
+      {/* Phones: one 480px column above the bottom nav. iPad (md): side rail, 720px column.
+          PC (lg): full sidebar, up to 1080px so pages can add a second column. */}
+      <div className="md:pl-[84px] md:has-[[data-takeover]]:pl-0 lg:pl-[248px]">
+        <div className="mx-auto min-h-dvh max-w-[480px] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 md:max-w-[720px] md:px-8 md:pt-8 md:pb-12 lg:max-w-[1080px] lg:px-10">
+          <Suspense fallback={<ShellSkeleton />}>
+            <AuthGate>{children}</AuthGate>
+          </Suspense>
+        </div>
       </div>
+      <Suspense fallback={<SideNavStatic />}>
+        <SideNav />
+      </Suspense>
       <Suspense fallback={<BottomNavStatic />}>
         <BottomNav />
       </Suspense>

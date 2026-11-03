@@ -72,7 +72,7 @@ async function LogContent({ searchParams }: { searchParams: PageProps<'/log'>['s
  */
 export default function LogPage(props: PageProps<'/log'>) {
   return (
-    <main className="relative">
+    <main data-takeover className="relative mx-auto w-full md:max-w-lg md:pt-6">
       {/* Full-bleed brand colour behind the centred column. */}
       <div aria-hidden className="bg-primary fixed inset-0 -z-10" />
       <header className="flex items-center justify-between pt-1">

@@ -156,6 +156,7 @@ export const copy = {
     inviteBody: 'Friends who open the link join. Others become your friend first, then join.',
     inviteShare: (name: string, url: string) => `Join our "${name}" group on Food Circle: ${url}`,
     manage: 'Groups',
+    seeAll: 'See all',
   },
   footer: {
     osm: '© OpenStreetMap contributors',

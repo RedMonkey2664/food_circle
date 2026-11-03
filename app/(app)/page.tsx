@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { HomeAside } from '@/components/home/HomeAside';
 import { buttonClass } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Footer } from '@/components/ui/Footer';
@@ -133,30 +134,55 @@ async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchPara
 
 export default function HomePage(props: PageProps<'/'>) {
   return (
-    <main>
-      <header className="flex items-center justify-between py-2">
-        <h1 className="font-display text-primary text-2xl font-semibold">{copy.app.name}</h1>
-        <div className="flex items-center gap-1">
-          <Link href="/search" className={buttonClass({ variant: 'ghost', className: 'text-sm' })}>
-            {copy.nav.search}
-          </Link>
-          <Link href="/friends" className={buttonClass({ variant: 'ghost', className: 'text-sm' })}>
-            {copy.friends.title}
-          </Link>
-        </div>
-      </header>
-      <Suspense
-        fallback={
-          <div aria-busy="true" className="mt-4 space-y-2">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="bg-line/60 h-24 animate-pulse rounded-[var(--radius-card)]" />
-            ))}
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-10">
+      <main className="min-w-0">
+        <header className="flex items-center justify-between py-2">
+          <h1 className="font-display text-primary text-2xl font-semibold md:sr-only">
+            {copy.app.name}
+          </h1>
+          <div className="flex items-center gap-1 md:hidden">
+            <Link
+              href="/search"
+              className={buttonClass({ variant: 'ghost', className: 'text-sm' })}
+            >
+              {copy.nav.search}
+            </Link>
+            <Link
+              href="/friends"
+              className={buttonClass({ variant: 'ghost', className: 'text-sm' })}
+            >
+              {copy.friends.title}
+            </Link>
           </div>
-        }
-      >
-        <Feed searchParams={props.searchParams} />
-      </Suspense>
-      <Footer className="mt-10" />
-    </main>
+        </header>
+        <Suspense
+          fallback={
+            <div aria-busy="true" className="mt-4 space-y-2">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="bg-line/60 h-24 animate-pulse rounded-[var(--radius-card)]"
+                />
+              ))}
+            </div>
+          }
+        >
+          <Feed searchParams={props.searchParams} />
+        </Suspense>
+        <Footer className="mt-10" />
+      </main>
+      <aside className="sticky top-8 hidden lg:block">
+        <Suspense
+          fallback={
+            <div
+              aria-busy="true"
+              className="bg-line/60 h-64 animate-pulse rounded-[var(--radius-card)]"
+            />
+          }
+        >
+          <HomeAside />
+        </Suspense>
+      </aside>
+    </div>
   );
 }

@@ -265,7 +265,7 @@ async function InviteSection() {
 
 export default function FriendsPage(props: PageProps<'/friends'>) {
   return (
-    <main>
+    <main className="mx-auto w-full lg:max-w-2xl">
       <div className="flex items-center justify-between pt-2">
         <h1 className="font-display text-2xl font-semibold">{copy.friends.title}</h1>
         <Link
