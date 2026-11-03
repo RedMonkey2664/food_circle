@@ -65,7 +65,13 @@ export function VerdictDetails({ details }: { details: VisitDetails }) {
               >
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
                   {/* eslint-disable-next-line @next/next/no-img-element -- signed, short-lived URLs */}
-                  <img src={p.url} alt="" loading="lazy" className="size-full object-cover" />
+                  <img
+                    src={p.url}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="bg-line/60 size-full object-cover"
+                  />
                 </a>
               </li>
             ))}

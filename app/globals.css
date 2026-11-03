@@ -278,3 +278,23 @@ html[data-vt='close']::view-transition-old(root) {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* Page entrance for in-app navigation (app/(app)/template.tsx). Transform + opacity only, so
+   it runs on the compositor and never causes layout work. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.page-in {
+  animation: page-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.page-in:has([data-takeover]) {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-in {
+    animation: none;
+  }
+}

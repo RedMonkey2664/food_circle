@@ -33,6 +33,7 @@ export function Avatar({
           width={size}
           height={size}
           loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           className="size-full object-cover"
         />

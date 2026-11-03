@@ -53,17 +53,16 @@ async function Feed({ searchParams }: { searchParams: PageProps<'/'>['searchPara
   const sp = await searchParams;
   const cursor = typeof sp.cursor === 'string' ? sp.cursor : undefined;
   await requireOnboardedUser();
-  const groups = await myGroups();
-  const groupId =
-    typeof sp.group === 'string' && UUID_RE.test(sp.group) && groups.some((g) => g.id === sp.group)
-      ? sp.group
-      : null;
-  const tab: FeedTab = groupId
-    ? `group:${groupId}`
-    : sp.tab === 'following'
-      ? 'following'
-      : 'friends';
-  const page = await homeFeed(tab, cursor);
+  const wantGroup = typeof sp.group === 'string' && UUID_RE.test(sp.group) ? sp.group : null;
+  const plainTab: FeedTab = sp.tab === 'following' ? 'following' : 'friends';
+  // Friends/Following: load the group tabs and the feed in parallel. A group tab must first
+  // be checked against my groups (the feed RPC rejects groups I'm not in).
+  const [groups, plainPage] = wantGroup
+    ? [await myGroups(), null]
+    : await Promise.all([myGroups(), homeFeed(plainTab, cursor)]);
+  const groupId = wantGroup && groups.some((g) => g.id === wantGroup) ? wantGroup : null;
+  const tab: FeedTab = groupId ? `group:${groupId}` : plainTab;
+  const page = plainPage ?? (await homeFeed(tab, cursor));
   const t = copy.home;
 
   return (

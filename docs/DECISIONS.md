@@ -288,3 +288,10 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Data: get_places_in_view (signed-in only) over the places table with a bounding box; refuses boxes larger than about 0.25 x 0.25 degrees (the UI says "Zoom in"), at most 300 places, confirmed first then a stable shuffle so they spread across the view; excludes merged/closed places and your own visits and Want to go. Served by GET /api/places/in-view so panning can cancel stale requests (debounced 250 ms). About 40 ms locally for a Bandra-sized view.
 - The map fits to your own pins only once, so it never jumps while exploring.
 - Deployed 2026-11-03 (human: "approve and deploy"): explore migration applied via the SQL editor (28 recorded, 0 anon-callable); main fast-forwarded and pushed.
+
+### Speed and smoothness (2026-11-03, human request)
+- Root cause of slow page loads after deploying: Vercel Functions ran in Washington DC (iad1, the default) while Supabase is in Mumbai, so every database call from a server-rendered page crossed the globe twice (pages make several). vercel.json now pins functions to bom1 (Mumbai), next to the database (Hobby allows one region). Done in the repo, not the dashboard, so it is reviewable and reproducible.
+- Router cache: experimental.staleTimes { dynamic: 30, static: 300 }, so tab switches and back/forward within 30 s are instant. Server actions already call revalidatePath after every change, which clears it.
+- Preconnect (react-dom preconnect) to the Supabase URL, OpenFreeMap tiles and Google avatars.
+- Smooth navigation: app/(app)/template.tsx gives each page a 200 ms fade + 6 px rise (transform/opacity only; off for reduced motion and for the log takeover's circle reveal).
+- Home loads group tabs and the feed in parallel; photos and avatars decode asynchronously with a soft placeholder.

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
+import { preconnect } from 'react-dom';
 import { APP_NAME, APP_TAGLINE } from '@/lib/config';
 import './globals.css';
 
@@ -28,6 +29,12 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
+  // Open connections early to the origins every signed-in page uses: the database and photo
+  // storage, map tiles, and Google profile pictures. Saves a DNS + TLS round trip on mobile.
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl) preconnect(supabaseUrl, { crossOrigin: 'anonymous' });
+  preconnect('https://tiles.openfreemap.org', { crossOrigin: 'anonymous' });
+  preconnect('https://lh3.googleusercontent.com');
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <body className="bg-bg text-ink min-h-dvh antialiased">{children}</body>

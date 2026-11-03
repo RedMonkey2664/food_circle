@@ -77,7 +77,13 @@ export function PhotoGrid({
             className="relative aspect-square overflow-hidden rounded-[var(--radius-button)]"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- signed, short-lived URLs */}
-            <img src={p.url} alt="" className="size-full object-cover" loading="lazy" />
+            <img
+              src={p.url}
+              alt=""
+              className="bg-line/60 size-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
             <button
               type="button"
               onClick={() => onRemove(p.path)}
