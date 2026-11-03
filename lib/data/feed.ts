@@ -1,5 +1,6 @@
 import 'server-only';
 import type { VerdictCardData } from '@/components/verdict/VerdictCard';
+import { withDetails } from '@/lib/data/details';
 import { tierFromNumber } from '@/lib/domain/tiers';
 import { createClient } from '@/lib/supabase/server';
 
@@ -31,8 +32,7 @@ export async function homeFeed(tab: FeedTab, cursorRaw?: string): Promise<FeedPa
   const rows = data ?? [];
   const page = rows.slice(0, PAGE);
   const last = page[page.length - 1];
-  return {
-    items: page.map((r) => ({
+  const items: VerdictCardData[] = page.map((r) => ({
       visitId: r.visit_id,
       verdict: r.verdict,
       onlyForText: r.only_for_text,
@@ -41,7 +41,9 @@ export async function homeFeed(tab: FeedTab, cursorRaw?: string): Promise<FeedPa
       author: { username: r.username, displayName: r.display_name, avatarUrl: r.avatar_url },
       tier: tierFromNumber(r.tier) ?? undefined,
       groupName: tab.startsWith('group:') ? null : r.group_name,
-    })),
+  }));
+  return {
+    items: await withDetails(items),
     nextCursor: rows.length > PAGE && last ? `${last.logged_at}_${last.visit_id}` : null,
   };
 }

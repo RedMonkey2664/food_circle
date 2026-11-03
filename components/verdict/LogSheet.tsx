@@ -11,6 +11,7 @@ import { afterLogSuggestions, logVisit, type AfterLogPerson } from '@/lib/action
 import { copy } from '@/lib/copy';
 import type { Verdict } from '@/lib/domain/verdict';
 import type { Visibility } from '@/lib/domain/visibility';
+import { QuickExtras } from '@/components/review/QuickExtras';
 import { VerdictButtons } from './VerdictButtons';
 import { VerdictLabel } from './VerdictLabel';
 import { VisibilityPicker, type PickerGroup } from './VisibilityPicker';
@@ -21,6 +22,8 @@ type Props = {
   isPrivateAccount: boolean;
   counts: { friends: number; followers: number };
   groups?: PickerGroup[];
+  /** Top dishes here, offered as one-tap chips after saving (P4-01). */
+  dishSuggestions?: string[];
 };
 
 /**
@@ -33,10 +36,15 @@ export function LogSheet({
   isPrivateAccount,
   counts,
   groups = [],
+  dishSuggestions = [],
 }: Props) {
   const [visibility, setVisibility] = useState<Visibility>(defaultVisibility);
   const [groupIds, setGroupIds] = useState<string[]>([]);
-  const [saved, setSaved] = useState<{ verdict: Verdict; onlyFor?: string } | null>(null);
+  const [saved, setSaved] = useState<{
+    verdict: Verdict;
+    onlyFor?: string;
+    visitId: string;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [others, setOthers] = useState<{ people: AfterLogPerson[]; othersCount: number } | null>(
     null,
@@ -55,7 +63,7 @@ export function LogSheet({
         ...(visibility === 'friends' && groupIds.length ? { groupIds } : {}),
       });
       if (!r.ok) return setError(r.message);
-      setSaved({ verdict, onlyFor: onlyForText });
+      setSaved({ verdict, onlyFor: onlyForText, visitId: r.data.visitId });
       // P2-04: who else logged this, that you could follow (never blocks the success state).
       afterLogSuggestions(place.id).then(setOthers, () => setOthers(null));
     });
@@ -71,7 +79,7 @@ export function LogSheet({
         <p className="mt-2">
           {place.name}: <VerdictLabel verdict={saved.verdict} onlyForText={saved.onlyFor} />
         </p>
-        <p className="text-muted mt-1 text-sm">{t.moreLater}</p>
+        <QuickExtras visitId={saved.visitId} suggestions={dishSuggestions} />
         {others && others.people.length > 0 ? (
           <div className="border-line mt-5 border-t pt-4">
             <p className="font-semibold">{t.othersLogged(others.othersCount)}</p>

@@ -8,6 +8,19 @@ import { createClient } from '@/lib/supabase/server';
 
 export type LogVisitResult = ActionResult<{ visitId: string }>;
 
+/** P4-07: the next log starts with the audience you chose last time. Best effort. */
+async function rememberVisibility(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  visibility: LogVisitInput['visibility'],
+) {
+  await supabase
+    .from('profiles')
+    .update({ default_visibility: visibility })
+    .eq('id', userId)
+    .neq('default_visibility', visibility);
+}
+
 /**
  * Log a visit. A direct insert: RLS checks it's yours and column grants stop clients from
  * touching computed columns (flags, verified, logged_at).
@@ -32,6 +45,7 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
       ...(v.visitedOn ? { p_visited_on: v.visitedOn } : {}),
     });
     if (error || !visitId) return { ok: false, ...fromDbError(error) };
+    await rememberVisibility(supabase, userId, 'friends');
     revalidatePath(`/place/${v.placeId}`);
     revalidatePath('/', 'layout');
     return { ok: true, data: { visitId } };
@@ -51,6 +65,7 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
     .single();
   if (error || !data) return { ok: false, ...fromDbError(error) };
 
+  await rememberVisibility(supabase, userId, v.visibility);
   revalidatePath(`/place/${v.placeId}`);
   revalidatePath('/', 'layout');
   return { ok: true, data: { visitId: data.id } };

@@ -2,6 +2,7 @@ import 'server-only';
 import type { VerdictCardData } from '@/components/verdict/VerdictCard';
 import type { PlaceType } from '@/lib/domain/place';
 import { summaryFromRows, type PlaceSummary } from '@/lib/domain/summary';
+import { withDetails } from '@/lib/data/details';
 import { tierFromNumber } from '@/lib/domain/tiers';
 import { createClient } from '@/lib/supabase/server';
 
@@ -49,7 +50,7 @@ export type PlaceVerdict = VerdictCardData & { tierNumber: number };
 export async function getPlaceVerdicts(id: string, filter: TierFilter): Promise<PlaceVerdict[]> {
   const supabase = await createClient();
   const { data } = await supabase.rpc('get_place_verdicts', { p_place: id, p_tier_filter: filter });
-  return (data ?? []).map((v) => ({
+  const rows: PlaceVerdict[] = (data ?? []).map((v) => ({
     visitId: v.visit_id,
     verdict: v.verdict,
     onlyForText: v.only_for_text,
@@ -59,6 +60,7 @@ export async function getPlaceVerdicts(id: string, filter: TierFilter): Promise<
     groupName: v.group_name,
     tierNumber: v.tier,
   }));
+  return withDetails(rows);
 }
 
 export type PlaceSearchResult = {

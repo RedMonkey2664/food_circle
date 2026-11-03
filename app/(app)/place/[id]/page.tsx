@@ -25,6 +25,7 @@ import { PLACE_TYPE_LABEL, cuisineLabel } from '@/lib/domain/place';
 import { TIER_SUMMARY_HEADING } from '@/lib/domain/tiers';
 import { visitAge } from '@/lib/domain/time';
 import { handoffUrl } from '@/lib/handoff';
+import { placeTopDishes } from '@/lib/data/details';
 
 const FILTERS: TierFilter[] = ['friends', 'friends_following', 'everyone'];
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -87,10 +88,11 @@ async function PlaceContent({
   if (!place) notFound();
   if (place.mergedFrom) redirect(`/place/${place.id}`);
 
-  const [summary, verdicts, friendsExist] = await Promise.all([
+  const [summary, verdicts, friendsExist, topDishes] = await Promise.all([
     getPlaceSummary(place.id),
     getPlaceVerdicts(place.id, filter),
     hasFriends(),
+    placeTopDishes(place.id),
   ]);
 
   const mine = verdicts.find((v) => v.tierNumber === 0);
@@ -144,13 +146,53 @@ async function PlaceContent({
               <span>
                 {t.yourLast} <VerdictLabel verdict={mine.verdict} onlyForText={mine.onlyForText} />
               </span>
-              <span className="text-muted">{visitAge(mine.visitedOn)}</span>
+              <span className="flex shrink-0 items-center gap-3">
+                <span className="text-muted">{visitAge(mine.visitedOn)}</span>
+                <Link href={`/visit/${mine.visitId}`} className="text-primary font-semibold">
+                  {mine.details ? copy.review.editDetails : copy.review.addDetails}
+                </Link>
+              </span>
             </p>
           ) : null}
 
           <div className="mt-4">
             <TierSummary summary={summary} />
           </div>
+
+          {[1, 2, 3].some((n) => topDishes.get(n)?.length) ? (
+            <section className="border-line bg-surface mt-4 rounded-[var(--radius-card)] border p-3">
+              <h2 className="text-sm font-bold">{copy.review.topDishes}</h2>
+              {/* Tiers stay separate: one list per tier, never merged. */}
+              <dl className="mt-2 space-y-2">
+                {([1, 2, 3] as const).map((n) => {
+                  const list = topDishes.get(n);
+                  if (!list?.length) return null;
+                  const heading =
+                    TIER_SUMMARY_HEADING[n === 1 ? 'friend' : n === 2 ? 'following' : 'public'];
+                  return (
+                    <div key={n}>
+                      <dt className="text-muted text-xs font-bold tracking-wide uppercase">
+                        {heading}
+                      </dt>
+                      <dd className="mt-1 flex flex-wrap gap-1.5">
+                        {list.map((d) => (
+                          <span
+                            key={d.name}
+                            className="bg-bg rounded-full px-2.5 py-1 text-xs font-medium"
+                          >
+                            {d.name}{' '}
+                            <span className="text-muted">
+                              ({copy.review.dishVotes(d.go, d.skip)})
+                            </span>
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </section>
+          ) : null}
 
           {/* iPad/PC: the primary action sits inline (phones get the sticky bar below). */}
           <div className="mt-5 hidden md:block">

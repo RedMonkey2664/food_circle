@@ -5,7 +5,9 @@ import type { Tier } from '@/lib/domain/tiers';
 import { visitAge } from '@/lib/domain/time';
 import type { Verdict } from '@/lib/domain/verdict';
 import { VISIBILITY_LABEL, type Visibility } from '@/lib/domain/visibility';
+import type { VisitDetails } from '@/lib/data/details';
 import { RelationshipTag } from './RelationshipTag';
+import { VerdictDetails } from './VerdictDetails';
 import { VerdictLabel } from './VerdictLabel';
 
 export type VerdictCardData = {
@@ -20,6 +22,8 @@ export type VerdictCardData = {
   groupName?: string | null;
   /** Shown only on the viewer's own cards ("Only me", "Friends"...). */
   ownVisibility?: Visibility;
+  /** Phase 4: note, dishes, price, photos (only what the viewer may see). */
+  details?: VisitDetails;
 };
 
 /**
@@ -59,6 +63,7 @@ export function VerdictCard({ data }: { data: VerdictCardData }) {
           <span className="text-muted text-xs">{VISIBILITY_LABEL[data.ownVisibility]}</span>
         ) : null}
       </div>
+      {data.details ? <VerdictDetails details={data.details} /> : null}
     </Card>
   );
 }
