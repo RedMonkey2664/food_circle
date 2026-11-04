@@ -25,6 +25,34 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"app_errors": {
+                  Row: {
+                    "created_at": string,"digest": string | null,"id": number,"message": string,"route": string | null,"source": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"digest"?: string | null,"id"?: never,"message": string,"route"?: string | null,"source": string
+                  }
+                  Update: {
+                    "created_at"?: string,"digest"?: string | null,"id"?: never,"message"?: string,"route"?: string | null,"source"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"app_events": {
+                  Row: {
+                    "created_at": string,"device": string | null,"id": number,"name": string,"route": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"device"?: string | null,"id"?: never,"name": string,"route"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"device"?: string | null,"id"?: never,"name"?: string,"route"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"areas": {
                   Row: {
                     "centroid": unknown,"city": string,"geom": unknown,"id": string,"kind": string,"name": string,"parent_id": string | null,"slug": string
@@ -393,14 +421,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "avatar_url": string | null,"banned_at": string | null,"bio": string | null,"created_at": string,"default_visibility": Database["public"]['Enums']["visibility"],"diet_prefs": (string)[],"display_name": string,"home_area_id": string | null,"id": string,"is_admin": boolean,"is_private": boolean,"leaderboards_opt_in": boolean,"onboarded_at": string | null,"updated_at": string,"username": string
+                    "avatar_url": string | null,"banned_at": string | null,"bio": string | null,"created_at": string,"default_visibility": Database["public"]['Enums']["visibility"],"diet_prefs": (string)[],"display_name": string,"home_area_id": string | null,"id": string,"is_admin": boolean,"is_private": boolean,"leaderboards_opt_in": boolean,"notify_friend_verdicts": boolean,"onboarded_at": string | null,"updated_at": string,"username": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "avatar_url"?: string | null,"banned_at"?: string | null,"bio"?: string | null,"created_at"?: string,"default_visibility"?: Database["public"]['Enums']["visibility"],"diet_prefs"?: (string)[],"display_name": string,"home_area_id"?: string | null,"id": string,"is_admin"?: boolean,"is_private"?: boolean,"leaderboards_opt_in"?: boolean,"onboarded_at"?: string | null,"updated_at"?: string,"username": string
+                    "avatar_url"?: string | null,"banned_at"?: string | null,"bio"?: string | null,"created_at"?: string,"default_visibility"?: Database["public"]['Enums']["visibility"],"diet_prefs"?: (string)[],"display_name": string,"home_area_id"?: string | null,"id": string,"is_admin"?: boolean,"is_private"?: boolean,"leaderboards_opt_in"?: boolean,"notify_friend_verdicts"?: boolean,"onboarded_at"?: string | null,"updated_at"?: string,"username": string
                   }
                   Update: {
-                    "avatar_url"?: string | null,"banned_at"?: string | null,"bio"?: string | null,"created_at"?: string,"default_visibility"?: Database["public"]['Enums']["visibility"],"diet_prefs"?: (string)[],"display_name"?: string,"home_area_id"?: string | null,"id"?: string,"is_admin"?: boolean,"is_private"?: boolean,"leaderboards_opt_in"?: boolean,"onboarded_at"?: string | null,"updated_at"?: string,"username"?: string
+                    "avatar_url"?: string | null,"banned_at"?: string | null,"bio"?: string | null,"created_at"?: string,"default_visibility"?: Database["public"]['Enums']["visibility"],"diet_prefs"?: (string)[],"display_name"?: string,"home_area_id"?: string | null,"id"?: string,"is_admin"?: boolean,"is_private"?: boolean,"leaderboards_opt_in"?: boolean,"notify_friend_verdicts"?: boolean,"onboarded_at"?: string | null,"updated_at"?: string,"username"?: string
                   }
                   Relationships: [
                     {
@@ -408,6 +436,26 @@ isOneToOne: false
       columns: ["home_area_id"]
 isOneToOne: false
       referencedRelation: "areas"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"push_subscriptions": {
+                  Row: {
+                    "auth": string,"created_at": string,"endpoint": string,"p256dh": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "auth": string,"created_at"?: string,"endpoint": string,"p256dh": string,"user_id": string
+                  }
+                  Update: {
+                    "auth"?: string,"created_at"?: string,"endpoint"?: string,"p256dh"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "push_subscriptions_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
       referencedColumns: ["id"]
     }
                   ]
@@ -476,6 +524,40 @@ isOneToOne: true
       referencedRelation: "visits"
       referencedColumns: ["id"]
     }
+                  ]
+                },"share_cards": {
+                  Row: {
+                    "created_at": string,"kind": string,"revoked_at": string | null,"snapshot": NonNullable<Json>,"token": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"kind": string,"revoked_at"?: string | null,"snapshot": NonNullable<Json>,"token": string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"kind"?: string,"revoked_at"?: string | null,"snapshot"?: NonNullable<Json>,"token"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "share_cards_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"stations": {
+                  Row: {
+                    "geom": unknown,"id": string,"name": string,"osm_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "geom": unknown,"id"?: string,"name": string,"osm_id": string
+                  }
+                  Update: {
+                    "geom"?: unknown,"id"?: string,"name"?: string,"osm_id"?: string
+                  }
+                  Relationships: [
+                    
                   ]
                 },"taste_matches": {
                   Row: {
@@ -744,6 +826,9 @@ isOneToOne: false
               "candidates": Json,"place_id": string,"status": string
             }[]
                            },
+"create_share_card":
+{ Args: { "p_kind": string,"p_ref"?: string }; Returns: string
+                           },
 "delete_group":
 { Args: { "p_group": string }; Returns: undefined
                            },
@@ -860,6 +945,12 @@ isOneToOne: false
               "reason": string,"unlocked": Json
             }[]
                            },
+"get_year_recap":
+{ Args: { "p_year": number }; Returns: Json
+                           },
+"hinglish_fold":
+{ Args: { "t": string }; Returns: string
+                           },
 "log_visit_for_groups":
 { Args: { "p_groups": (string)[],"p_only_for_text"?: string,"p_place": string,"p_verdict": Database["public"]['Enums']["verdict"],"p_visited_on"?: string }; Returns: string
                            },
@@ -911,6 +1002,9 @@ isOneToOne: false
                            },
 "revoke_invite":
 { Args: { "p_invite": string }; Returns: undefined
+                           },
+"revoke_share_card":
+{ Args: { "p_token": string }; Returns: undefined
                            },
 "save_review":
 { Args: { "p_dishes"?: Json,"p_note"?: string,"p_occasions"?: (string)[],"p_price"?: number,"p_visit": string }; Returns: undefined
