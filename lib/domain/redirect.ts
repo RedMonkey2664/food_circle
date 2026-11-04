@@ -12,7 +12,14 @@ export function safeNextPath(next: string | null | undefined): string {
 }
 
 /** Paths reachable without a session. Everything else needs sign-in. */
-export const PUBLIC_PATH_PREFIXES = ['/login', '/auth/', '/invite/'] as const;
+export const PUBLIC_PATH_PREFIXES = [
+  '/login',
+  '/auth/',
+  '/invite/',
+  '/s/',
+  '/api/t',
+  '/offline',
+] as const;
 
 export function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATH_PREFIXES.some((p) =>

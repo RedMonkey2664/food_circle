@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { saveMemory } from '@/lib/actions/memory';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
+import { DictateButton } from './DictateButton';
 import { PhotoGrid, type GridPhoto } from './PhotoGrid';
 
 type Friend = { id: string; name: string };
@@ -63,9 +64,14 @@ export function MemoryEditor({
   return (
     <div className="space-y-5">
       <div>
-        <label htmlFor="mem-note" className="text-sm font-semibold">
-          {t.note}
-        </label>
+        <div className="flex items-center justify-between gap-2">
+          <label htmlFor="mem-note" className="text-sm font-semibold">
+            {t.note}
+          </label>
+          <DictateButton
+            onText={(txt) => setNote((n) => (n ? `${n} ${txt}` : txt).slice(0, 2000))}
+          />
+        </div>
         <textarea
           id="mem-note"
           value={note}

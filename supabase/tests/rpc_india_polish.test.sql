@@ -2,7 +2,7 @@
 begin;
 \ir _helpers.psql
 
-select plan(17);
+select plan(21);
 
 select tests.create_user('rider') as me \gset
 select tests.create_user('other') as other \gset
@@ -61,6 +61,23 @@ select is((select count(*)::int from push_subscriptions), 0, 'cannot see other p
 select is((select count(*)::int from app_events), 0, 'users cannot read analytics');
 select throws_ok($$ insert into app_events (name) values ('hacked') $$, '42501', null,
   'users cannot write analytics directly');
+
+-- Push targets: only opted-in, subscribed friends who can see the visit; service role only
+reset role;
+select tests.make_friends(:'me', :'other');
+update profiles set notify_friend_verdicts = true where id = :'other';
+insert into push_subscriptions (endpoint, user_id, p256dh, auth) values ('https://push.example/o', :'other', 'k', 'a');
+select id as fv from visits where user_id = :'me' and visibility = 'friends' limit 1 \gset
+select is((select array_agg(user_id) from push_targets_for_visit(:'fv')), array[:'other'::uuid],
+  'a friends visit notifies an opted-in, subscribed friend');
+update visits set visibility = 'private' where id = :'fv';
+select is((select count(*)::int from push_targets_for_visit(:'fv')), 0, 'a private visit notifies nobody');
+update visits set visibility = 'friends' where id = :'fv';
+update profiles set notify_friend_verdicts = false where id = :'other';
+select is((select count(*)::int from push_targets_for_visit(:'fv')), 0, 'opted-out friends are not notified');
+select tests.authenticate_as(:'me');
+select throws_ok(format('select * from push_targets_for_visit(%L)', :'fv'), '42501', null,
+  'signed-in users cannot list push targets');
 
 select * from finish();
 rollback;

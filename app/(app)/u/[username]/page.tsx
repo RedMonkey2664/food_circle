@@ -14,6 +14,10 @@ import { profileByUsername, profileStats, recentVisitsBy } from '@/lib/data/prof
 import { achievements, myProgress } from '@/lib/data/achievements';
 import { AchievementGrid } from '@/components/compete/AchievementGrid';
 import { ProgressCard } from '@/components/compete/ProgressCard';
+import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { NotificationsCard } from '@/components/pwa/NotificationsCard';
+import { ShareButton } from '@/components/share/ShareButton';
+import { createClient } from '@/lib/supabase/server';
 import { refreshMyTasteMatches } from '@/lib/data/discover';
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith } from '@/lib/domain/relationship';
@@ -54,6 +58,21 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
     isSelf ? myProgress() : Promise.resolve(null),
   ]);
   const earned = badges.filter((b) => b.earnedAt !== null);
+  // Settings for your own profile only: push needs both VAPID keys configured.
+  const pushKey =
+    isSelf && process.env.VAPID_PRIVATE_KEY
+      ? (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? null)
+      : null;
+  let notifyVerdicts = false;
+  if (pushKey) {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('profiles')
+      .select('notify_friend_verdicts')
+      .eq('id', me.id)
+      .maybeSingle();
+    notifyVerdicts = Boolean(data?.notify_friend_verdicts);
+  }
   const pinned = earned
     .filter((b) => b.showcased !== null)
     .sort((a, b) => (a.showcased ?? 0) - (b.showcased ?? 0));
@@ -168,8 +187,21 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
       </div>
 
       {progress ? (
-        <div className="mt-4">
+        <div className="mt-4 space-y-3">
           <ProgressCard progress={progress} link={false} />
+          <div className="flex flex-wrap items-center gap-x-5">
+            <Link
+              href="/recap"
+              className="text-primary inline-flex min-h-11 items-center text-sm font-semibold"
+            >
+              🗓️ {copy.recap.open} ›
+            </Link>
+            <ShareButton target={{ kind: 'journey' }} text={copy.share.journeyText} />
+          </div>
+          <InstallPrompt />
+          {pushKey ? (
+            <NotificationsCard publicKey={pushKey} friendVerdicts={notifyVerdicts} />
+          ) : null}
         </div>
       ) : null}
 

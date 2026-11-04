@@ -962,6 +962,11 @@ isOneToOne: false
 "normalize_name":
 { Args: { "n": string }; Returns: string
                            },
+"push_targets_for_visit":
+{ Args: { "p_visit": string }; Returns: {
+              "user_id": string
+            }[]
+                           },
 "redeem_invite":
 { Args: { "p_befriend"?: boolean,"p_code": string }; Returns: {
               "group_id": string,"inviter": string,"kind": Database["public"]['Enums']["invite_kind"]

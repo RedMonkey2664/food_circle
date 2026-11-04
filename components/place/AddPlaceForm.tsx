@@ -6,6 +6,7 @@ import { useState, useTransition } from 'react';
 import { MapView } from '@/components/map/MapView';
 import { Button } from '@/components/ui/Button';
 import { createPlace, type Candidate, type CreatePlaceInput } from '@/lib/actions/places';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import { PLACE_TYPE_LABEL } from '@/lib/domain/place';
@@ -75,8 +76,10 @@ export function AddPlaceForm({ initialName }: { initialName: string }) {
     start(async () => {
       const r = await createPlace(input);
       if (!r.ok) return setError(r.message);
-      if (r.data.status === 'created') router.push(`/log?place=${r.data.placeId}`);
-      else setCandidates(r.data.candidates);
+      if (r.data.status === 'created') {
+        track('place_added');
+        router.push(`/log?place=${r.data.placeId}`);
+      } else setCandidates(r.data.candidates);
     });
   }
 

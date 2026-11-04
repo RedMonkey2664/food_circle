@@ -143,6 +143,12 @@ async function DiaryContent({
       {progress ? (
         <div className="mt-4 md:max-w-2xl">
           <ProgressCard progress={progress} />
+          <Link
+            href="/recap"
+            className="text-primary mt-2 inline-flex min-h-11 items-center text-sm font-semibold"
+          >
+            🗓️ {copy.recap.open} ›
+          </Link>
         </div>
       ) : null}
       {!cursor ? <OnThisDay /> : null}

@@ -470,6 +470,23 @@ create policy app_events_admin on public.app_events for select to authenticated 
 create policy app_errors_admin on public.app_errors for select to authenticated using (private.is_admin());
 grant select on public.app_events, public.app_errors to authenticated;
 
+-- Who should get a push about a new verdict: friends of the author who opted in, have a
+-- subscription, and are allowed to see this visit (same rule as everywhere else).
+create or replace function public.push_targets_for_visit(p_visit uuid)
+returns table (user_id uuid)
+language sql stable security definer set search_path = public, extensions as $$
+  select distinct pr.id
+  from public.visits v
+  join public.friendships f on v.user_id in (f.user_low, f.user_high) and f.status = 'accepted'
+  join public.profiles pr on pr.id = case when f.user_low = v.user_id then f.user_high else f.user_low end
+  where v.id = p_visit and v.visibility <> 'private'
+    and pr.notify_friend_verdicts
+    and exists (select 1 from public.push_subscriptions s where s.user_id = pr.id)
+    and private.can_view_visit(pr.id, v.id, v.user_id, v.visibility);
+$$;
+revoke all on function public.push_targets_for_visit(uuid) from public, anon, authenticated;
+grant execute on function public.push_targets_for_visit(uuid) to service_role;
+
 revoke all on all functions in schema private from public, anon;
 grant execute on all functions in schema private to authenticated, service_role;
 grant execute on function public.get_year_recap(int), public.create_share_card(text, text),

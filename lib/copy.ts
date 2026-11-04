@@ -282,6 +282,78 @@ export const copy = {
     },
     unlocked: 'Achievement unlocked!',
   },
+  recap: {
+    title: 'Your year in food',
+    years: 'Choose a year',
+    youAte: 'You ate your way through',
+    placesAcross: (areas: number) =>
+      `places across ${areas} neighbourhood${areas === 1 ? '' : 's'}`,
+    busiest: (month: string) => `Hungriest month: ${month}`,
+    meals: 'Meals logged',
+    newPlaces: 'New places',
+    badges: 'Badges',
+    verdicts: 'How you judged',
+    verdictLine: (go: number, onlyFor: number, skip: number) =>
+      `${go} Go · ${onlyFor} Only for · ${skip} Skip`,
+    monthByMonth: 'Month by month',
+    topAreas: 'Top neighbourhoods',
+    topCuisines: 'Top cuisines',
+    places: (n: number) => (n === 1 ? '1 place' : `${n} places`),
+    firstBite: 'First bite of the year',
+    favourite: 'Your “Same again, bhaiya”',
+    visitsCount: (n: number) => `${n} visits`,
+    badgesEarned: 'Badges unlocked this year',
+    empty: (year: number) => `Nothing logged in ${year} yet.`,
+    emptyBody: 'Log a few places and your year in food fills itself in.',
+    share: 'Share my year',
+    shareText: (year: number, places: number) =>
+      `My ${year} in food: ${places} places across Mumbai 🍽️`,
+    privateNote:
+      'Only you can see this page. Sharing creates a public card with counts only: no notes, photos or the list of places.',
+    open: 'Year in food',
+  },
+  share: {
+    share: 'Share',
+    creating: 'Making card…',
+    publicNote:
+      'Anyone with this link sees the card (counts and badge names only). You can turn it off any time.',
+    whatsapp: 'WhatsApp',
+    story: 'Story image',
+    more: 'More…',
+    copy: 'Copy link',
+    copied: 'Link copied.',
+    copyFailed: 'Couldn’t copy. Long-press the link instead.',
+    join: 'Join Food Circle',
+    badgeText: (name: string) => `I just unlocked “${name}” on Food Circle 🏅`,
+    journeyText: 'My food journey on Food Circle 🧭',
+  },
+  pwa: {
+    installTitle: 'Install Food Circle',
+    installBody:
+      'Add it to your home screen: opens like an app, works on slow data, and your diary reads offline.',
+    installIos: 'On iPhone or iPad: tap Share, then “Add to Home Screen”.',
+    install: 'Install app',
+    notifyTitle: 'Notifications',
+    notifyBody: 'Friend requests and when a friend tags you. Nothing else unless you turn it on.',
+    notifyUnsupported:
+      'This browser can’t do notifications. On iPhone, install the app first (Share > Add to Home Screen).',
+    notifyBlocked:
+      'Notifications are blocked for this site. Allow them in your browser settings to turn them on.',
+    notifyOn: 'Turn on notifications',
+    notifyOff: 'Turn off on this device',
+    friendVerdicts: 'When friends log a place',
+    friendVerdictsHint: 'Only places you’re allowed to see.',
+    pushFailed: 'Couldn’t turn on notifications. Try again.',
+    offlineTitle: 'You’re offline',
+    offlineBody:
+      'No signal, no problem: pages you opened recently, like your diary, still work. Everything else is back when you are.',
+    offlineDiary: 'Open my diary',
+  },
+  voice: {
+    speak: 'Speak',
+    stop: 'Stop',
+    switchLang: 'Switch dictation language between Hindi and English',
+  },
   groups: {
     title: 'Groups',
     intro:

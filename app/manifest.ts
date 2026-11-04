@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { APP_NAME, APP_TAGLINE } from '@/lib/config';
 import { BRAND_CREAM } from '@/lib/icon';
 
-// PWA manifest (P1-12). No service worker yet: offline and push arrive in Phase 7.
+// PWA manifest (P1-12). Service worker (offline diary, push) is public/sw.js (P7-05).
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',

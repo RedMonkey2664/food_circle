@@ -1,10 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
 import { safeNextPath } from '@/lib/domain/redirect';
+import { pushToUsers } from '@/lib/push';
 import { createClient } from '@/lib/supabase/server';
 
 // Every social mutation: validate input with Zod, call the security-definer RPC with the
@@ -65,8 +67,29 @@ function userAction(
 
 const accept = (f: FormData) => ({ p_accept: f.get('accept') === 'true' });
 
-export const requestFriend: FormAction = async (p, f) =>
-  userAction('request_friend', 'p_target')(p, f);
+export const requestFriend: FormAction = async (p, f) => {
+  const r = await userAction('request_friend', 'p_target')(p, f);
+  const to = target(f);
+  if (r.ok && to) {
+    // P7-05: tell them, after the response is sent (never slows the tap down).
+    after(async () => {
+      const supabase = await createClient();
+      const { data: claims } = await supabase.auth.getClaims();
+      const { data: me } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', claims?.claims?.sub ?? '')
+        .maybeSingle();
+      await pushToUsers([to], {
+        title: `${me?.display_name ?? 'Someone'} wants to be friends`,
+        body: 'Open Food Circle to accept.',
+        url: '/friends?tab=requests',
+        tag: 'friend-request',
+      });
+    });
+  }
+  return r;
+};
 export const respondFriend: FormAction = async (p, f) =>
   userAction('respond_friend', 'p_other', accept)(p, f);
 export const cancelFriendRequest: FormAction = async (p, f) =>

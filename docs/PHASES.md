@@ -161,14 +161,14 @@ Done when: logging a 5th cafe unlocks "Bean There, Done That" with a celebration
 
 ## Phase 7: India polish and growth
 
-- [ ] P7-01 (M) Full India badge set: Local Train Foodie, Vada Pav Veteran, Irani Chai Regular, Thali Master, Trusted Taster (friend acted on your verdict, weighted higher than a stranger).
-- [ ] P7-02 (M) Area boards within a friend circle or group ("Bandra Explorer").
-- [ ] P7-03 (M) Year recap page.
-- [ ] P7-04 (M) Shareable cards (logbook, badge, recap) as images via `next/og`, tuned for WhatsApp and Instagram stories.
-- [ ] P7-05 (L) Full PWA: service worker, offline diary reading, install prompt, web push for friend activity.
-- [ ] P7-06 (M) Hinglish input polish; voice notes as a time-boxed experiment.
-- [ ] P7-07 (M) Analytics and error tracking (privacy-respecting, no PII in events).
-- [ ] P7-08 (L) Phone OTP sign-in, only if SMS cost and registration requirements are acceptable (the human decides).
+- [x] P7-01 (M) Full India badge set: Local Train Foodie, Vada Pav Veteran, Irani Chai Regular, Thali Master, Trusted Taster (friend acted on your verdict, weighted higher than a stranger).
+- [x] P7-02 (M) ~~Area boards~~ replaced by personal achievements (human decision, see DECISIONS.md); Area boards within a friend circle or group ("Bandra Explorer").
+- [x] P7-03 (M) Year recap page.
+- [x] P7-04 (M) Shareable cards (logbook, badge, recap) as images via `next/og`, tuned for WhatsApp and Instagram stories.
+- [x] P7-05 (L) Full PWA: service worker, offline diary reading, install prompt, web push for friend activity.
+- [x] P7-06 (M) Hinglish input polish; voice notes as a time-boxed experiment.
+- [x] P7-07 (M) Analytics and error tracking (privacy-respecting, no PII in events).
+- [ ] P7-08 (L) ON HOLD (human, 2026-11-04). Phone OTP sign-in, only if SMS cost and registration requirements are acceptable (the human decides).
 
 Done when: a shared recap card looks right in a WhatsApp preview, push notifications arrive on Android Chrome, and the app is installable.
 

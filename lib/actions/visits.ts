@@ -1,12 +1,30 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
+import { pushNewVerdict } from '@/lib/push';
 import { z } from 'zod';
 import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
 import { logVisitInput, type LogVisitInput } from '@/lib/validation/visit';
 import { createClient } from '@/lib/supabase/server';
 
 export type LogVisitResult = ActionResult<{ visitId: string }>;
+
+/** P7-05: push "X logged Y" to opted-in friends who can see it, after the response. */
+function notifyFriends(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  visitId: string,
+  userId: string,
+  placeId: string,
+) {
+  after(async () => {
+    const [{ data: me }, { data: place }] = await Promise.all([
+      supabase.from('profiles').select('display_name').eq('id', userId).maybeSingle(),
+      supabase.from('places').select('name').eq('id', placeId).maybeSingle(),
+    ]);
+    await pushNewVerdict(visitId, me?.display_name ?? 'A friend', place?.name ?? 'a place');
+  });
+}
 
 /** P4-07: the next log starts with the audience you chose last time. Best effort. */
 async function rememberVisibility(
@@ -46,6 +64,7 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
     });
     if (error || !visitId) return { ok: false, ...fromDbError(error) };
     await rememberVisibility(supabase, userId, 'friends');
+    notifyFriends(supabase, visitId, userId, v.placeId);
     revalidatePath(`/place/${v.placeId}`);
     revalidatePath('/', 'layout');
     return { ok: true, data: { visitId } };
@@ -66,6 +85,7 @@ export async function logVisit(input: LogVisitInput): Promise<LogVisitResult> {
   if (error || !data) return { ok: false, ...fromDbError(error) };
 
   await rememberVisibility(supabase, userId, v.visibility);
+  if (v.visibility !== 'private') notifyFriends(supabase, data.id, userId, v.placeId);
   revalidatePath(`/place/${v.placeId}`);
   revalidatePath('/', 'layout');
   return { ok: true, data: { visitId: data.id } };

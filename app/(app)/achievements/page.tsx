@@ -34,7 +34,7 @@ async function Content() {
         </h2>
         <div className="mt-3">
           {earned.length ? (
-            <AchievementGrid items={earned} />
+            <AchievementGrid items={earned} shareable />
           ) : (
             <p className="text-muted text-sm">{t.none}</p>
           )}

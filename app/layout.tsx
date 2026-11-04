@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import { preconnect } from 'react-dom';
+import { RegisterSW } from '@/components/pwa/RegisterSW';
+import { Telemetry } from '@/components/pwa/Telemetry';
 import { APP_NAME, APP_TAGLINE } from '@/lib/config';
 import './globals.css';
 
@@ -37,7 +40,13 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   preconnect('https://lh3.googleusercontent.com');
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className="bg-bg text-ink min-h-dvh antialiased">{children}</body>
+      <body className="bg-bg text-ink min-h-dvh antialiased">
+        {children}
+        <RegisterSW />
+        <Suspense fallback={null}>
+          <Telemetry />
+        </Suspense>
+      </body>
     </html>
   );
 }

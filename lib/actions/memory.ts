@@ -1,6 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
+import { pushToUsers } from '@/lib/push';
 import { z } from 'zod';
 import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
 import { createClient } from '@/lib/supabase/server';
@@ -65,6 +67,19 @@ export async function saveMemory(input: MemoryInput): Promise<ActionResult<null>
       .from('visit_companions')
       .insert(add.map((user_id) => ({ visit_id: v.visitId, user_id })));
     if (r.error) return { ok: false, ...fromDbError(r.error) };
+    after(async () => {
+      const { data: visit } = await supabase
+        .from('visits')
+        .select('place:places(name), author:profiles(display_name)')
+        .eq('id', v.visitId)
+        .maybeSingle();
+      await pushToUsers(add, {
+        title: `${visit?.author?.display_name ?? 'A friend'} tagged you`,
+        body: `At ${visit?.place?.name ?? 'a place'}. Add it to your log?`,
+        url: '/',
+        tag: `tag-${v.visitId}`,
+      });
+    });
   }
   revalidatePath(`/visit/${v.visitId}`);
   revalidatePath('/diary');

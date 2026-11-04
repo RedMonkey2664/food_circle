@@ -8,6 +8,7 @@ import { ActionButton } from '@/components/social/ActionButton';
 import { Avatar } from '@/components/social/Avatar';
 import { followUser } from '@/lib/actions/social';
 import { afterLogSuggestions, logVisit, type AfterLogPerson } from '@/lib/actions/visits';
+import { track } from '@/lib/analytics';
 import { copy } from '@/lib/copy';
 import type { Verdict } from '@/lib/domain/verdict';
 import type { Visibility } from '@/lib/domain/visibility';
@@ -75,6 +76,7 @@ export function LogSheet({
         ...(visibility === 'friends' && groupIds.length ? { groupIds } : {}),
       });
       if (!r.ok) return setError(r.message);
+      track('log_saved');
       setSaved({ verdict, onlyFor: onlyForText, visitId: r.data.visitId });
       // P2-04: who else logged this, that you could follow (never blocks the success state).
       afterLogSuggestions(place.id).then(setOthers, () => setOthers(null));

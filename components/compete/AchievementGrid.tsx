@@ -1,10 +1,18 @@
+import { ShareButton } from '@/components/share/ShareButton';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import type { Achievement } from '@/lib/data/achievements';
 import { formatDay } from '@/lib/domain/mapCard';
 
 /** Achievement cards: unlocked in full colour, locked greyed with progress, secrets masked. */
-export function AchievementGrid({ items }: { items: Achievement[] }) {
+export function AchievementGrid({
+  items,
+  shareable = false,
+}: {
+  items: Achievement[];
+  /** Your own page: offer a share card for each unlocked badge. */
+  shareable?: boolean;
+}) {
   const t = copy.achieve;
   return (
     <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -40,8 +48,17 @@ export function AchievementGrid({ items }: { items: Achievement[] }) {
               </span>
               <span className="text-muted block text-sm">{a.description}</span>
               {earned && a.earnedAt ? (
-                <span className="text-go mt-1 block text-xs font-medium">
-                  {t.earnedOn(formatDay(a.earnedAt))}
+                <span className="mt-1 flex flex-wrap items-center gap-x-3">
+                  <span className="text-go text-xs font-medium">
+                    {t.earnedOn(formatDay(a.earnedAt))}
+                  </span>
+                  {shareable ? (
+                    <ShareButton
+                      target={{ kind: 'badge', ref: a.slug }}
+                      text={copy.share.badgeText(a.name)}
+                      compact
+                    />
+                  ) : null}
                 </span>
               ) : a.progress !== null ? (
                 <span className="mt-1.5 flex items-center gap-2">
