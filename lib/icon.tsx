@@ -3,7 +3,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const BRAND_ORANGE = '#c2410c';
+/** Brand red (name kept for existing imports). */
+export const BRAND_ORANGE = '#b0141b';
 export const BRAND_CREAM = '#fffbf5';
 
 let cached: Promise<string> | null = null;

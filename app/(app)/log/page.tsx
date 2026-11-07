@@ -14,7 +14,7 @@ import { profileStats } from '@/lib/data/profile';
 
 export const metadata = { title: 'Log a place' };
 // The log screen is a spice-orange takeover; tint the browser/status bar to match.
-export const viewport: Viewport = { themeColor: '#c2410c' };
+export const viewport: Viewport = { themeColor: '#b0141b' };
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

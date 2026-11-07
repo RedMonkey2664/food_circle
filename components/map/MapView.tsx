@@ -279,7 +279,7 @@ export function MapView({
         return;
       }
       if (!picker.current) {
-        picker.current = new ml.Marker({ color: '#c2410c', draggable: true })
+        picker.current = new ml.Marker({ color: '#b0141b', draggable: true })
           .setLngLat([pick.lng, pick.lat])
           .addTo(m);
         picker.current.on('dragend', () => {

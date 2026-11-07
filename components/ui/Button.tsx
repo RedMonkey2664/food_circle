@@ -5,7 +5,7 @@ type Variant = 'primary' | 'secondary' | 'ghost';
 type Size = 'md' | 'lg';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary text-on-primary hover:bg-primary-press active:bg-primary-press',
+  primary: 'sk-press bg-primary text-on-primary hover:bg-primary-press active:bg-primary-press',
   secondary: 'bg-surface text-ink border border-line hover:border-muted',
   ghost: 'bg-transparent text-ink hover:bg-primary-soft',
 };
@@ -26,7 +26,7 @@ export function buttonClass({
 }: StyleOptions = {}) {
   return cn(
     'inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] font-semibold',
-    'transition-[transform,background-color,border-color] duration-150 ease-[var(--ease-out)]',
+    'transition-[transform,translate,box-shadow,background-color,border-color] duration-150 ease-[var(--ease-out)]',
     'active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
     variants[variant],
     sizes[size],

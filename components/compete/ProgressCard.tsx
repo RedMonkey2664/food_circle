@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CountUp } from '@/components/motion/CountUp';
 import { copy } from '@/lib/copy';
 import type { Progress } from '@/lib/data/achievements';
 
@@ -9,11 +10,17 @@ import type { Progress } from '@/lib/data/achievements';
 export function ProgressCard({ progress, link = true }: { progress: Progress; link?: boolean }) {
   const t = copy.achieve;
   return (
-    <section className="border-line bg-surface rounded-[var(--radius-card)] border p-4">
+    <section
+      data-reveal=""
+      className="sk-ink-card relative overflow-hidden rounded-[var(--radius-card)] p-4 text-[#fbf3e6]"
+    >
       <div className="flex items-baseline justify-between gap-2">
-        <p className="font-display text-primary text-lg font-semibold">{t.level(progress.level)}</p>
+        <p className="font-display text-sun text-xl font-semibold">{t.level(progress.level)}</p>
         {link ? (
-          <Link href="/achievements" className="text-primary text-sm font-semibold">
+          <Link
+            href="/achievements"
+            className="text-sm font-semibold text-[#fbf3e6] underline-offset-4 hover:underline"
+          >
             {t.seeAll} ›
           </Link>
         ) : null}
@@ -21,14 +28,17 @@ export function ProgressCard({ progress, link = true }: { progress: Progress; li
       <dl className="mt-3 grid grid-cols-3 gap-2 text-center">
         {(
           [
-            [t.allTime, String(progress.allTime)],
-            [t.thisMonth, String(progress.thisMonth)],
-            ['Badges', `${progress.badgesEarned}/${progress.badgesTotal}`],
+            [t.allTime, progress.allTime, null],
+            [t.thisMonth, progress.thisMonth, null],
+            ['Badges', progress.badgesEarned, progress.badgesTotal],
           ] as const
-        ).map(([label, n]) => (
-          <div key={label} className="bg-bg rounded-[var(--radius-button)] py-2">
-            <dd className="font-display text-xl font-semibold tabular-nums">{n}</dd>
-            <dt className="text-muted text-xs">{label}</dt>
+        ).map(([label, n, of]) => (
+          <div key={label} className="rounded-[var(--radius-button)] bg-white/[0.07] py-2.5">
+            <dd className="font-display text-2xl font-semibold">
+              <CountUp value={n} />
+              {of !== null ? <span className="text-base text-white/60">/{of}</span> : null}
+            </dd>
+            <dt className="text-xs text-white/70">{label}</dt>
           </div>
         ))}
       </dl>
@@ -36,8 +46,8 @@ export function ProgressCard({ progress, link = true }: { progress: Progress; li
         <p className="mt-3 text-sm">
           <span aria-hidden>🔥 </span>
           <span className="font-semibold">{t.streak(progress.currentStreak)}</span>
-          <span className="text-muted"> · {t.bestStreak(progress.bestStreak)}</span>
-          {progress.inGrace ? <span className="text-muted block text-xs">{t.grace}</span> : null}
+          <span className="text-white/70"> · {t.bestStreak(progress.bestStreak)}</span>
+          {progress.inGrace ? <span className="block text-xs text-white/70">{t.grace}</span> : null}
         </p>
       ) : null}
     </section>

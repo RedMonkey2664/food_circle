@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CircleOpenLink } from '@/components/motion/CircleLink';
+import { NavPill } from '@/components/motion/NavPill';
 import {
   BookIcon,
   CompassIcon,
@@ -113,13 +114,14 @@ function SideNavView({ pathname }: { pathname: string | null }) {
       <CircleOpenLink
         href="/log"
         aria-label={copy.nav.log}
-        className="bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(194_65_12/0.6)] transition-[transform,background-color] duration-150 active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
+        className="sk-log-btn bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(176_20_27/0.55)] transition-[transform,background-color] duration-150 active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
       >
         <PlusIcon size={22} strokeWidth={2.5} />
         <span className="hidden font-semibold lg:inline">{copy.nav.log}</span>
       </CircleOpenLink>
 
-      <ul className="flex flex-col gap-1">
+      <ul className="relative flex flex-col gap-1">
+        <NavPill pathname={pathname} className="bg-primary-soft rounded-[var(--radius-button)]" />
         {ITEMS.map(({ href, label, Icon, match }) => {
           const active = pathname !== null && match(pathname);
           return (
@@ -128,9 +130,9 @@ function SideNavView({ pathname }: { pathname: string | null }) {
                 href={href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-button)] text-[11px] font-medium transition-colors duration-150',
+                  'relative z-[1] flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-button)] text-[11px] font-medium transition-colors duration-200',
                   'lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-[15px]',
-                  active ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-bg hover:text-ink',
+                  active ? 'text-primary' : 'text-muted hover:text-ink',
                 )}
               >
                 <Icon size={22} strokeWidth={active ? 2.4 : 2} />

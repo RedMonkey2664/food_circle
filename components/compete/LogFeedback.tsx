@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Burst } from '@/components/motion/Burst';
 import { visitFeedback, type VisitFeedback } from '@/lib/actions/achievements';
 import { copy } from '@/lib/copy';
 
@@ -31,12 +32,12 @@ export function LogFeedback({ visitId }: { visitId: string }) {
         {t.feedback[fb.reason]}
       </p>
       {fb.unlocked.map((u, i) => (
-        <div
+        <Burst
           key={u.name}
-          className="border-primary/40 bg-primary-soft motion-safe:animate-suggest-in flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
-          style={{ animationDelay: `${i * 120}ms` }}
+          delay={i * 0.35}
+          className="border-primary/40 bg-primary-soft flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
         >
-          <span aria-hidden className="text-3xl leading-none">
+          <span aria-hidden data-burst-icon className="inline-block text-3xl leading-none">
             {u.icon}
           </span>
           <span>
@@ -46,7 +47,7 @@ export function LogFeedback({ visitId }: { visitId: string }) {
             <span className="font-display block text-lg font-semibold">{u.name}</span>
             <span className="text-muted text-sm">{u.description}</span>
           </span>
-        </div>
+        </Burst>
       ))}
     </div>
   );
