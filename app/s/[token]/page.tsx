@@ -7,6 +7,7 @@ import { APP_NAME, APP_TAGLINE } from '@/lib/config';
 import { copy } from '@/lib/copy';
 import { shareCardByToken } from '@/lib/data/recap';
 import { cuisineLabel } from '@/lib/domain/place';
+import { Brand } from '@/components/brand/Logo';
 
 type Json = Record<string, unknown>;
 const n = (v: unknown) => (typeof v === 'number' ? v : Number(v ?? 0) || 0);
@@ -108,7 +109,9 @@ async function Card({ params }: { params: PageProps<'/s/[token]'>['params'] }) {
 export default function SharePage(props: PageProps<'/s/[token]'>) {
   return (
     <main className="mx-auto flex min-h-dvh max-w-[480px] flex-col justify-center px-4 py-10">
-      <p className="font-display text-primary mb-4 text-xl font-semibold">{APP_NAME}</p>
+      <p className="mb-4 text-xl">
+        <Brand />
+      </p>
       <Suspense
         fallback={
           <div

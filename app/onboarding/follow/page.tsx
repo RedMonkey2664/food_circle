@@ -10,6 +10,7 @@ import { discoverPeople, myHomeArea, type DiscoverPerson } from '@/lib/data/disc
 import { myGraph } from '@/lib/data/social';
 import { safeNextPath } from '@/lib/domain/redirect';
 import { relationshipWith } from '@/lib/domain/relationship';
+import { Brand } from '@/components/brand/Logo';
 
 export const metadata = { title: 'Follow people' };
 
@@ -64,7 +65,9 @@ async function FollowStep({
 export default function FollowStepPage(props: PageProps<'/onboarding/follow'>) {
   return (
     <main className="mx-auto min-h-dvh max-w-[480px] px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-10">
-      <p className="font-display text-primary text-xl font-semibold">{copy.app.name}</p>
+      <p className="text-xl">
+        <Brand />
+      </p>
       <h1 className="font-display mt-4 text-2xl font-semibold">{copy.onboarding.followTitle}</h1>
       <p className="text-muted mt-2">{copy.onboarding.followIntro}</p>
       <Suspense

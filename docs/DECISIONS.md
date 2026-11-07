@@ -350,3 +350,5 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 
 ### Logo (2026-11-07, human)
 - The SKOOP logo is the human-supplied mark: a black cat in orange sunglasses eating a slice of pizza. Background removed and stored as public/brand/skoop-mark.png (512px, used by next/og for the tab, install, maskable and Apple icons and on share cards) and skoop-mark.webp (UI). It appears in the side nav, the phone home header and the sign-in page. The sunglasses-cat sticker on the sign-in ticket was removed at the human's request.
+- Logo everywhere (2026-11-07): a Brand component (mark + name) heads the invite, onboarding, follow, 404 and public share pages, alongside the side nav and phone home header. The offline page keeps its emoji because the optimised logo image is not in the offline cache.
+- Deployed 2026-11-07 (human: "deploy"): design/login-scrapbook fast-forwarded into main and pushed. No database changes.

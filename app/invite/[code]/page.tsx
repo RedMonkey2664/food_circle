@@ -6,6 +6,7 @@ import { buttonClass } from '@/components/ui/Button';
 import { copy } from '@/lib/copy';
 import { createClient } from '@/lib/supabase/server';
 import { AcceptInvite } from './AcceptInvite';
+import { Brand } from '@/components/brand/Logo';
 
 export const metadata = { title: 'Invite' };
 
@@ -23,7 +24,9 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
   if (!claims?.claims?.sub) {
     return (
       <Card>
-        <h1 className="font-display text-2xl font-semibold">{copy.app.name}</h1>
+        <h1 className="text-2xl">
+          <Brand size={44} />
+        </h1>
         <p className="text-muted mt-2">{copy.invite.pageBody}</p>
         <Link
           href={`/login?next=${encodeURIComponent(here)}`}
@@ -64,7 +67,9 @@ async function InviteContent({ params }: { params: PageProps<'/invite/[code]'>['
           </div>
         </div>
       ) : (
-        <h1 className="font-display text-xl font-semibold">{copy.app.name}</h1>
+        <h1 className="text-xl">
+          <Brand />
+        </h1>
       )}
 
       {status === 'ok' && groupName ? (

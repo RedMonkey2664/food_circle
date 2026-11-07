@@ -5,6 +5,7 @@ import { copy } from '@/lib/copy';
 import { safeNextPath } from '@/lib/domain/redirect';
 import { createClient } from '@/lib/supabase/server';
 import { OnboardingForm, type AreaGroup } from './OnboardingForm';
+import { Brand } from '@/components/brand/Logo';
 
 export const metadata = { title: 'Set up your profile' };
 
@@ -65,7 +66,9 @@ async function Onboarding({
 export default function OnboardingPage(props: PageProps<'/onboarding'>) {
   return (
     <main className="mx-auto min-h-dvh max-w-[480px] px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-10">
-      <p className="font-display text-primary text-xl font-semibold">{copy.app.name}</p>
+      <p className="text-xl">
+        <Brand />
+      </p>
       <h1 className="font-display mt-4 text-2xl font-semibold">{copy.onboarding.title}</h1>
       <p className="text-muted mt-2">{copy.onboarding.intro}</p>
       <Suspense
