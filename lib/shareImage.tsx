@@ -14,7 +14,16 @@ const n = (v: unknown) => (typeof v === 'number' ? v : Number(v ?? 0) || 0);
  * The image for a share card (P7-04), for next/og ImageResponse. `story` = 1080x1920 for
  * Instagram/WhatsApp status; otherwise 1200x630 for link previews. Text only from the snapshot.
  */
-export function ShareImage({ card, story }: { card: ShareCard; story: boolean }) {
+export function ShareImage({
+  card,
+  story,
+  mark,
+}: {
+  card: ShareCard;
+  story: boolean;
+  /** The SKOOP mark as a data URI (markDataUri). */
+  mark: string;
+}) {
   const s = card.snapshot;
   const big = story ? 1 : 0.62;
   const pad = story ? 96 : 64;
@@ -70,21 +79,8 @@ export function ShareImage({ card, story }: { card: ShareCard; story: boolean })
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          style={{
-            width: 56 * (story ? 1.4 : 1),
-            height: 56 * (story ? 1.4 : 1),
-            borderRadius: 999,
-            background: BRAND_ORANGE,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <div
-            style={{ width: '40%', height: '40%', borderRadius: 999, background: BRAND_CREAM }}
-          />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain <img> */}
+        <img src={mark} width={story ? 96 : 68} height={story ? 96 : 68} alt="" />
         <div style={{ fontSize: 40 * big + 8, fontWeight: 700, color: BRAND_ORANGE }}>
           {APP_NAME}
         </div>

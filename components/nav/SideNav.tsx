@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
+import { Logo } from '@/components/brand/Logo';
 
 type Item = { href: string; label: string; Icon: typeof HomeIcon; match: (p: string) => boolean };
 
@@ -103,11 +104,9 @@ function SideNavView({ pathname }: { pathname: string | null }) {
     >
       <Link
         href="/"
-        className="font-display text-primary mb-6 flex h-10 items-center justify-center text-xl font-semibold lg:justify-start lg:px-3"
+        className="font-display mb-6 flex h-12 items-center justify-center gap-2 text-2xl font-bold tracking-tight lg:justify-start lg:px-2"
       >
-        <span className="lg:hidden" aria-hidden>
-          FC
-        </span>
+        <Logo size={44} />
         <span className="sr-only lg:not-sr-only">{copy.app.name}</span>
       </Link>
 

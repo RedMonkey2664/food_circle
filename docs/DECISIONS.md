@@ -347,3 +347,6 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 - Two display fonts only on /login via next/font (self-hosted, no npm dependency): Anton (condensed tape lettering) and Permanent Marker (handwriting). Nothing follows the cursor. All motion is CSS and off under prefers-reduced-motion.
 - The rest of the app still uses the original orange theme; carrying the collage palette into the app is a separate decision for the human.
 - Update (2026-11-07, human: "too clustered"): trimmed to a curated set with breathing room: eyes (top-right), swinging lantern, croissant, halftone burger, iced coffee, spinning vinyl, plus the pin, sunflower and GO stamp on the note, the sunglasses cat on the ticket and the hand pointing at the Google button. One dish tape instead of two crossed tapes. Unused images removed from public/login (11 remain).
+
+### Logo (2026-11-07, human)
+- The SKOOP logo is the human-supplied mark: a black cat in orange sunglasses eating a slice of pizza. Background removed and stored as public/brand/skoop-mark.png (512px, used by next/og for the tab, install, maskable and Apple icons and on share cards) and skoop-mark.webp (UI). It appears in the side nav, the phone home header and the sign-in page. The sunglasses-cat sticker on the sign-in ticket was removed at the human's request.

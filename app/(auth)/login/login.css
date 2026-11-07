@@ -117,7 +117,7 @@
 
 /* Special moves */
 .sk-stk.sk-eyes {
-  width: clamp(112px, 17vw, 260px);
+  width: clamp(92px, 17vw, 260px);
 }
 .sk-swing > .sk-pop {
   transform-origin: 50% 0;

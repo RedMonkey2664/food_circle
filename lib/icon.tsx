@@ -1,38 +1,46 @@
-// The app mark: a cream ring with a dot on spice orange (a "circle" of people around a place).
-// Rendered to PNG by next/og at build time; no binary icon files in the repo.
+// The app mark: the SKOOP cat (sunglasses, slice of pizza) on cream. The artwork lives in
+// public/brand/skoop-mark.png; icons and share images are rendered from it by next/og.
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
 export const BRAND_ORANGE = '#c2410c';
 export const BRAND_CREAM = '#fffbf5';
 
+let cached: Promise<string> | null = null;
+
+/** The mark as a data URI, for next/og (server only). */
+export function markDataUri(): Promise<string> {
+  cached ??= readFile(join(process.cwd(), 'public', 'brand', 'skoop-mark.png')).then(
+    (buf) => `data:image/png;base64,${buf.toString('base64')}`,
+  );
+  return cached;
+}
+
 /** `safe` shrinks the mark for maskable icons (Android crops to a circle). */
-export function AppMark({ size, safe = false }: { size: number; safe?: boolean }) {
-  const ring = Math.round(size * (safe ? 0.42 : 0.56));
-  const stroke = Math.max(2, Math.round(size * (safe ? 0.06 : 0.08)));
-  const dot = Math.round(size * (safe ? 0.12 : 0.16));
+export function AppMark({
+  size,
+  src,
+  safe = false,
+}: {
+  size: number;
+  src: string;
+  safe?: boolean;
+}) {
+  const art = Math.round(size * (safe ? 0.66 : 0.9));
   return (
     <div
       style={{
         width: size,
         height: size,
-        background: BRAND_ORANGE,
+        background: BRAND_CREAM,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: safe ? 0 : Math.round(size * 0.22),
       }}
     >
-      <div
-        style={{
-          width: ring,
-          height: ring,
-          borderRadius: '50%',
-          border: `${stroke}px solid ${BRAND_CREAM}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div style={{ width: dot, height: dot, borderRadius: '50%', background: BRAND_CREAM }} />
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain <img> */}
+      <img src={src} width={art} height={art} alt="" />
     </div>
   );
 }

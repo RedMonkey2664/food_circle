@@ -9,6 +9,7 @@ import {
   RibbonWide,
   StickerDefs,
 } from '@/components/login/Stickers';
+import { Logo } from '@/components/brand/Logo';
 import { Footer } from '@/components/ui/Footer';
 import { GoogleIcon } from '@/components/ui/icons';
 import { PromisePreview } from '@/components/verdict/PromisePreview';
@@ -40,7 +41,6 @@ const t = copy.login;
 /** Cut-out stickers in public/login (pixel sizes of the files, so nothing shifts). */
 const ART = {
   burger: [424, 391],
-  'cat-pizza': [341, 424],
   croissant: [424, 373],
   eyes: [345, 478],
   fries: [424, 412],
@@ -90,7 +90,7 @@ const DESK: Array<{
 }> = [
   {
     name: 'eyes',
-    at: 'sk-eyes -top-10 -right-9 lg:-top-8 lg:-right-10',
+    at: 'sk-eyes -top-12 -right-8 lg:-top-8 lg:-right-10',
     show: 'all',
     w: 260,
     r: -4,
@@ -297,20 +297,23 @@ export default function LoginPage(props: PageProps<'/login'>) {
 
       <div className="relative z-[2] mx-auto flex min-h-dvh max-w-[480px] flex-col px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pb-4 md:max-w-[600px] lg:grid lg:max-w-[1120px] lg:grid-cols-[minmax(0,1fr)_400px] lg:content-center lg:items-center lg:gap-20 lg:px-10 lg:pt-6 lg:pb-32">
         <div>
-          <p className="sk-scribble fc-fade flex items-end gap-1 text-lg [--delay:0.9s] lg:text-xl">
-            {t.scribble}
-            <svg viewBox="0 0 44 44" aria-hidden className="sk-arrow size-9 shrink-0">
-              <path
-                pathLength={1}
-                d="M4 8c18 0 30 10 30 28m0 0-8-7m8 7 6-9"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-          </p>
+          <div className="flex items-center gap-3">
+            <Logo size={64} className="fc-fade [--delay:0s] lg:size-[84px]" />
+            <p className="sk-scribble fc-fade flex items-end gap-1 text-lg [--delay:0.9s] lg:text-xl">
+              {t.scribble}
+              <svg viewBox="0 0 44 44" aria-hidden className="sk-arrow size-9 shrink-0">
+                <path
+                  pathLength={1}
+                  d="M4 8c18 0 30 10 30 28m0 0-8-7m8 7 6-9"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+              </svg>
+            </p>
+          </div>
           <Wordmark />
           <Tagline />
           <p className="fc-fade mt-4 max-w-[36ch] text-lg text-[#5c5248] [--delay:1.2s]">
@@ -342,13 +345,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
         </div>
 
         <div className="fc-ticket-wrap mt-20 lg:mt-0">
-          <Corner
-            name="cat-pizza"
-            at="-top-[78px] right-2 w-[96px] lg:-top-[96px] lg:w-[120px]"
-            w={120}
-            r={6}
-            d={2}
-          />
           <div
             aria-hidden
             className="sk-corner sk-poke top-[150px] -left-[150px] hidden w-[140px] lg:block"

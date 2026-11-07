@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { shareCardByToken } from '@/lib/data/recap';
+import { markDataUri } from '@/lib/icon';
 import { ShareImage } from '@/lib/shareImage';
 import { APP_NAME } from '@/lib/config';
 
@@ -29,5 +30,8 @@ export default async function Image({ params }: { params: Promise<{ token: strin
       size,
     );
   }
-  return new ImageResponse(<ShareImage card={card} story={false} />, { ...size, emoji: 'twemoji' });
+  return new ImageResponse(<ShareImage card={card} story={false} mark={await markDataUri()} />, {
+    ...size,
+    emoji: 'twemoji',
+  });
 }

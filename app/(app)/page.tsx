@@ -11,6 +11,7 @@ import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import { homeFeed, type FeedTab } from '@/lib/data/feed';
 import { myGroups, type MyGroup } from '@/lib/data/groups';
+import { Logo } from '@/components/brand/Logo';
 
 function tabHref(tab: FeedTab): string {
   if (tab === 'friends') return '/';
@@ -138,7 +139,8 @@ export default function HomePage(props: PageProps<'/'>) {
     <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-10">
       <main className="min-w-0">
         <header className="flex items-center justify-between py-2">
-          <h1 className="font-display text-primary text-2xl font-semibold md:sr-only">
+          <h1 className="font-display flex items-center gap-2 text-2xl font-bold tracking-tight md:sr-only">
+            <Logo size={36} />
             {copy.app.name}
           </h1>
           <div className="flex items-center gap-1 md:hidden">

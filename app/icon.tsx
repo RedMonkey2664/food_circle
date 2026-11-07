@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og';
-import { AppMark } from '@/lib/icon';
+import { AppMark, markDataUri } from '@/lib/icon';
 
 // Generated at build time: /icon/32 (tab), /icon/192 and /icon/512 (install), /icon/maskable.
 export function generateImageMetadata() {
@@ -14,7 +14,8 @@ export function generateImageMetadata() {
 export default async function Icon({ id }: { id: Promise<string> }) {
   const which = await id;
   const size = which === '32' ? 32 : which === '192' ? 192 : 512;
-  return new ImageResponse(<AppMark size={size} safe={which === 'maskable'} />, {
+  const src = await markDataUri();
+  return new ImageResponse(<AppMark size={size} src={src} safe={which === 'maskable'} />, {
     width: size,
     height: size,
   });
