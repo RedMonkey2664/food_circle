@@ -1,19 +1,14 @@
 import { Suspense, type CSSProperties, type ReactNode } from 'react';
-import { LoginFX } from '@/components/login/LoginFX';
+import Image from 'next/image';
 import {
   CoolCat,
-  CuttingChai,
   GoStamp,
-  HalftonePizza,
   MarkerLoop,
   MazeRings,
   RibbonPhone,
   RibbonWide,
-  ScribbleStar,
-  SpiralStar,
   StickerDefs,
   Sunflower,
-  VadaPav,
 } from '@/components/login/Stickers';
 import { Footer } from '@/components/ui/Footer';
 import { GoogleIcon } from '@/components/ui/icons';
@@ -61,11 +56,30 @@ async function LoginForm({ searchParams }: { searchParams: PageProps<'/login'>['
   );
 }
 
-/** A floating sticker: position via className, depth/tilt/timing via CSS variables. */
+/** Cut-out artwork in public/login (sizes are the files' own, for no layout shift). */
+const ART = {
+  burger: [480, 441],
+  dessert: [394, 480],
+  croissant: [480, 424],
+  icecream: [227, 480],
+  toast: [469, 480],
+  fries: [480, 466],
+  pizza: [480, 428],
+  eyes: [337, 474],
+  pin: [191, 252],
+} as const;
+
+function Art({ name }: { name: keyof typeof ART }) {
+  const [width, height] = ART[name];
+  return (
+    <Image src={`/login/${name}.webp`} width={width} height={height} alt="" draggable={false} />
+  );
+}
+
+/** A sticker on the desk: position via className, tilt/timing via CSS variables. */
 function Sticker({
   className,
   w,
-  depth,
   tilt,
   delay,
   float = 5.5,
@@ -73,7 +87,6 @@ function Sticker({
 }: {
   className: string;
   w: number;
-  depth: number;
   tilt: number;
   delay: number;
   float?: number;
@@ -81,7 +94,6 @@ function Sticker({
 }) {
   const vars = {
     '--w': `${w}px`,
-    '--d': depth,
     '--r': `${tilt}deg`,
     '--delay': `${delay}s`,
     '--fdur': `${float}s`,
@@ -154,7 +166,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
   return (
     <main className="fc-login">
       <StickerDefs />
-      <div className="fc-spot" aria-hidden />
 
       {/* Background: ribbon, wavy stripes, turning rings. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 hidden md:block">
@@ -172,68 +183,76 @@ export default function LoginPage(props: PageProps<'/login'>) {
 
       {/* Stickers scattered on the desk. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
-        <Sticker className="top-3 right-3 lg:hidden" w={92} depth={0} tilt={10} delay={0.9}>
-          <VadaPav />
-        </Sticker>
-        <Sticker className="top-6 right-[118px] lg:hidden" w={58} depth={0} tilt={-12} delay={1.1}>
-          <Sunflower />
-        </Sticker>
+        {/* The eyes peek in from the top-right corner, cut off by the page edge. */}
         <Sticker
-          className="top-[7vh] left-[2.5vw] hidden xl:block"
-          w={150}
-          depth={28}
-          tilt={-12}
-          delay={1}
+          className="fc-eyes -top-4 -right-7 lg:-top-8 lg:-right-10"
+          w={0}
+          tilt={-4}
+          delay={0.6}
+          float={7}
         >
-          <VadaPav />
+          <Art name="eyes" />
+        </Sticker>
+        <Sticker className="top-14 right-[96px] lg:hidden" w={70} tilt={-10} delay={1}>
+          <Art name="croissant" />
+        </Sticker>
+        <Sticker className="top-[6vh] left-[2.5vw] hidden xl:block" w={150} tilt={-10} delay={0.9}>
+          <Art name="burger" />
         </Sticker>
         <Sticker
-          className="top-[3vh] left-[47vw] hidden lg:block"
-          w={118}
-          depth={18}
+          className="top-[2vh] left-[37vw] hidden lg:block"
+          w={92}
           tilt={10}
-          delay={1.15}
+          delay={1.05}
           float={7}
         >
           <Sunflower />
         </Sticker>
+        <Sticker className="top-[6vh] left-[50vw] hidden lg:block" w={150} tilt={-8} delay={1.15}>
+          <Art name="croissant" />
+        </Sticker>
         <Sticker
-          className="top-[9vh] right-[4vw] hidden lg:block"
-          w={98}
-          depth={22}
-          tilt={9}
+          className="top-[42vh] left-[46vw] hidden lg:block"
+          w={112}
+          tilt={12}
           delay={1.3}
-          float={4.5}
+          float={4.8}
         >
-          <CuttingChai />
+          <Art name="fries" />
+        </Sticker>
+        <Sticker
+          className="bottom-[12vh] left-[47vw] hidden lg:block"
+          w={104}
+          tilt={-9}
+          delay={1.45}
+          float={6.2}
+        >
+          <Art name="dessert" />
         </Sticker>
         <Sticker
           className="right-[2.5vw] bottom-[17vh] hidden xl:block"
-          w={150}
-          depth={34}
-          tilt={16}
-          delay={1.45}
-        >
-          <HalftonePizza />
-        </Sticker>
-        <Sticker
-          className="bottom-[13vh] left-[44vw] hidden lg:block"
-          w={92}
-          depth={14}
-          tilt={-9}
-          delay={1.6}
-          float={6.5}
-        >
-          <SpiralStar />
-        </Sticker>
-        <Sticker
-          className="top-[44vh] left-[1.5vw] hidden xl:block"
-          w={60}
-          depth={40}
+          w={165}
           tilt={14}
+          delay={1.55}
+        >
+          <Art name="pizza" />
+        </Sticker>
+        <Sticker
+          className="top-[40vh] left-[2vw] hidden xl:block"
+          w={76}
+          tilt={-12}
+          delay={1.65}
+          float={4.4}
+        >
+          <Art name="icecream" />
+        </Sticker>
+        <Sticker
+          className="bottom-[20vh] left-[1.5vw] hidden xl:block"
+          w={130}
+          tilt={8}
           delay={1.75}
         >
-          <ScribbleStar />
+          <Art name="toast" />
         </Sticker>
       </div>
 
@@ -251,13 +270,12 @@ export default function LoginPage(props: PageProps<'/login'>) {
             <p className="text-muted fc-fade mt-7 max-w-[34ch] text-lg [--delay:0.9s] lg:text-xl">
               {t.pitch}
             </p>
-            <Corner className="top-10 -right-2 hidden w-[54px] lg:block" tilt={-14} delay={1.9}>
-              <ScribbleStar />
-            </Corner>
           </header>
 
           <div className="fc-note mt-10 lg:max-w-md">
-            <span aria-hidden className="fc-tape" />
+            <span aria-hidden className="fc-pin">
+              <Art name="pin" />
+            </span>
             <PromisePreview />
             <Corner
               className="-right-1 -bottom-9 w-[78px] lg:-right-4 lg:w-[96px]"
@@ -319,8 +337,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
           </div>
         </div>
       </div>
-
-      <LoginFX />
     </main>
   );
 }

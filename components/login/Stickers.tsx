@@ -1,6 +1,5 @@
-// Hand-drawn SVG stickers for the sign-in "scrapbook" (all original artwork, no image files).
-// Style cues from the team's mood board: die-cut white borders, black-and-white halftone
-// cut-outs, watercolour food, a fat red ribbon, wavy stripes, scribbled stars and a cat mascot.
+// Hand-drawn SVG pieces for the sign-in "scrapbook": sunflower, stars, GO stamp, cat mascot,
+// ribbon and doodles. The food and the eyes are cut-out images in public/login.
 // Everything here is decorative and hidden from screen readers.
 
 const INK = '#161412';
@@ -43,119 +42,6 @@ export function StickerDefs() {
           <circle cx="2.5" cy="2.5" r="1.2" fill="#e8b04a" opacity="0.55" />
         </pattern>
       </defs>
-    </svg>
-  );
-}
-
-export function VadaPav() {
-  return (
-    <svg viewBox="0 0 130 120" filter="url(#fc-diecut)">
-      <g filter="url(#fc-rough)">
-        {/* green chilli */}
-        <path d="M98 30c14-12 26-4 26 10-6-6-15-5-22 3-3-3-4-8-4-13Z" fill="#3f8f2f" />
-        <path
-          d="M98 30c-2-5 0-9 4-10"
-          stroke="#2c6a1f"
-          strokeWidth="3"
-          strokeLinecap="round"
-          fill="none"
-        />
-        {/* bottom bun */}
-        <path d="M14 76q51 30 102 0 2 14-12 20-44 16-78 0-14-6-12-20Z" fill="#d48f3d" />
-        {/* vada */}
-        <ellipse cx="65" cy="71" rx="54" ry="13" fill="#c2741d" />
-        <g fill="#9c5410" opacity="0.8">
-          <circle cx="30" cy="72" r="2" />
-          <circle cx="48" cy="77" r="1.6" />
-          <circle cx="70" cy="74" r="2.2" />
-          <circle cx="92" cy="77" r="1.6" />
-          <circle cx="104" cy="70" r="1.8" />
-        </g>
-        {/* chutneys */}
-        <path
-          d="M16 64q9-6 18 0t18 0 18 0 18 0 18 0 18 0"
-          stroke="#4c9a2a"
-          strokeWidth="5"
-          strokeLinecap="round"
-          fill="none"
-        />
-        <path
-          d="M24 67l8 2m14-2 7 2m14-3 8 2m14-2 7 2"
-          stroke="#c0392b"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        />
-        {/* top bun */}
-        <path d="M12 62q2-42 53-44 51 2 53 44-53 9-106 0Z" fill="#e7a24a" />
-        <path d="M28 46q10-18 36-21-17 6-25 24Z" fill="#f8cf8c" opacity="0.9" />
-        <g fill="#fff6e6" opacity="0.85">
-          <ellipse cx="56" cy="32" rx="3" ry="1.3" />
-          <ellipse cx="78" cy="30" rx="2.4" ry="1.1" />
-          <ellipse cx="90" cy="40" rx="2.8" ry="1.2" />
-          <ellipse cx="68" cy="42" rx="2" ry="1" />
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-export function CuttingChai() {
-  return (
-    <svg viewBox="0 0 120 130" filter="url(#fc-diecut)">
-      <g
-        className="fc-steam"
-        stroke="#9b7653"
-        strokeWidth="3"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.6"
-      >
-        <path d="M48 24c-6-6 6-10 0-18" />
-        <path d="M62 22c-6-6 6-10 0-18" />
-        <path d="M76 24c-6-6 6-10 0-18" />
-      </g>
-      <g filter="url(#fc-rough)">
-        <path d="M30 32h60l-7 84q-23 8-46 0Z" fill="#f4ede4" />
-        <path d="M33 56h54l-5 58q-22 7-44 0Z" fill="#b8692c" />
-        <ellipse cx="60" cy="56" rx="27" ry="4.5" fill="#d79352" />
-        <g stroke="#ffffff" strokeWidth="2.4" opacity="0.45">
-          <path d="M40 34l3 80M50 34l1.5 82M60 34v83M70 34l-1.5 82M80 34l-3 80" />
-        </g>
-        <ellipse cx="60" cy="32" rx="30" ry="5" fill="none" stroke="#8b6a4a" strokeWidth="2.5" />
-        <path d="M30 32l7 84q23 8 46 0l7-84" fill="none" stroke="#8b6a4a" strokeWidth="2.5" />
-      </g>
-    </svg>
-  );
-}
-
-/** Black-and-white halftone cut-out, like a photocopied zine. */
-export function HalftonePizza() {
-  return (
-    <svg viewBox="0 0 120 120" filter="url(#fc-diecut)">
-      <g filter="url(#fc-rough)">
-        <path d="M12 26q48-20 96 0L62 114Z" fill="#fbf7ef" />
-        <path d="M12 26q48-20 96 0L62 114Z" fill="url(#fc-ht)" />
-        <path d="M12 26q48-20 96 0l-5 11Q60 20 17 37Z" fill="url(#fc-ht-dense)" />
-        {[
-          [44, 48, 10],
-          [74, 49, 9],
-          [58, 76, 8.5],
-          [62, 99, 5],
-        ].map(([cx, cy, r]) => (
-          <g key={`${cx}-${cy}`}>
-            <circle cx={cx} cy={cy} r={r} fill="#fbf7ef" />
-            <circle cx={cx} cy={cy} r={r} fill="url(#fc-ht-dense)" />
-            <circle cx={cx} cy={cy} r={r} fill="none" stroke={INK} strokeWidth="1.6" />
-          </g>
-        ))}
-        <path
-          d="M12 26q48-20 96 0L62 114Z"
-          fill="none"
-          stroke={INK}
-          strokeWidth="2.4"
-          strokeLinejoin="round"
-        />
-      </g>
     </svg>
   );
 }
@@ -256,53 +142,6 @@ export function CoolCat() {
       <path d="M55.5 98h17l-1.4 11q-7 2.6-14 0Z" fill="#b8692c" />
       <ellipse cx="50" cy="104" rx="8" ry="6" fill={INK} />
       <ellipse cx="78" cy="104" rx="8" ry="6" fill={INK} />
-    </svg>
-  );
-}
-
-/** Black star with a cream spiral, cut from card. */
-export function SpiralStar() {
-  return (
-    <svg viewBox="0 0 120 120" filter="url(#fc-diecut)">
-      <g filter="url(#fc-rough)">
-        <path
-          d="M60 8l12.9 34.2 36.6 1.7-28.6 22.9 9.7 35.3L60 82l-30.6 20.1 9.7-35.3-28.6-22.9 36.6-1.7Z"
-          fill={INK}
-          stroke={INK}
-          strokeWidth="6"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M60 62c0-3 4-3 4 0 0 6-9 6-9 0 0-9 14-9 14 0 0 12-19 12-19 0 0-15 24-15 24 0 0 18-29 18-29 0"
-          stroke="#f3e9d6"
-          strokeWidth="3.6"
-          strokeLinecap="round"
-          fill="none"
-        />
-      </g>
-    </svg>
-  );
-}
-
-/** A scribbled star on a torn scrap of paper. */
-export function ScribbleStar() {
-  return (
-    <svg viewBox="0 0 80 80">
-      <g filter="url(#fc-rough)">
-        <path
-          d="M14 22 30 8l18 6 20-2 4 22-6 18 6 16-22 6-14-4-20 4-6-20 6-16Z"
-          fill="#fbf7ef"
-          stroke="#d9cfc0"
-          strokeWidth="1.5"
-        />
-        <path
-          d="M40 18l6 15 16 1-12 10 4 16-14-9-14 9 4-16-12-10 16-1Z"
-          fill="none"
-          stroke={INK}
-          strokeWidth="3"
-          strokeLinejoin="round"
-        />
-      </g>
     </svg>
   );
 }

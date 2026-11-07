@@ -32,21 +32,6 @@
     radial-gradient(circle at 0% 100%, #000 0, transparent 30%);
 }
 
-/* Halftone spotlight that follows the mouse (PC only, see LoginFX). */
-.fc-spot {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s;
-  background: radial-gradient(circle, rgb(194 65 12 / 0.28) 1.3px, transparent 1.8px) 0 0 / 9px 9px;
-  mask: radial-gradient(240px circle at var(--px, 50%) var(--py, 50%), #000 0, transparent 70%);
-}
-.fc-fx .fc-spot {
-  opacity: 1;
-}
-
 /* ---------- Lines that draw themselves ---------- */
 .fc-draw {
   stroke-dasharray: 1;
@@ -73,8 +58,6 @@
   position: absolute;
   width: var(--w, 120px);
   z-index: 1;
-  translate: calc(var(--mx, 0) * var(--d, 12) * 1px) calc(var(--my, 0) * var(--d, 12) * 1px);
-  transition: translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .fc-stk > .fc-pop {
   rotate: var(--r, 0deg);
@@ -82,7 +65,8 @@
     fc-pop 0.9s var(--ease-spring) var(--delay, 0.8s) both,
     fc-float var(--fdur, 5.5s) ease-in-out calc(var(--delay, 0.8s) + 0.9s) infinite alternate;
 }
-.fc-stk svg {
+.fc-stk svg,
+.fc-stk img {
   display: block;
   width: 100%;
   height: auto;
@@ -91,11 +75,21 @@
     scale 0.45s var(--ease-spring),
     rotate 0.45s var(--ease-spring);
 }
-.fc-stk:hover svg {
+.fc-stk img {
+  filter: drop-shadow(0 10px 12px rgb(60 20 5 / 0.22));
+  user-select: none;
+}
+/* The eyes are big and bleed off the top-right edge of the page. */
+.fc-stk.fc-eyes {
+  width: clamp(124px, 17vw, 250px);
+}
+.fc-stk:hover svg,
+.fc-stk:hover img {
   scale: 1.14;
   rotate: 9deg;
 }
-.fc-stk:active svg {
+.fc-stk:active svg,
+.fc-stk:active img {
   scale: 0.9;
   rotate: -6deg;
 }
@@ -243,35 +237,30 @@
 .fc-note figure {
   box-shadow: 0 22px 44px -26px rgb(60 20 5 / 0.45);
 }
-.fc-tape {
+/* A halftone push pin holds the note to the desk. */
+.fc-pin {
   position: absolute;
-  z-index: 2;
-  top: -15px;
+  z-index: 3;
+  top: -42px;
   left: 50%;
-  width: 118px;
-  height: 30px;
+  width: 52px;
   translate: -50% 0;
-  rotate: 4deg;
-  opacity: 0.9;
-  background: repeating-linear-gradient(-45deg, #f9c9b0 0 8px, #fde6d8 8px 16px);
-  clip-path: polygon(
-    0 8%,
-    6% 0,
-    12% 10%,
-    18% 0,
-    82% 0,
-    88% 10%,
-    94% 0,
-    100% 8%,
-    100% 92%,
-    94% 100%,
-    88% 90%,
-    82% 100%,
-    18% 100%,
-    12% 90%,
-    6% 100%,
-    0 92%
-  );
+  rotate: 18deg;
+  filter: drop-shadow(-4px 8px 6px rgb(40 20 5 / 0.35));
+  animation: fc-pin 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) 1.55s both;
+}
+.fc-pin img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@keyframes fc-pin {
+  from {
+    opacity: 0;
+    scale: 1.8;
+    translate: -50% -40px;
+    rotate: 40deg;
+  }
 }
 .fc-login .promise-row {
   animation: fc-fade 0.6s var(--ease-out) both;
@@ -436,8 +425,5 @@
   }
   .fc-draw {
     stroke-dashoffset: 0;
-  }
-  .fc-spot {
-    display: none;
   }
 }
