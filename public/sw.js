@@ -1,11 +1,11 @@
-/* Food Circle service worker (P7-05).
+/* SKOOP service worker (P7-05).
  * - Static build assets: cache-first (they are content-hashed, so they never go stale).
  * - Page navigations: network-first; the last good copy of each page you visited (your diary,
  *   timeline, places) is kept so it can be read offline; otherwise an offline page.
  * - Never caches API routes, auth, server actions or anything that isn't a GET.
  * - Web push: shows the notification and opens the app on tap.
  */
-const VERSION = 'fc-v1';
+const VERSION = 'fc-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 const OFFLINE_URL = '/offline';
@@ -81,7 +81,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let data = { title: 'Food Circle', body: '', url: '/', tag: undefined };
+  let data = { title: 'SKOOP', body: '', url: '/', tag: undefined };
   try {
     data = { ...data, ...event.data.json() };
   } catch {

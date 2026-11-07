@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { defaultVisibility, visibilityOptions, whoCanSee, whoCanSeeGroups } from './visibility';
+import { APP_NAME } from '@/lib/config';
 
 describe('defaultVisibility', () => {
   it('defaults to the narrower audience', () => {
@@ -19,7 +20,7 @@ describe('whoCanSee', () => {
   it('describes each audience in plain words', () => {
     expect(whoCanSee('private', false)).toBe('Only you can see this.');
     expect(whoCanSee('friends', false)).toBe('Visible to your friends.');
-    expect(whoCanSee('public', false)).toBe('Visible to anyone on Food Circle.');
+    expect(whoCanSee('public', false)).toBe(`Visible to anyone on ${APP_NAME}.`);
   });
   it('uses counts with correct plurals', () => {
     expect(whoCanSee('followers', false, { friends: 12, followers: 1 })).toBe(

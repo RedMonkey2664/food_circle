@@ -1,5 +1,5 @@
-// Single home for the working title and feature flags (CLAUDE.md: name lives in one constant).
-export const APP_NAME = 'Food Circle';
+// Single home for the product name (SKOOP since 2026-11-07) and feature flags (CLAUDE.md: name lives in one constant).
+export const APP_NAME = 'SKOOP';
 export const APP_TAGLINE = 'Eat where your people eat.';
 
 function flag(value: string | undefined): boolean {

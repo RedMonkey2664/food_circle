@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { APP_NAME } from '@/lib/config';
 
 export type Recap = {
   year: number;
@@ -74,5 +75,5 @@ export async function shareCardByToken(token: string): Promise<ShareCard | null>
   if (!data || data.revoked_at) return null;
   const snap = (data.snapshot ?? {}) as Json;
   const kind = data.kind === 'badge' || data.kind === 'journey' ? data.kind : 'recap';
-  return { kind, snapshot: snap, displayName: String(snap.display_name ?? 'A Food Circle member') };
+  return { kind, snapshot: snap, displayName: String(snap.display_name ?? `A ${APP_NAME} member`) };
 }

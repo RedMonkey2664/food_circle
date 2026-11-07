@@ -106,4 +106,4 @@ Create these scripts in package.json during Phase 0 if they do not exist.
 
 ## Out of scope for now
 
-Native apps, delivery/ordering inside the app, payments, restaurant-owner accounts, ads, global rankings, AI recommendations. Monetisation and final name/branding are undecided; use the working title "Food Circle" and keep the name in one config constant (`lib/config.ts`).
+Native apps, delivery/ordering inside the app, payments, restaurant-owner accounts, ads, global rankings, AI recommendations. Monetisation is undecided. The product name is "SKOOP" (human decision, 2026-11-07; formerly the working title "Food Circle"); keep it in one config constant (`lib/config.ts`).

@@ -1,11 +1,12 @@
 import { ImageResponse } from 'next/og';
 import { shareCardByToken } from '@/lib/data/recap';
 import { ShareImage } from '@/lib/shareImage';
+import { APP_NAME } from '@/lib/config';
 
 // Link preview for WhatsApp, iMessage, Instagram DMs (P7-04). 1200x630 is what they crop to.
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'A Food Circle share card';
+export const alt = `A ${APP_NAME} share card`;
 
 export default async function Image({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -23,7 +24,7 @@ export default async function Image({ params }: { params: Promise<{ token: strin
           fontSize: 56,
         }}
       >
-        Food Circle
+        {APP_NAME}
       </div>,
       size,
     );

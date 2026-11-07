@@ -1,4 +1,4 @@
-# Food Circle (working title)
+# SKOOP (formerly Food Circle)
 
 Restaurant, cafe and street-food verdicts from people you actually know. Mumbai first.
 

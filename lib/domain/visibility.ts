@@ -1,3 +1,5 @@
+import { APP_NAME } from '@/lib/config';
+
 // Visit visibility (PRODUCT_SPEC.md §5). Narrower audience wins by default.
 export const VISIBILITIES = ['private', 'friends', 'followers', 'public'] as const;
 export type Visibility = (typeof VISIBILITIES)[number];
@@ -48,7 +50,7 @@ export function whoCanSee(v: Visibility, isPrivateAccount: boolean, counts: Coun
     case 'public':
       return isPrivateAccount
         ? `Visible to ${friends} and ${followers} (your account is private).`
-        : 'Visible to anyone on Food Circle.';
+        : `Visible to anyone on ${APP_NAME}.`;
   }
 }
 

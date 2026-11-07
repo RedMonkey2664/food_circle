@@ -13,7 +13,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ tok
     height: 1920,
     emoji: 'twemoji',
   });
-  res.headers.set('Content-Disposition', 'inline; filename="food-circle-story.png"');
+  res.headers.set('Content-Disposition', 'inline; filename="skoop-story.png"');
   res.headers.set('Cache-Control', 'public, max-age=3600');
   return res;
 }

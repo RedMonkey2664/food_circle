@@ -8,6 +8,7 @@ import { fail, fromDbError, type ActionResult } from '@/lib/domain/errors';
 import { safeNextPath } from '@/lib/domain/redirect';
 import { pushToUsers } from '@/lib/push';
 import { createClient } from '@/lib/supabase/server';
+import { APP_NAME } from '@/lib/config';
 
 // Every social mutation: validate input with Zod, call the security-definer RPC with the
 // user's session, map errors to stable codes, refresh the pages that show relationships.
@@ -82,7 +83,7 @@ export const requestFriend: FormAction = async (p, f) => {
         .maybeSingle();
       await pushToUsers([to], {
         title: `${me?.display_name ?? 'Someone'} wants to be friends`,
-        body: 'Open Food Circle to accept.',
+        body: `Open ${APP_NAME} to accept.`,
         url: '/friends?tab=requests',
         tag: 'friend-request',
       });

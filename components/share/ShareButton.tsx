@@ -97,7 +97,7 @@ export function ShareButton({
           href={links.storyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          download="food-circle-story.png"
+          download="skoop-story.png"
           className="border-line flex min-h-11 items-center justify-center rounded-[var(--radius-button)] border text-sm font-semibold"
         >
           {t.story}

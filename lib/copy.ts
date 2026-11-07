@@ -18,6 +18,16 @@ export const copy = {
     ticketEyebrow: 'Admit you + your people',
     ticketTitle: 'Pull up a chair.',
     stamp: 'GO',
+    scribble: 'psst… your friends already ate here',
+    /** The yellow tape on the sign-in page. */
+    slogans: [
+      'Go',
+      'Skip',
+      'Only for…',
+      'Friends, not strangers',
+      'Your food diary',
+      'Made in Mumbai',
+    ],
     marquee: [
       'Vada pav',
       'Cutting chai',
@@ -113,7 +123,7 @@ export const copy = {
     copyFailed: "Couldn't copy. Long-press the link instead.",
     limits: 'Works for 7 days and up to 20 people.',
     shareText: (url: string) =>
-      `Join me on Food Circle, where friends tell you where to eat: ${url}`,
+      `Join me on ${APP_NAME}, where friends tell you where to eat: ${url}`,
     pageTitle: (name: string) => `${name} invited you`,
     pageBody: 'Become friends to see each other’s picks first.',
     accept: 'Add as friend',
@@ -340,12 +350,12 @@ export const copy = {
     copy: 'Copy link',
     copied: 'Link copied.',
     copyFailed: 'Couldn’t copy. Long-press the link instead.',
-    join: 'Join Food Circle',
-    badgeText: (name: string) => `I just unlocked “${name}” on Food Circle 🏅`,
-    journeyText: 'My food journey on Food Circle 🧭',
+    join: `Join ${APP_NAME}`,
+    badgeText: (name: string) => `I just unlocked “${name}” on ${APP_NAME} 🏅`,
+    journeyText: `My food journey on ${APP_NAME} 🧭`,
   },
   pwa: {
-    installTitle: 'Install Food Circle',
+    installTitle: `Install ${APP_NAME}`,
     installBody:
       'Add it to your home screen: opens like an app, works on slow data, and your diary reads offline.',
     installIos: 'On iPhone or iPad: tap Share, then “Add to Home Screen”.',
@@ -405,7 +415,7 @@ export const copy = {
     privateNote: 'Groups are private. Only members see who is in them.',
     inviteTitle: 'Invite to this group',
     inviteBody: 'Friends who open the link join. Others become your friend first, then join.',
-    inviteShare: (name: string, url: string) => `Join our "${name}" group on Food Circle: ${url}`,
+    inviteShare: (name: string, url: string) => `Join our "${name}" group on ${APP_NAME}: ${url}`,
     manage: 'Groups',
     seeAll: 'See all',
   },
