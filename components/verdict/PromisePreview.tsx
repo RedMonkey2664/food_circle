@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { RelationshipTag } from './RelationshipTag';
 import { VerdictLabel } from './VerdictLabel';
 import type { Verdict } from '@/lib/domain/verdict';
@@ -27,8 +28,12 @@ export function PromisePreview() {
         <span className="text-muted text-sm">Dadar West. 3 of your friends went.</span>
       </figcaption>
       <ul className="space-y-2.5">
-        {sample.map((s) => (
-          <li key={s.name} className="flex items-center gap-3">
+        {sample.map((s, i) => (
+          <li
+            key={s.name}
+            className="promise-row flex items-center gap-3"
+            style={{ '--i': i } as CSSProperties}
+          >
             <span
               aria-hidden
               className="bg-primary-soft font-display text-primary flex size-9 shrink-0 items-center justify-center rounded-full font-semibold"
@@ -40,7 +45,7 @@ export function PromisePreview() {
                 <span className="font-semibold">{s.name}</span>
                 <RelationshipTag tier="friend" group={s.group} />
               </div>
-              <div className="mt-0.5 text-sm">
+              <div className="promise-verdict mt-0.5 text-sm">
                 <VerdictLabel verdict={s.verdict} onlyForText={s.note} />
               </div>
             </div>

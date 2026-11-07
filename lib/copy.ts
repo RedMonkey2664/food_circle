@@ -13,6 +13,23 @@ export const copy = {
       'We only use your name and photo from Google. You choose who sees each entry before you post it.',
     error: 'Sign-in did not finish. Please try again.',
     providerOff: 'Google sign-in is not set up on this server yet. Please try again later.',
+    /** Part of the headline circled with a marker on the sign-in page. */
+    headlineHighlight: 'your people',
+    ticketEyebrow: 'Admit you + your people',
+    ticketTitle: 'Pull up a chair.',
+    stamp: 'GO',
+    marquee: [
+      'Vada pav',
+      'Cutting chai',
+      'Misal pav',
+      'Bun maska',
+      'Pav bhaji',
+      'Kheema pav',
+      'Sev puri',
+      'Falooda',
+      'Bombay sandwich',
+      'Irani chai',
+    ],
   },
   onboarding: {
     title: 'Set up your profile',

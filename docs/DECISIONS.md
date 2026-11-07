@@ -331,3 +331,8 @@ Deviations from the docs, assumptions, and new dependencies. Newest at the botto
 
 ### Phase 7 approved and deployed (2026-11-04)
 - Human: "deploy". VAPID env vars added in Vercel (private key as Secret by the human, public key as Config because NEXT_PUBLIC_ values are sent to the browser, subject = the site URL). India polish migration applied via the SQL editor (UTF-8): 30 migrations recorded, 0 anon-callable functions, 44 active achievements, 58 stations. main fast-forwarded and pushed.
+
+### Sign-in page redesign: "scrapbook" (2026-11-07, human request)
+- Human asked for a far more striking sign-in page using the ui_designing mood board. The mood board images are downloaded third-party art (stock "premium" PNGs, Redbubble/Pinterest stickers), so none are shipped or committed; they were used only as style reference. Every sticker (vada pav, cutting chai, halftone pizza, sunflower, spiral star, scribbled star, GO stamp, a sunglasses cat mascot) is original inline SVG in components/login/Stickers.tsx.
+- Look: cream paper with grain and halftone corners, die-cut white sticker borders (SVG dilate filter), wobbly hand-cut edges (turbulence filter), a red ribbon and blue wavy stripes that draw themselves, turning maze rings, a taped note whose verdicts stamp in, a ticket-shaped sign-in card, and a dish-name marquee tape.
+- Motion: CSS only (transform, opacity, stroke-dashoffset), no new dependency. One tiny client component (LoginFX) adds sticker parallax, a halftone spotlight under the cursor and a magnetic Google button, for mouse/trackpad only. Everything is static under prefers-reduced-motion. Decorative art is aria-hidden; strings live in lib/copy.ts.
