@@ -5,6 +5,7 @@ import { ShowcasePicker } from '@/components/compete/ShowcasePicker';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { achievements, myProgress } from '@/lib/data/achievements';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Achievements' };
 
@@ -55,7 +56,9 @@ async function Content() {
 export default function AchievementsPage() {
   return (
     <main className="pt-2">
-      <h1 className="font-display text-2xl font-semibold">{copy.achieve.title}</h1>
+      <PageTitle sticker="torn-stars" tilt={-8}>
+        {copy.achieve.title}
+      </PageTitle>
       <p className="text-muted mt-1 mb-4 text-sm">{copy.achieve.intro}</p>
       <Suspense
         fallback={

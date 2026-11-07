@@ -10,6 +10,7 @@ import { copy } from '@/lib/copy';
 import { myRecap } from '@/lib/data/recap';
 import { formatDay } from '@/lib/domain/mapCard';
 import { cuisineLabel } from '@/lib/domain/place';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Your year in food' };
 
@@ -202,7 +203,9 @@ async function Recap({ searchParams }: { searchParams: PageProps<'/recap'>['sear
 export default function RecapPage(props: PageProps<'/recap'>) {
   return (
     <main className="mx-auto w-full pt-2 lg:max-w-3xl">
-      <h1 className="font-display text-2xl font-semibold">{copy.recap.title}</h1>
+      <PageTitle sticker="vinyl" tilt={0}>
+        {copy.recap.title}
+      </PageTitle>
       <Suspense
         fallback={
           <div

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { AddPlaceForm } from '@/components/place/AddPlaceForm';
 import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Add a place' };
 
@@ -14,7 +15,9 @@ async function Form({ searchParams }: { searchParams: PageProps<'/add-place'>['s
 export default function AddPlacePage(props: PageProps<'/add-place'>) {
   return (
     <main className="pt-2">
-      <h1 className="font-display text-2xl font-semibold">{copy.addPlace.title}</h1>
+      <PageTitle sticker="croissant" tilt={-8}>
+        {copy.addPlace.title}
+      </PageTitle>
       <p className="text-muted mt-1 mb-4 text-sm">{copy.addPlace.intro}</p>
       <Suspense
         fallback={

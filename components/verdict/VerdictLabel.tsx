@@ -20,7 +20,7 @@ export function VerdictLabel({
 }) {
   const I = Icon[verdict];
   return (
-    <span className={cn('inline-flex items-center gap-1.5 font-bold', tone[verdict])}>
+    <span data-stamp="" className={cn('inline-flex items-center gap-1.5 font-bold', tone[verdict])}>
       <I size={18} />
       <span>{verdictText(verdict, onlyForText)}</span>
     </span>

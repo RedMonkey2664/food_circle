@@ -4,6 +4,7 @@ import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { myGroups } from '@/lib/data/groups';
 import { CreateGroupForm } from './CreateGroupForm';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Groups' };
 
@@ -57,7 +58,9 @@ async function GroupsList() {
 export default function GroupsPage() {
   return (
     <main className="pt-2">
-      <h1 className="font-display text-2xl font-semibold">{copy.groups.title}</h1>
+      <PageTitle sticker="cat" tilt={6}>
+        {copy.groups.title}
+      </PageTitle>
       <p className="text-muted mt-1 text-sm">{copy.groups.intro}</p>
       <Suspense
         fallback={

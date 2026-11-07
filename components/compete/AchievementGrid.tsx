@@ -23,7 +23,7 @@ export function AchievementGrid({
         return (
           <li
             key={a.slug}
-            data-reveal=""
+            data-reveal="pop"
             className={cn(
               'flex items-start gap-3 rounded-[var(--radius-card)] border p-3',
               earned ? 'sk-card border-primary/30 bg-surface' : 'border-line bg-surface/50',

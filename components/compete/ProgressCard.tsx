@@ -11,7 +11,7 @@ export function ProgressCard({ progress, link = true }: { progress: Progress; li
   const t = copy.achieve;
   return (
     <section
-      data-reveal=""
+      data-reveal="flip"
       className="sk-ink-card relative overflow-hidden rounded-[var(--radius-card)] p-4 text-[#fbf3e6]"
     >
       <div className="flex items-baseline justify-between gap-2">

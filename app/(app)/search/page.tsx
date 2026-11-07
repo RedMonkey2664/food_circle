@@ -4,6 +4,7 @@ import { buttonClass } from '@/components/ui/Button';
 import { PlaceSearch } from '@/components/place/PlaceSearch';
 import { copy } from '@/lib/copy';
 import { searchPlaces } from '@/lib/data/places';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Search' };
 
@@ -31,7 +32,9 @@ async function Results({ searchParams }: { searchParams: PageProps<'/search'>['s
 export default function SearchPage(props: PageProps<'/search'>) {
   return (
     <main className="mx-auto w-full pt-2 lg:max-w-2xl">
-      <h1 className="font-display text-2xl font-semibold">{copy.search.title}</h1>
+      <PageTitle sticker="lantern" tilt={4}>
+        {copy.search.title}
+      </PageTitle>
       <Suspense
         fallback={
           <div

@@ -14,6 +14,7 @@ import {
 } from '@/lib/data/discover';
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith, type FollowRow, type FriendRow } from '@/lib/domain/relationship';
+import { PageTitle } from '@/components/brand/Sticker';
 
 export const metadata = { title: 'Discover' };
 
@@ -206,7 +207,9 @@ function SearchBox({ query }: { query: string }) {
 export default function DiscoverPage(props: PageProps<'/discover'>) {
   return (
     <main className="pt-2">
-      <h1 className="font-display text-2xl font-semibold">{copy.discover.title}</h1>
+      <PageTitle sticker="eyes" tilt={-6}>
+        {copy.discover.title}
+      </PageTitle>
       <Suspense
         fallback={
           <div aria-busy="true" className="mt-3 space-y-3">

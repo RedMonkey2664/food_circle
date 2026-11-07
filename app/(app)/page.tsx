@@ -12,6 +12,7 @@ import { copy } from '@/lib/copy';
 import { homeFeed, type FeedTab } from '@/lib/data/feed';
 import { myGroups, type MyGroup } from '@/lib/data/groups';
 import { Logo } from '@/components/brand/Logo';
+import { NavPill } from '@/components/motion/NavPill';
 
 function tabHref(tab: FeedTab): string {
   if (tab === 'friends') return '/';
@@ -29,8 +30,9 @@ function Tabs({ active, groups }: { active: FeedTab; groups: MyGroup[] }) {
   return (
     <nav
       aria-label={copy.home.feedLabel}
-      className="border-line -mx-4 flex [scrollbar-width:none] overflow-x-auto border-b px-4"
+      className="border-line relative -mx-4 flex [scrollbar-width:none] overflow-x-auto border-b px-4"
     >
+      <NavPill fit="underline" className="bg-primary rounded-full" />
       {tabs.map(({ tab, label }) => (
         <Link
           key={tab}
@@ -38,7 +40,7 @@ function Tabs({ active, groups }: { active: FeedTab; groups: MyGroup[] }) {
           aria-current={active === tab ? 'page' : undefined}
           className={cn(
             'flex min-h-11 shrink-0 grow basis-0 items-center justify-center border-b-2 px-3 font-medium whitespace-nowrap',
-            active === tab ? 'border-primary text-primary' : 'text-muted border-transparent',
+            active === tab ? 'text-primary border-transparent' : 'text-muted border-transparent',
           )}
         >
           {label}

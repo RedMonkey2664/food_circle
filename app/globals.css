@@ -348,37 +348,6 @@ html[data-vt='close']::view-transition-old(root) {
   visibility: hidden;
 }
 
-/* The Log button breathes gently so it reads as the one thing to tap. */
-.sk-log-btn {
-  isolation: isolate;
-}
-.sk-log-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: var(--c-primary);
-  animation: sk-breathe 2.8s ease-out infinite;
-}
-@keyframes sk-breathe {
-  0% {
-    opacity: 0.45;
-    scale: 1;
-  }
-  70%,
-  100% {
-    opacity: 0;
-    scale: 1.45;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sk-log-btn::before {
-    animation: none;
-    opacity: 0;
-  }
-}
-
 /* Ink card: the ticket look from the sign-in page (progress, highlights). */
 .sk-ink-card {
   background:

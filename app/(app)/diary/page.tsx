@@ -12,6 +12,8 @@ import { myLogbook, myMapPins, myTimeline, onThisDay } from '@/lib/data/diary';
 import { myProgress } from '@/lib/data/achievements';
 import { ProgressCard } from '@/components/compete/ProgressCard';
 import { cuisineLabel } from '@/lib/domain/place';
+import { PageTitle } from '@/components/brand/Sticker';
+import { NavPill } from '@/components/motion/NavPill';
 
 export const metadata = { title: 'Diary' };
 
@@ -22,8 +24,9 @@ function Tabs({ active }: { active: View }) {
   return (
     <nav
       aria-label={copy.diary.title}
-      className="border-line mt-2 grid grid-cols-3 border-b md:max-w-md"
+      className="border-line relative mt-2 grid grid-cols-3 border-b md:max-w-md"
     >
+      <NavPill fit="underline" className="bg-primary rounded-full" />
       {VIEWS.map((v) => (
         <Link
           key={v}
@@ -31,7 +34,7 @@ function Tabs({ active }: { active: View }) {
           aria-current={active === v ? 'page' : undefined}
           className={cn(
             'flex min-h-11 items-center justify-center border-b-2 font-medium',
-            active === v ? 'border-primary text-primary' : 'text-muted border-transparent',
+            active === v ? 'text-primary border-transparent' : 'text-muted border-transparent',
           )}
         >
           {copy.diary.tabs[v]}
@@ -191,7 +194,9 @@ async function DiaryContent({
 export default function DiaryPage(props: PageProps<'/diary'>) {
   return (
     <main className="pt-2">
-      <h1 className="font-display text-2xl font-semibold">{copy.diary.title}</h1>
+      <PageTitle sticker="camera-hand" tilt={8}>
+        {copy.diary.title}
+      </PageTitle>
       <Suspense
         fallback={
           <div

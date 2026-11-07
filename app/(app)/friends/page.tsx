@@ -13,6 +13,7 @@ import { copy } from '@/lib/copy';
 import { myActiveInvites, myGraph, peopleById, searchPeople } from '@/lib/data/social';
 import { otherId, relationshipWith } from '@/lib/domain/relationship';
 import { siteOrigin } from '@/lib/site';
+import { NavPill } from '@/components/motion/NavPill';
 
 export const metadata = { title: 'Friends' };
 
@@ -21,7 +22,11 @@ type Tab = (typeof TABS)[number];
 
 function TabBar({ active, requestCount }: { active: Tab; requestCount: number }) {
   return (
-    <nav aria-label="Friends sections" className="border-line mt-4 grid grid-cols-3 border-b">
+    <nav
+      aria-label="Friends sections"
+      className="border-line relative mt-4 grid grid-cols-3 border-b"
+    >
+      <NavPill fit="underline" className="bg-primary rounded-full" />
       {TABS.map((t) => (
         <Link
           key={t}
@@ -29,7 +34,7 @@ function TabBar({ active, requestCount }: { active: Tab; requestCount: number })
           aria-current={active === t ? 'page' : undefined}
           className={cn(
             'flex min-h-11 items-center justify-center gap-1.5 border-b-2 font-medium',
-            active === t ? 'border-primary text-primary' : 'text-muted border-transparent',
+            active === t ? 'text-primary border-transparent' : 'text-muted border-transparent',
           )}
         >
           {copy.friends.tabs[t]}

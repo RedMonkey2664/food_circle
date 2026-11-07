@@ -42,7 +42,7 @@ function BottomNavView({ pathname }: { pathname: string | null }) {
           <CircleOpenLink
             href="/log"
             aria-label={copy.nav.log}
-            className="sk-log-btn bg-primary text-on-primary relative z-[1] -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(176_20_27/0.55)] transition-transform duration-150 active:scale-[0.94]"
+            className="bg-primary text-on-primary relative z-[1] -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(176_20_27/0.55)] transition-transform duration-150 active:scale-[0.94]"
           >
             <PlusIcon size={26} strokeWidth={2.5} />
           </CircleOpenLink>

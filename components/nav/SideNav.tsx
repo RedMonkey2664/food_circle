@@ -114,7 +114,7 @@ function SideNavView({ pathname }: { pathname: string | null }) {
       <CircleOpenLink
         href="/log"
         aria-label={copy.nav.log}
-        className="sk-log-btn bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(176_20_27/0.55)] transition-[transform,background-color] duration-150 active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
+        className="bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(176_20_27/0.55)] transition-[transform,background-color] duration-150 active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
       >
         <PlusIcon size={22} strokeWidth={2.5} />
         <span className="hidden font-semibold lg:inline">{copy.nav.log}</span>
