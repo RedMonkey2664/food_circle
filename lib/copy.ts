@@ -19,15 +19,6 @@ export const copy = {
     ticketTitle: 'Pull up a chair.',
     stamp: 'GO',
     scribble: 'psst… your friends already ate here',
-    /** The yellow tape on the sign-in page. */
-    slogans: [
-      'Go',
-      'Skip',
-      'Only for…',
-      'Friends, not strangers',
-      'Your food diary',
-      'Made in Mumbai',
-    ],
     marquee: [
       'Vada pav',
       'Cutting chai',

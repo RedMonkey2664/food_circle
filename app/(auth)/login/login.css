@@ -484,7 +484,7 @@
 /* ---------- Crossed tapes ---------- */
 .sk-tapes {
   z-index: 2;
-  height: 120px;
+  height: 96px;
 }
 .sk-tape {
   position: absolute;
@@ -493,7 +493,7 @@
   animation: fc-fade 0.9s var(--ease-out) 2s both;
 }
 .sk-tape.ink {
-  top: 56px;
+  top: 30px;
   rotate: -2.5deg;
   background: var(--ink);
   color: #fbf3e6;

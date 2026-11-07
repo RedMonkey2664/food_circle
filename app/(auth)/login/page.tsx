@@ -39,37 +39,16 @@ const t = copy.login;
 
 /** Cut-out stickers in public/login (pixel sizes of the files, so nothing shifts). */
 const ART = {
-  'blue-florals': [217, 424],
-  'blue-waves': [246, 424],
   burger: [424, 391],
-  'bw-wave': [374, 424],
-  'camera-hand': [361, 424],
   'cat-pizza': [341, 424],
-  cat: [339, 424],
-  cheesecake: [424, 348],
-  clef: [183, 424],
-  cocktail: [223, 424],
   croissant: [424, 373],
-  dessert: [351, 424],
   eyes: [345, 478],
   fries: [424, 412],
-  'halftone-flowers': [424, 419],
   'hand-point': [424, 393],
-  icecream: [209, 424],
   'iced-coffee': [252, 424],
   lantern: [289, 424],
-  lily: [424, 403],
-  pancakes: [424, 417],
   pin: [196, 256],
-  'pizza-halftone': [370, 424],
-  pizza: [424, 379],
-  'red-flower': [342, 356],
-  'red-wave': [424, 409],
-  'spiral-star': [423, 424],
-  'sunflower-halftone': [257, 424],
   sunflower: [424, 422],
-  toast: [414, 424],
-  'torn-stars': [315, 259],
   vinyl: [407, 424],
 } as const;
 type ArtName = keyof typeof ART;
@@ -97,8 +76,8 @@ const SHOW: Record<Show, string> = {
 };
 
 /**
- * The collage. Positions are tuned for a 390px phone and 1280-1920px screens; most pieces
- * only appear where there is room (and hidden ones are never downloaded).
+ * A few deliberate pieces with room to breathe (the human found the full collage too busy).
+ * Pieces hidden on a screen size are never downloaded there.
  */
 const DESK: Array<{
   name: ArtName;
@@ -119,37 +98,11 @@ const DESK: Array<{
     f: 7,
   },
   { name: 'fries', at: 'top-[178px] right-3', show: 'phone', w: 62, r: 12, d: 1.4 },
-  { name: 'lantern', at: 'sk-swing -top-3 left-[1.5vw]', show: 'lg', w: 92, r: 0, d: 0.6 },
-  { name: 'blue-waves', at: 'top-[1vh] left-[17vw]', show: 'xl', w: 46, r: 0, d: 0.9 },
-  { name: 'clef', at: 'top-[2vh] left-[44vw]', show: 'xl', w: 42, r: -8, d: 1 },
-  { name: 'sunflower-halftone', at: 'bottom-[4vh] left-[36vw]', show: 'lg', w: 66, r: 12, d: 1.1 },
-  { name: 'croissant', at: 'top-[5vh] left-[51vw]', show: 'lg', w: 130, r: -8, d: 1.2 },
-  { name: 'lily', at: 'top-[1vh] left-[64vw]', show: 'xl', w: 100, r: 14, d: 1.25 },
-  { name: 'torn-stars', at: 'top-[5vh] right-[22vw]', show: 'xl', w: 84, r: -6, d: 1.3 },
-  { name: 'blue-florals', at: 'top-[22vh] -left-3', show: 'xl', w: 74, r: -6, d: 1 },
-  {
-    name: 'camera-hand',
-    at: 'sk-flash top-[25vh] left-[6vw]',
-    show: 'xl',
-    w: 100,
-    r: -10,
-    d: 1.35,
-  },
-  { name: 'cheesecake', at: 'top-[45vh] left-[0.5vw]', show: 'xl', w: 118, r: 8, d: 1.4 },
-  { name: 'burger', at: 'top-[64vh] left-[1vw]', show: 'xl', w: 118, r: -10, d: 1.5 },
-  { name: 'toast', at: 'bottom-[1vh] left-[9vw]', show: 'xl', w: 104, r: 10, d: 1.6 },
-  { name: 'icecream', at: 'bottom-[2vh] left-[26vw]', show: 'xl', w: 54, r: -12, d: 1.75 },
-  { name: 'red-wave', at: 'top-[47vh] left-[41vw]', show: 'xl', w: 60, r: -20, d: 1.55 },
-  { name: 'fries', at: 'top-[55vh] left-[45vw]', show: 'lg', w: 98, r: 12, d: 1.45 },
-  { name: 'spiral-star', at: 'bottom-[22vh] left-[52vw]', show: 'xl', w: 62, r: -8, d: 1.7 },
-  { name: 'dessert', at: 'bottom-[10vh] left-[46vw]', show: 'lg', w: 98, r: -9, d: 1.6 },
-  { name: 'pizza-halftone', at: 'bottom-[12vh] right-[33vw]', show: 'xl', w: 80, r: 12, d: 1.7 },
-  { name: 'cocktail', at: 'bottom-[13vh] right-[26vw]', show: 'xl', w: 58, r: -10, d: 1.65 },
-  { name: 'iced-coffee', at: 'bottom-[12vh] right-[19vw]', show: 'xl', w: 66, r: 8, d: 1.6 },
-  { name: 'bw-wave', at: 'bottom-[1vh] right-[30vw]', show: 'xl', w: 70, r: 0, d: 1.8 },
-  { name: 'pancakes', at: 'bottom-[2vh] right-[8vw]', show: 'xl', w: 106, r: -8, d: 1.7 },
-  { name: 'pizza', at: 'bottom-[15vh] right-[1vw]', show: 'xl', w: 156, r: 14, d: 1.5 },
-  { name: 'vinyl', at: 'sk-vinyl top-[37vh] -right-16', show: 'lg', w: 220, r: 0, d: 1.3 },
+  { name: 'lantern', at: 'sk-swing -top-3 left-[3vw]', show: 'lg', w: 100, r: 0, d: 0.6 },
+  { name: 'croissant', at: 'top-[6vh] left-[50vw]', show: 'lg', w: 120, r: -8, d: 1.2 },
+  { name: 'burger', at: 'top-[54vh] left-[2.5vw]', show: 'xl', w: 128, r: -8, d: 1.4 },
+  { name: 'iced-coffee', at: 'bottom-[15vh] left-[50vw]', show: 'xl', w: 72, r: 8, d: 1.6 },
+  { name: 'vinyl', at: 'sk-vinyl bottom-[16vh] -right-14', show: 'lg', w: 220, r: 0, d: 1.3 },
 ];
 
 /** A sticker stuck onto, or tucked behind, a card. */
@@ -365,14 +318,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
           </p>
 
           <div className="fc-note mt-14 lg:mt-12 lg:max-w-md">
-            <Corner
-              name="cat"
-              at="-left-16 top-10 hidden w-[104px] lg:block"
-              w={104}
-              r={-14}
-              d={2.3}
-              behind
-            />
             <span aria-hidden className="fc-pin">
               <Art name="pin" w={50} />
             </span>
@@ -383,14 +328,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
               w={70}
               r={-12}
               d={2.1}
-            />
-            <Corner
-              name="red-flower"
-              at="-right-8 -top-10 w-[80px] hidden lg:block"
-              w={80}
-              r={16}
-              d={2.4}
-              behind
             />
             <div
               aria-hidden
@@ -411,14 +348,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
             w={120}
             r={6}
             d={2}
-          />
-          <Corner
-            name="halftone-flowers"
-            at="-left-14 -top-12 w-[120px] hidden lg:block"
-            w={120}
-            r={-10}
-            d={1.8}
-            behind
           />
           <div
             aria-hidden
@@ -457,7 +386,6 @@ export default function LoginPage(props: PageProps<'/login'>) {
       </div>
 
       <div aria-hidden className="sk-tapes relative lg:absolute lg:inset-x-0 lg:bottom-4">
-        <Tape kind="sun" items={t.slogans} />
         <Tape kind="ink" items={t.marquee} />
       </div>
     </main>
