@@ -3,7 +3,7 @@
 begin;
 \ir _helpers.psql
 
-select plan(17);
+select plan(18);
 
 delete from visits;
 delete from places;
@@ -64,6 +64,15 @@ select results_eq($$ select matched from admin_import_wikimedia($w$[
   {"qid":"Q1","kind":"other","label":"Amer","lat":26.9860,"lng":75.8520,"file_title":"Amer town.jpg",
    "thumb_url":"https://upload.wikimedia.org/a.jpg","page_url":"https://commons.wikimedia.org/wiki/File:A.jpg"}
 ]$w$::jsonb) $$, $$ values (0) $$, 'a place-name item never matches a food outlet named after it');
+
+-- A chosen city ranks its places first, even over an exact-name match elsewhere.
+insert into places (name, geom, source, status, type)
+values ('Chai Point', st_setsrid(st_makepoint(72.83, 19.06), 4326)::geography, 'user', 'confirmed', 'cafe'),
+       ('Chai Point Jaipur Branch', st_setsrid(st_makepoint(75.80, 26.91), 4326)::geography, 'user', 'confirmed', 'cafe');
+select tests.authenticate_as(tests.create_user('searcher'));
+select is((select name from search_places('chai point', 26.90, 75.80, 5) limit 1), 'Chai Point Jaipur Branch',
+  'searching near Jaipur puts the Jaipur place first');
+reset role;
 
 select tests.authenticate_as(tests.create_user('reader'));
 select is((select count(*)::int from place_media), 1, 'signed-in users can read photos');

@@ -126,6 +126,8 @@ type Props = {
   onViewChange?: (v: MapViewport) => void;
   /** Shown as "Save to Want to go" on explore pins. */
   onSave?: (pin: MapPin) => void;
+  /** Fly here (a picked city or "near me"). A new `key` re-flies to the same spot. */
+  focus?: { lat: number; lng: number; zoom: number; key: number } | null;
   className?: string;
   ariaLabel: string;
 };
@@ -140,6 +142,7 @@ export function MapView({
   onPick,
   onViewChange,
   onSave,
+  focus = null,
   className,
   ariaLabel,
 }: Props) {
@@ -161,18 +164,34 @@ export function MapView({
     onSaveRef.current = onSave;
   }, [onPick, onViewChange, onSave]);
 
+  // Fly to a newly chosen city / "near me".
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m || !focus) return;
+    fitted.current = true;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    m.flyTo({
+      center: [focus.lng, focus.lat],
+      zoom: focus.zoom,
+      essential: false,
+      duration: still ? 0 : 1600,
+    });
+  }, [ready, focus]);
+
   // Create the map once.
   useEffect(() => {
     let cancelled = false;
     void import('maplibre-gl')
       .then(({ default: ml }) => {
         if (cancelled || !box.current) return;
-        const start = pick ?? pins[0] ?? MUMBAI_CENTER;
+        const start = pick ?? focus ?? pins[0] ?? MUMBAI_CENTER;
+        // A chosen city wins over fitting the diary's pins on first load.
+        if (focus && !pick) fitted.current = true;
         const m = new ml.Map({
           container: box.current,
           style: MAP_STYLE_URL,
           center: [start.lng, start.lat],
-          zoom: pick ? 16 : pins.length ? 12 : 11,
+          zoom: pick ? 16 : focus ? focus.zoom : pins.length ? 12 : 11,
           attributionControl: { compact: true },
           cooperativeGestures: !onPickRef.current,
         });

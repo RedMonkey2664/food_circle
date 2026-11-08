@@ -41,6 +41,17 @@ export const copy = {
     followIntro: 'Their picks show up in your Following feed. Follow as many as you like, or none.',
     followContinue: 'Continue',
   },
+  city: {
+    label: 'City',
+    pick: 'Choose a city',
+    nearMe: 'Near me',
+    nearYou: 'Near you',
+    locating: 'Finding you…',
+    denied: 'Location is off. Pick a city instead.',
+    metros: 'Cities',
+    getaways: 'Getaways',
+    hint: 'Search and the map start here.',
+  },
   placeAbout: {
     about: 'About',
     photos: 'Photos',
@@ -447,7 +458,7 @@ export const copy = {
       },
       {
         h: 'Location',
-        p: 'We never track your location in the background. Your location is only used when you tap a button that asks for it (for example "near me"), and only for that request.',
+        p: 'We never track your location in the background. It is only read when you tap "Near me", and then only an approximate point (about 1 km) is kept in a cookie on your device to sort search results and centre the map. Picking a city replaces it.',
       },
       {
         h: 'Analytics and notifications',

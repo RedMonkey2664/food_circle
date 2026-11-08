@@ -76,11 +76,20 @@ export type PlaceSearchResult = {
   dietFlags: string[];
 };
 
-export async function searchPlaces(query: string, limit = 20): Promise<PlaceSearchResult[]> {
+/** `near` (a chosen city or approximate point) ranks places within ~50 km of it first. */
+export async function searchPlaces(
+  query: string,
+  limit = 20,
+  near: { lat: number; lng: number } | null = null,
+): Promise<PlaceSearchResult[]> {
   const q = query.trim().slice(0, 80);
   if (q.length < 2) return [];
   const supabase = await createClient();
-  const { data } = await supabase.rpc('search_places', { p_query: q, p_limit: limit });
+  const { data } = await supabase.rpc('search_places', {
+    p_query: q,
+    p_limit: limit,
+    ...(near ? { p_lat: near.lat, p_lng: near.lng } : {}),
+  });
   return (data ?? []).map((r) => ({
     id: r.id,
     name: r.name,

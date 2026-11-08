@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
 import { searchPlaces } from '@/lib/data/places';
+import { readNear } from '@/lib/near';
 import { createClient } from '@/lib/supabase/server';
 
 const querySchema = z.string().trim().min(2).max(80);
@@ -18,6 +19,6 @@ export async function GET(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const results = await searchPlaces(parsed.data, 8);
+  const results = await searchPlaces(parsed.data, 8, await readNear());
   return NextResponse.json({ results }, { headers: { 'Cache-Control': 'private, max-age=60' } });
 }

@@ -9,6 +9,8 @@ import { copy } from '@/lib/copy';
 import { mapCard } from '@/lib/domain/mapCard';
 import { PLACE_TYPE_LABEL, type PlaceType } from '@/lib/domain/place';
 import { MapView, type MapPin, type MapViewport } from './MapView';
+import { CityPicker, NEAR_EVENT, type NearEvent } from '@/components/place/CityPicker';
+import type { Near } from '@/lib/domain/cities';
 
 type Filter = 'both' | 'been' | 'want';
 const EXPLORE_TYPES: PlaceType[] = [
@@ -52,7 +54,7 @@ function explorePin(p: ExplorePlace): MapPin {
  * P5-06 + P5-11 + Explore: your Been and Want to go pins, plus (optionally) places you haven't
  * tried in the visible area, filtered by type and pure veg. Save straight from a pin.
  */
-export function DiaryMap({ pins }: { pins: MapPin[] }) {
+export function DiaryMap({ pins, near = null }: { pins: MapPin[]; near?: Near | null }) {
   const t = copy.diary;
   const [filter, setFilter] = useState<Filter>('both');
   const [exploreOn, setExploreOn] = useState(false);
@@ -60,6 +62,22 @@ export function DiaryMap({ pins }: { pins: MapPin[] }) {
   const [veg, setVeg] = useState(false);
   const [view, setView] = useState<MapViewport | null>(null);
   const [explore, setExplore] = useState<MapPin[]>([]);
+  const [focus, setFocus] = useState<{
+    lat: number;
+    lng: number;
+    zoom: number;
+    key: number;
+  } | null>(
+    near ? { lat: near.lat, lng: near.lng, zoom: near.slug === 'me' ? 14 : 12, key: 0 } : null,
+  );
+  useEffect(() => {
+    const onNear = (e: Event) => {
+      const d = (e as NearEvent).detail;
+      setFocus({ lat: d.lat, lng: d.lng, zoom: d.zoom, key: Date.now() });
+    };
+    window.addEventListener(NEAR_EVENT, onNear);
+    return () => window.removeEventListener(NEAR_EVENT, onNear);
+  }, []);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState<MapPin[]>([]); // saved from the map this session
   const [error, setError] = useState<string | null>(null);
@@ -268,7 +286,9 @@ export function DiaryMap({ pins }: { pins: MapPin[] }) {
       {pins.length === 0 && !exploreOn ? (
         <p className="text-muted mt-2 text-sm">{t.mapEmpty}</p>
       ) : null}
+      <CityPicker initial={near} className="mt-3" />
       <MapView
+        focus={focus}
         pins={shown}
         onViewChange={setView}
         onSave={onSave}

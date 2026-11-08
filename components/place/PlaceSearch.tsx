@@ -82,7 +82,9 @@ export function PlaceSearch({
     const spinner = window.setTimeout(() => setLoading(true), SPINNER_AFTER_MS);
     const timer = window.setTimeout(async () => {
       try {
-        const res = await fetch(`/api/places/suggest?q=${encodeURIComponent(trimmed)}`, {
+        // The city (cookie) is part of the URL only so cached suggestions differ per city.
+        const city = /(?:^|; )skoop_near=([^;|]*)/.exec(document.cookie)?.[1] ?? '';
+        const res = await fetch(`/api/places/suggest?q=${encodeURIComponent(trimmed)}&c=${city}`, {
           signal: controller.signal,
         });
         if (!res.ok) return;

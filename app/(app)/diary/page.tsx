@@ -14,6 +14,7 @@ import { ProgressCard } from '@/components/compete/ProgressCard';
 import { cuisineLabel } from '@/lib/domain/place';
 import { PageTitle } from '@/components/brand/Sticker';
 import { NavPill } from '@/components/motion/NavPill';
+import { readNear } from '@/lib/near';
 
 export const metadata = { title: 'Diary' };
 
@@ -79,7 +80,7 @@ async function DiaryContent({
       <>
         <Tabs active={view} />
         <div className="mt-4">
-          <DiaryMap pins={await myMapPins()} />
+          <DiaryMap pins={await myMapPins()} near={await readNear()} />
         </div>
       </>
     );
