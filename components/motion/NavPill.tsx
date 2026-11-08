@@ -34,6 +34,9 @@ export function NavPill({
       const list = pill?.parentElement;
       if (!pill || !list) return;
       const key = `${fit}:${list.getAttribute('aria-label') ?? ''}`;
+      // Each run starts from scratch (revertOnUpdate wiped the old styles); the last spot below
+      // lets the highlight glide from where it was.
+      placed.current = false;
 
       const place = (animate: boolean) => {
         const active = list.querySelector<HTMLElement>('[aria-current="page"]');
@@ -42,6 +45,10 @@ export function NavPill({
           placed.current = false;
           return;
         }
+        // Measure icons at rest: a pop still in flight (shrunk, rotated) would skew the target.
+        const icons = list.querySelectorAll('svg');
+        gsap.killTweensOf(icons);
+        gsap.set(icons, { clearProps: 'transform' });
         const target = fit === 'icon' ? (active.querySelector('svg') ?? active) : active;
         const r = target.getBoundingClientRect();
         const box = list.getBoundingClientRect();
@@ -64,13 +71,14 @@ export function NavPill({
         if (!animate || !placed.current || !motionOK()) {
           gsap.set(pill, { ...to, autoAlpha: 1 });
         } else {
-          // A little stretch while it travels, like ink being dragged.
+          // A little stretch while it travels, like ink being dragged. (No clearProps here:
+          // clearing any transform part also wipes x/y and the bar would jump to the corner.)
           gsap.to(pill, { ...to, autoAlpha: 1, duration: 0.6, ease: 'expo.out' });
           if (fit !== 'link') {
             gsap.fromTo(
               pill,
               { scaleY: fit === 'underline' ? 1.8 : 0.85 },
-              { scaleY: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)', clearProps: 'scale' },
+              { scaleY: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)' },
             );
           }
           const icon = active.querySelector('svg');
@@ -91,17 +99,26 @@ export function NavPill({
         placed.current = true;
       };
 
+      // Route changes arrive twice (the pathname prop and the aria-current attribute):
+      // coalesce them into one placement per frame.
+      let frame = 0;
+      const schedule = (animate: boolean) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => place(animate));
+      };
       place(true);
-      const onResize = () => place(false);
+      const onResize = () => schedule(false);
       window.addEventListener('resize', onResize);
-      const mo = new MutationObserver(() => place(true));
+      const mo = new MutationObserver(() => schedule(true));
       mo.observe(list, { attributes: true, attributeFilter: ['aria-current'], subtree: true });
       return () => {
+        cancelAnimationFrame(frame);
         window.removeEventListener('resize', onResize);
         mo.disconnect();
       };
     },
-    { dependencies: [pathname, fit] },
+    // revertOnUpdate: each route change tears down the previous watchers before re-placing.
+    { dependencies: [pathname, fit], revertOnUpdate: true },
   );
 
   return (
