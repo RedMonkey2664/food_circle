@@ -422,6 +422,69 @@ export const copy = {
     osm: '© OpenStreetMap contributors',
     overture: 'Overture Maps Foundation',
     privacy: 'Your entries are only visible to the people you choose.',
+    privacyLink: 'Privacy',
+    termsLink: 'Terms',
+  },
+  legal: {
+    updated: 'Last updated 8 November 2026',
+    contact: (email: string) =>
+      email
+        ? `Questions or requests: ${email}`
+        : 'Questions or requests: use Report a problem in the app.',
+    privacyTitle: 'Privacy Policy',
+    privacy: [
+      {
+        h: 'Who we are',
+        p: `${APP_NAME} is a website where you see food verdicts (Go, Skip, Only for) from people you know, and keep a private food diary.`,
+      },
+      {
+        h: 'What we collect',
+        p: 'When you sign in with Google we receive your name, email address and profile photo. We do not receive your Google password and we do not read your Gmail, contacts or anything else. Inside the app we store what you choose to add: your username, the places you log, your verdicts, optional notes, dishes, photos, groups, friends and follows.',
+      },
+      {
+        h: 'Who can see your entries',
+        p: 'Every entry has an audience you choose before posting: only you, your friends, your followers, a group, or everyone. Memories (private notes, companions, memory photos) are private by default. These rules are enforced in our database, not just in the app screens.',
+      },
+      {
+        h: 'Location',
+        p: 'We never track your location in the background. Your location is only used when you tap a button that asks for it (for example "near me"), and only for that request.',
+      },
+      {
+        h: 'Analytics and notifications',
+        p: 'We count anonymous events (for example "a page was viewed on a phone") in our own database, without your user id, and we do not use third-party trackers or advertising cookies. Push notifications are off until you turn them on, and you can turn them off at any time.',
+      },
+      {
+        h: 'Where your data lives',
+        p: 'Your account and entries are stored with Supabase (database and file storage, in the Mumbai region) and the website runs on Vercel. We do not sell your data or show ads.',
+      },
+      {
+        h: 'Place information',
+        p: 'Place names and locations come from open data (OpenStreetMap and Overture Maps). Some place photos and short descriptions come from Wikimedia Commons and Wikipedia under their free licences, and each one is credited on the page.',
+      },
+      {
+        h: 'Your choices',
+        p: 'You can edit or delete your entries at any time, change who can see them, and ask us to delete your account and everything in it.',
+      },
+    ],
+    termsTitle: 'Terms of Use',
+    terms: [
+      {
+        h: 'Using SKOOP',
+        p: `${APP_NAME} is for sharing honest food verdicts with people you know. Be fair: post only about places you actually visited, and do not post anything abusive, illegal or someone else's photos.`,
+      },
+      {
+        h: 'Your content',
+        p: 'You own what you post. You let us store it and show it to the audience you chose, so the app can work. You can delete it at any time.',
+      },
+      {
+        h: 'Place information',
+        p: 'Place details come from open data and from members and may be out of date. Always check opening times and details before you go.',
+      },
+      {
+        h: 'Changes',
+        p: `This is an early version of ${APP_NAME}. Features may change, and we may update these terms; the date at the top shows the latest version.`,
+      },
+    ],
   },
   profile: {
     stats: {

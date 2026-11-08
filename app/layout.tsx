@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   applicationName: APP_NAME,
   appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
   formatDetection: { telephone: false },
+  // Google Search Console ownership tag (for Google sign-in brand verification), set in Vercel.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 export const viewport: Viewport = {

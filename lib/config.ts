@@ -1,6 +1,8 @@
 // Single home for the product name (SKOOP since 2026-11-07) and feature flags (CLAUDE.md: name lives in one constant).
 export const APP_NAME = 'SKOOP';
 export const APP_TAGLINE = 'Eat where your people eat.';
+/** Shown on the privacy and terms pages; set NEXT_PUBLIC_SUPPORT_EMAIL in Vercel. */
+export const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? '';
 
 function flag(value: string | undefined): boolean {
   return value === 'true';

@@ -19,6 +19,8 @@ export const PUBLIC_PATH_PREFIXES = [
   '/s/',
   '/api/t',
   '/offline',
+  '/privacy',
+  '/terms',
 ] as const;
 
 export function isPublicPath(pathname: string): boolean {
