@@ -20,8 +20,9 @@ const DIET = ['pure_veg', 'veg_options', 'jain', 'halal', 'egg'] as const;
 
 const createPlaceInput = z.object({
   name: z.string().trim().min(2).max(120),
-  lat: z.number().min(18.85).max(19.5),
-  lng: z.number().min(72.7).max(73.25),
+  // Anywhere in India (matches create_place since 2026-11-08).
+  lat: z.number().min(6).max(37.5),
+  lng: z.number().min(68).max(98),
   type: z.enum(PLACE_TYPES),
   dietFlags: z.array(z.enum(DIET)).max(5),
   cuisineTags: z.array(z.string().trim().min(1).max(30)).max(8),

@@ -35,7 +35,14 @@ const on = 'border-primary bg-primary-soft text-primary';
 const off = 'border-line bg-surface';
 
 /** P5-01/02: pin-drop + name, with "Is this the same as X?" before creating. */
-export function AddPlaceForm({ initialName }: { initialName: string }) {
+export function AddPlaceForm({
+  initialName,
+  near = null,
+}: {
+  initialName: string;
+  /** The chosen city / near-me point: the map opens there. */
+  near?: { lat: number; lng: number } | null;
+}) {
   const router = useRouter();
   const t = copy.addPlace;
   const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
@@ -138,7 +145,13 @@ export function AddPlaceForm({ initialName }: { initialName: string }) {
   return (
     <div className="space-y-5 md:grid md:grid-cols-2 md:items-start md:gap-6 md:space-y-0">
       <div>
-        <MapView ariaLabel={t.tapMap} pick={pin} onPick={setPin} className="h-72 md:h-[480px]" />
+        <MapView
+          ariaLabel={t.tapMap}
+          pick={pin}
+          onPick={setPin}
+          focus={!pin && near ? { ...near, zoom: 13, key: 0 } : null}
+          className="h-72 md:h-[480px]"
+        />
         <div className="mt-2 flex items-center justify-between gap-2">
           <p className="text-muted text-xs">{t.tapMap}</p>
           <button

@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { AddPlaceForm } from '@/components/place/AddPlaceForm';
 import { requireOnboardedUser } from '@/lib/auth';
+import { readNear } from '@/lib/near';
 import { copy } from '@/lib/copy';
 import { PageTitle } from '@/components/brand/Sticker';
 
@@ -9,7 +10,12 @@ export const metadata = { title: 'Add a place' };
 async function Form({ searchParams }: { searchParams: PageProps<'/add-place'>['searchParams'] }) {
   const { name } = await searchParams;
   await requireOnboardedUser();
-  return <AddPlaceForm initialName={typeof name === 'string' ? name.slice(0, 120) : ''} />;
+  return (
+    <AddPlaceForm
+      initialName={typeof name === 'string' ? name.slice(0, 120) : ''}
+      near={await readNear()}
+    />
+  );
 }
 
 export default function AddPlacePage(props: PageProps<'/add-place'>) {

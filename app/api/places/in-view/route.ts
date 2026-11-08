@@ -4,10 +4,11 @@ import { PLACE_TYPES } from '@/lib/domain/place';
 import { createClient } from '@/lib/supabase/server';
 
 const query = z.object({
-  minLat: z.coerce.number().min(18).max(20),
-  minLng: z.coerce.number().min(72).max(74),
-  maxLat: z.coerce.number().min(18).max(20),
-  maxLng: z.coerce.number().min(72).max(74),
+  // All of India (was Mumbai-only before the India expansion, 2026-11-08).
+  minLat: z.coerce.number().min(6).max(37),
+  minLng: z.coerce.number().min(68).max(98),
+  maxLat: z.coerce.number().min(6).max(37),
+  maxLng: z.coerce.number().min(68).max(98),
   types: z
     .string()
     .optional()

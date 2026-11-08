@@ -23,8 +23,8 @@ select is((select status from create_place('Anna Vada Pav Stall', 19.0600, 72.83
 select id as stall from places where name = 'Anna Vada Pav Stall' \gset
 select is((select status::text || '/' || source || '/' || cuisine_tags::text from places where id = :'stall'),
   'unverified/user/{vada_pav}', 'new places start unverified, source user, tags normalized');
-select throws_ok($$ select * from create_place('Far Away Dhaba', 28.61, 77.20) $$, 'P0001', 'invalid_input',
-  'points outside the Mumbai region are rejected');
+select throws_ok($$ select * from create_place('Far Away Dhaba', 51.50, -0.12) $$, 'P0001', 'invalid_input',
+  'points outside India are rejected');
 insert into visits (user_id, place_id, verdict, visibility) values (:'a', :'stall', 'go', 'friends');
 
 -- Map: Been and Want to go are different pins

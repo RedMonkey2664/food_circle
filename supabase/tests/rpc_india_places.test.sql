@@ -3,7 +3,7 @@
 begin;
 \ir _helpers.psql
 
-select plan(18);
+select plan(19);
 
 delete from visits;
 delete from places;
@@ -72,6 +72,8 @@ values ('Chai Point', st_setsrid(st_makepoint(72.83, 19.06), 4326)::geography, '
 select tests.authenticate_as(tests.create_user('searcher'));
 select is((select name from search_places('chai point', 26.90, 75.80, 5) limit 1), 'Chai Point Jaipur Branch',
   'searching near Jaipur puts the Jaipur place first');
+select is((select status from create_place('Pyaaz Kachori Corner', 26.92, 75.82, 'street_stall')), 'created',
+  'members can add a place outside Mumbai');
 reset role;
 
 select tests.authenticate_as(tests.create_user('reader'));
