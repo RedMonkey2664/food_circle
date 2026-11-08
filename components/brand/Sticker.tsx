@@ -44,13 +44,7 @@ export function foodFor(text: string): StickerName {
   return FOOD[h % FOOD.length] ?? 'croissant';
 }
 
-// Washi tape and halftone colours (SKOOP palette), picked per sticker so pages differ.
-const TAPES = [
-  ['#f9c9b0', '#fde6d8'],
-  ['#ffd970', '#fff1c2'],
-  ['#b9c8f0', '#e4eafb'],
-  ['#f5b8cf', '#fde3ec'],
-] as const;
+// Halftone dot colours (SKOOP palette), picked per sticker so pages differ.
 const DOTS = ['rgb(176 20 27 / 0.32)', 'rgb(46 79 174 / 0.3)', 'rgb(246 181 0 / 0.45)'] as const;
 const pick = <T,>(xs: readonly T[], key: string, salt = 0): T => {
   let h = salt;
@@ -59,8 +53,7 @@ const pick = <T,>(xs: readonly T[], key: string, salt = 0): T => {
 };
 
 /**
- * A decorative sticker. `taped` presents it like the sign-in scrapbook: stuck down with a strip
- * of washi tape over a halftone dot backdrop. `data-sticker` lets the motion layer slap it on.
+ * A decorative sticker. `taped` sets it on a halftone dot backdrop, like the sign-in scrapbook. `data-sticker` lets the motion layer slap it on.
  */
 export function Sticker({
   name,
@@ -76,7 +69,6 @@ export function Sticker({
   className?: string;
 }) {
   const [w, h] = STICKERS[name];
-  const tape = pick(TAPES, name);
   return (
     <span
       aria-hidden
@@ -101,18 +93,6 @@ export function Sticker({
         draggable={false}
         className="relative h-auto w-full drop-shadow-[0_8px_10px_rgb(50_20_5/0.22)]"
       />
-      {taped ? (
-        <span
-          className="sk-washi"
-          style={
-            {
-              '--tape-a': tape[0],
-              '--tape-b': tape[1],
-              rotate: `${tilt > 0 ? -14 : 12}deg`,
-            } as React.CSSProperties
-          }
-        />
-      ) : null}
     </span>
   );
 }
