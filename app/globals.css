@@ -504,3 +504,62 @@ html[data-vt='close']::view-transition-old(root) {
     transition: none;
   }
 }
+
+/* ---------- Stickers, scrapbook style (components/brand/Sticker) ---------- */
+/* Halftone dots behind a taped sticker. */
+.sk-dots {
+  position: absolute;
+  inset: -16% -14% -8% -16%;
+  z-index: -1;
+  border-radius: 46% 54% 50% 50% / 52% 46% 54% 48%;
+  background: radial-gradient(circle, var(--dot) 1.4px, transparent 1.9px) 0 0 / 7px 7px;
+  mask: radial-gradient(closest-side, #000 55%, transparent 100%);
+}
+/* A strip of washi tape across the top, torn at both ends. */
+.sk-washi {
+  position: absolute;
+  top: -8%;
+  left: 50%;
+  width: 62%;
+  height: 20%;
+  min-height: 12px;
+  translate: -50% 0;
+  opacity: 0.9;
+  background: repeating-linear-gradient(-45deg, var(--tape-a) 0 5px, var(--tape-b) 5px 10px);
+  box-shadow: 0 1px 2px rgb(60 30 10 / 0.18);
+  clip-path: polygon(
+    0 10%,
+    6% 0,
+    12% 12%,
+    18% 0,
+    82% 0,
+    88% 12%,
+    94% 0,
+    100% 10%,
+    100% 90%,
+    94% 100%,
+    88% 88%,
+    82% 100%,
+    18% 100%,
+    12% 88%,
+    6% 100%,
+    0 90%
+  );
+}
+/* Page titles: a marker underline that draws itself once. */
+.sk-underline path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sk-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
+}
+@keyframes sk-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sk-underline path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

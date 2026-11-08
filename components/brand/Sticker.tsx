@@ -44,26 +44,54 @@ export function foodFor(text: string): StickerName {
   return FOOD[h % FOOD.length] ?? 'croissant';
 }
 
-/** A decorative sticker. `data-sticker` lets the motion layer slap it on. */
+// Washi tape and halftone colours (SKOOP palette), picked per sticker so pages differ.
+const TAPES = [
+  ['#f9c9b0', '#fde6d8'],
+  ['#ffd970', '#fff1c2'],
+  ['#b9c8f0', '#e4eafb'],
+  ['#f5b8cf', '#fde3ec'],
+] as const;
+const DOTS = ['rgb(176 20 27 / 0.32)', 'rgb(46 79 174 / 0.3)', 'rgb(246 181 0 / 0.45)'] as const;
+const pick = <T,>(xs: readonly T[], key: string, salt = 0): T => {
+  let h = salt;
+  for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return xs[h % xs.length] as T;
+};
+
+/**
+ * A decorative sticker. `taped` presents it like the sign-in scrapbook: stuck down with a strip
+ * of washi tape over a halftone dot backdrop. `data-sticker` lets the motion layer slap it on.
+ */
 export function Sticker({
   name,
   size,
   tilt = 0,
+  taped = false,
   className,
 }: {
   name: StickerName;
   size: number;
   tilt?: number;
+  taped?: boolean;
   className?: string;
 }) {
   const [w, h] = STICKERS[name];
+  const tape = pick(TAPES, name);
   return (
     <span
       aria-hidden
       data-sticker=""
-      className={cn('pointer-events-none inline-block select-none', className)}
+      className={cn(
+        'pointer-events-none isolate inline-block select-none',
+        // Positioned for the tape and dots, unless the caller already places it absolutely.
+        !(className ?? '').split(' ').some((c) => c === 'absolute' || c === 'fixed') && 'relative',
+        className,
+      )}
       style={{ width: size, rotate: `${tilt}deg` }}
     >
+      {taped ? (
+        <span className="sk-dots" style={{ '--dot': pick(DOTS, name, 7) } as React.CSSProperties} />
+      ) : null}
       <Image
         src={`/stickers/${name}.webp`}
         width={w}
@@ -71,13 +99,25 @@ export function Sticker({
         sizes={`${size}px`}
         alt=""
         draggable={false}
-        className="h-auto w-full drop-shadow-[0_8px_10px_rgb(50_20_5/0.22)]"
+        className="relative h-auto w-full drop-shadow-[0_8px_10px_rgb(50_20_5/0.22)]"
       />
+      {taped ? (
+        <span
+          className="sk-washi"
+          style={
+            {
+              '--tape-a': tape[0],
+              '--tape-b': tape[1],
+              rotate: `${tilt > 0 ? -14 : 12}deg`,
+            } as React.CSSProperties
+          }
+        />
+      ) : null}
     </span>
   );
 }
 
-/** A page heading with its sticker tucked at the right. */
+/** A page heading with a marker underline and its taped sticker tucked at the right. */
 export function PageTitle({
   children,
   sticker,
@@ -92,19 +132,35 @@ export function PageTitle({
   return (
     <div
       className={cn(
-        'relative flex items-end justify-between gap-3 pr-1 md:justify-start md:gap-4',
+        'relative flex items-end justify-between gap-3 pr-1 md:justify-start md:gap-5',
         className,
       )}
     >
-      <h1 className="font-display text-[2rem] leading-tight font-semibold tracking-tight md:text-[2.4rem]">
+      <h1 className="font-display relative text-[2rem] leading-tight font-semibold tracking-tight md:text-[2.4rem]">
         {children}
+        <svg
+          aria-hidden
+          viewBox="0 0 200 14"
+          preserveAspectRatio="none"
+          className="sk-underline pointer-events-none absolute -bottom-1.5 left-0 h-3 w-[calc(100%+0.3em)]"
+        >
+          <path
+            pathLength={1}
+            d="M3 9c30-6 60-7 96-4s66 4 98-2"
+            fill="none"
+            stroke="var(--c-primary)"
+            strokeWidth="3.4"
+            strokeLinecap="round"
+          />
+        </svg>
       </h1>
       <TapSticker name={sticker}>
         <Sticker
           name={sticker}
-          size={64}
+          size={66}
           tilt={tilt}
-          className="-mt-3 -mb-2 shrink-0 md:w-[76px]!"
+          taped
+          className="-mt-2 mr-1 -mb-1 shrink-0 md:w-[80px]!"
         />
       </TapSticker>
     </div>

@@ -18,12 +18,7 @@ export function EmptyState({
       data-reveal="pop"
       className="border-line bg-surface/80 relative overflow-hidden rounded-[var(--radius-card)] border border-dashed px-5 py-8 pr-24"
     >
-      <Sticker
-        name={foodFor(title)}
-        size={76}
-        tilt={10}
-        className="absolute top-4 right-4 opacity-95"
-      />
+      <Sticker name={foodFor(title)} size={78} tilt={10} taped className="absolute top-5 right-5" />
       {icon ? <div className="text-primary mb-3">{icon}</div> : null}
       <h2 className="font-display text-xl font-semibold text-balance">{title}</h2>
       {body ? <p className="text-muted mt-2">{body}</p> : null}
