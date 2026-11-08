@@ -6,6 +6,9 @@ import {
   dietFlagsFor,
   placeTypeFor,
   toImportRow,
+  attractionCore,
+  dedupeAttractions,
+  namesOtherRegion,
   type ImportRow,
   type OvertureRow,
 } from './transform';
@@ -125,5 +128,50 @@ describe('dedupeRows', () => {
   it('keeps the most confident of near-identical rows, but keeps far-apart branches', () => {
     const out = dedupeRows([row('a', 19.0, 0.6), row('b', 19.0001, 0.9), row('c', 19.05, 0.7)]);
     expect(out.map((r) => r.overture_id).sort()).toEqual(['b', 'c']);
+  });
+});
+
+describe('attractions cleanup', () => {
+  const sight = (
+    id: string,
+    name: string,
+    lat: number,
+    category: string,
+    confidence: number,
+  ): ImportRow => ({
+    overture_id: id,
+    name,
+    lat,
+    lng: 75.85,
+    type: 'attraction',
+    diet_flags: [],
+    cuisine_tags: [],
+    brand_slug: null,
+    brand_name: null,
+    confident: true,
+    confidence,
+    category,
+  });
+  const words = ['jaipur', 'rajasthan'];
+  it('strips place words and filler from names', () => {
+    expect(attractionCore('Amber Fort Jaipur, India', words)).toBe('amber fort');
+    expect(attractionCore('Amber Fort A world  Heritage Site', words)).toBe('amber fort');
+  });
+  it('keeps one Amber Fort, preferring the fort category', () => {
+    const out = dedupeAttractions(
+      [
+        sight('a', 'Amber Fort A world Heritage Site', 26.9855, 'historic_site', 0.85),
+        sight('b', 'Amber Fort', 26.9856, 'fort', 0.76),
+        sight('c', 'Amber Fort Jaipur, India', 26.986, 'museum', 0.73),
+        sight('d', 'Jaigarh Fort', 26.985, 'fort', 0.8),
+      ],
+      words,
+    );
+    expect(out.map((r) => r.overture_id).sort()).toEqual(['b', 'd']);
+  });
+  it('drops sights whose name says they are in another region', () => {
+    expect(namesOtherRegion('Baga Beach,goa', ['jaipur'], ['goa', 'agra'])).toBe(true);
+    expect(namesOtherRegion('Hawa Mahal, Jaipur', ['jaipur'], ['goa'])).toBe(false);
+    expect(namesOtherRegion('Delhi Darwaza', ['jaipur'], ['delhi'])).toBe(false);
   });
 });

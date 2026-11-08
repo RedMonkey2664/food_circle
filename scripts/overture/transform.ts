@@ -251,3 +251,83 @@ export function dedupeRows(rows: ImportRow[], radiusM = 40): ImportRow[] {
   }
   return out;
 }
+
+// ---------------------------------------------------------------------------------------
+// Attractions: Overture lists famous sights many times ("Amber Fort", "Amber Fort Jaipur,
+// India", "Amber Fort A world Heritage Site"), and some are pinned in the wrong city.
+// ---------------------------------------------------------------------------------------
+
+const FILLER = [
+  'a world heritage site',
+  'world heritage site',
+  'unesco world heritage site',
+  'india',
+  'the',
+];
+
+/** "Amber Fort, Jaipur, India" -> "amber fort" (drops place words and filler). */
+export function attractionCore(name: string, placeWords: string[]): string {
+  let n = ` ${normalizeName(name)} `;
+  for (const w of [...FILLER, ...placeWords].sort((a, b) => b.length - a.length)) {
+    n = n.split(` ${w} `).join(' ');
+  }
+  return n.replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * True when the text after the last comma names a different region ("Baga Beach,goa" pinned
+ * in Jaipur): such rows are mislocated, so they are dropped.
+ */
+export function namesOtherRegion(name: string, own: string[], others: string[]): boolean {
+  const i = name.lastIndexOf(',');
+  if (i < 0) return false;
+  const tail = normalizeName(name.slice(i + 1));
+  if (!tail) return false;
+  if (own.some((w) => tail.includes(w))) return false;
+  return others.some((w) => tail === w || tail.endsWith(` ${w}`) || tail.startsWith(`${w} `));
+}
+
+const CATEGORY_RANK = [
+  'fort',
+  'palace',
+  'monument',
+  'landmark_and_historical_building',
+  'historic_site',
+  'museum',
+  'beach',
+  'lake',
+  'waterfall',
+];
+const rank = (c: string | null) => {
+  const i = c ? CATEGORY_RANK.indexOf(c) : -1;
+  return i < 0 ? CATEGORY_RANK.length : i;
+};
+
+/** Collapses repeated attractions (same core name within `radiusM`), keeping the best one. */
+export function dedupeAttractions(
+  rows: ImportRow[],
+  placeWords: string[],
+  radiusM = 1500,
+): ImportRow[] {
+  const food = rows.filter((r) => r.type !== 'attraction');
+  const sights = rows
+    .filter((r) => r.type === 'attraction')
+    .map((r) => ({ r, core: attractionCore(r.name, placeWords) }))
+    .filter((x) => x.core.length >= 3)
+    .sort(
+      (a, b) =>
+        rank(a.r.category) - rank(b.r.category) ||
+        b.r.confidence - a.r.confidence ||
+        a.r.name.length - b.r.name.length,
+    );
+  const kept: { r: ImportRow; core: string }[] = [];
+  for (const x of sights) {
+    const dup = kept.some(
+      (k) =>
+        distanceM(k.r, x.r) <= radiusM &&
+        (k.core === x.core || x.core.startsWith(`${k.core} `) || k.core.startsWith(`${x.core} `)),
+    );
+    if (!dup) kept.push(x);
+  }
+  return [...food, ...kept.map((k) => k.r)];
+}

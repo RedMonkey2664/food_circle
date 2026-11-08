@@ -17,9 +17,16 @@ import { DuckDBInstance } from '@duckdb/node-api';
 import { createClient } from '@supabase/supabase-js';
 import { config as loadEnv } from 'dotenv';
 import type { BrandDef } from './osm/transform';
-import { slugify } from './osm/text';
+import { normalizeName, slugify } from './osm/text';
 import { REGIONS, type Region } from './overture/regions';
-import { dedupeRows, toImportRow, type ImportRow, type OvertureRow } from './overture/transform';
+import {
+  dedupeAttractions,
+  dedupeRows,
+  namesOtherRegion,
+  toImportRow,
+  type ImportRow,
+  type OvertureRow,
+} from './overture/transform';
 
 const argv = process.argv.slice(2);
 const arg = (name: string) => {
@@ -139,7 +146,7 @@ function areaRows(region: Region, raw: AreaRaw[]) {
     if (!name || !slugify(name)) continue;
     const town = a.subtype === 'locality';
     push(name, {
-      name: town ? name : `${name}, ${region.name}`,
+      name: town && name === region.name ? name : `${name}, ${region.name}`,
       kind: town ? 'region' : 'neighbourhood',
       city: region.name,
       geojson: a.geojson,
@@ -166,13 +173,27 @@ async function main() {
 
   let totalPlaces = 0;
   for (const region of ALL) {
-    const rows = dedupeRows(
-      places
-        .filter((p) => p.region === region.slug)
-        .map((p) => toImportRow(p, brands))
-        .filter((r): r is ImportRow => r !== null)
-        .filter((r) => region.slug !== 'mumbai' || r.type === 'attraction'),
-    ).map((r) => ({ ...r, city: region.name }));
+    // Place words of this region ("north goa", "goa", "jaipur", "rajasthan") vs every other one.
+    const wordsOf = (g: Region) => {
+      const full = [normalizeName(g.name), normalizeName(g.state)];
+      return [
+        ...new Set([...full, ...full.flatMap((w) => w.split(' ')).filter((w) => w.length >= 4)]),
+      ];
+    };
+    const own = wordsOf(region);
+    const others = ALL.filter((g) => g.state !== region.state)
+      .flatMap(wordsOf)
+      .filter((w) => !own.includes(w));
+    const mapped = places
+      .filter((p) => p.region === region.slug)
+      .map((p) => toImportRow(p, brands))
+      .filter((r): r is ImportRow => r !== null)
+      .filter((r) => region.slug !== 'mumbai' || r.type === 'attraction')
+      .filter((r) => r.type !== 'attraction' || !namesOtherRegion(r.name, own, others));
+    const rows = dedupeAttractions(dedupeRows(mapped), own).map((r) => ({
+      ...r,
+      city: region.name,
+    }));
     const regionAreas =
       region.slug === 'mumbai'
         ? []
