@@ -21,7 +21,9 @@ import { normalizeName, slugify } from './osm/text';
 import { REGIONS, type Region } from './overture/regions';
 import {
   dedupeAttractions,
+  attractionCore,
   dedupeRows,
+  mislocatedFamous,
   namesOtherRegion,
   toImportRow,
   type ImportRow,
@@ -171,6 +173,16 @@ async function main() {
   if (!DRY_RUN && !db) throw new Error('NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SECRET_KEY missing');
   if (db) console.log(`  target: ${new URL(url ?? '').host}`);
 
+  // Famous sights pinned in the wrong city, found across all regions at once.
+  const wordsAll = ALL.flatMap((g) => [normalizeName(g.name), normalizeName(g.state)]);
+  const mapped0 = places
+    .map((p) => ({ p, r: toImportRow(p, brands) }))
+    .filter((x): x is { p: RegionRow; r: ImportRow } => x.r?.type === 'attraction');
+  const misplaced = mislocatedFamous(
+    mapped0.map((x) => ({ region: x.p.region, core: attractionCore(x.r.name, wordsAll) })),
+  );
+  console.log(`  ${misplaced.size} mislocated famous sights dropped`);
+
   let totalPlaces = 0;
   for (const region of ALL) {
     // Place words of this region ("north goa", "goa", "jaipur", "rajasthan") vs every other one.
@@ -181,15 +193,21 @@ async function main() {
       ];
     };
     const own = wordsOf(region);
-    const others = ALL.filter((g) => g.state !== region.state)
-      .flatMap(wordsOf)
-      .filter((w) => !own.includes(w));
+    const others = [
+      ...ALL.filter((g) => g.state !== region.state).flatMap(wordsOf),
+      ...ALL.filter((g) => g.slug !== region.slug).map((g) => normalizeName(g.name)),
+    ].filter((w) => !own.includes(w));
     const mapped = places
       .filter((p) => p.region === region.slug)
       .map((p) => toImportRow(p, brands))
       .filter((r): r is ImportRow => r !== null)
       .filter((r) => region.slug !== 'mumbai' || r.type === 'attraction')
-      .filter((r) => r.type !== 'attraction' || !namesOtherRegion(r.name, own, others));
+      .filter((r) => r.type !== 'attraction' || !namesOtherRegion(r.name, own, others))
+      .filter(
+        (r) =>
+          r.type !== 'attraction' ||
+          !misplaced.has(`${region.slug}|${attractionCore(r.name, wordsAll)}`),
+      );
     const rows = dedupeAttractions(dedupeRows(mapped), own).map((r) => ({
       ...r,
       city: region.name,

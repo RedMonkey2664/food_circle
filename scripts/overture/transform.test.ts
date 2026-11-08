@@ -9,6 +9,7 @@ import {
   attractionCore,
   dedupeAttractions,
   namesOtherRegion,
+  mislocatedFamous,
   type ImportRow,
   type OvertureRow,
 } from './transform';
@@ -162,16 +163,41 @@ describe('attractions cleanup', () => {
       [
         sight('a', 'Amber Fort A world Heritage Site', 26.9855, 'historic_site', 0.85),
         sight('b', 'Amber Fort', 26.9856, 'fort', 0.76),
-        sight('c', 'Amber Fort Jaipur, India', 26.986, 'museum', 0.73),
+        sight('c', 'Amber Fort Jaipur, India', 26.9331, 'museum', 0.73),
+        sight('e', 'Hanuman Mandir', 26.9, 'religious_organization', 0.8),
+        sight('f', 'Hanuman Mandir', 26.95, 'religious_organization', 0.8),
         sight('d', 'Jaigarh Fort', 26.985, 'fort', 0.8),
       ],
       words,
     );
-    expect(out.map((r) => r.overture_id).sort()).toEqual(['b', 'd']);
+    // The decorated copy 6 km away goes; two plain same-name temples 5 km apart both stay.
+    expect(out.map((r) => r.overture_id).sort()).toEqual(['b', 'd', 'e', 'f']);
   });
   it('drops sights whose name says they are in another region', () => {
     expect(namesOtherRegion('Baga Beach,goa', ['jaipur'], ['goa', 'agra'])).toBe(true);
     expect(namesOtherRegion('Hawa Mahal, Jaipur', ['jaipur'], ['goa'])).toBe(false);
     expect(namesOtherRegion('Delhi Darwaza', ['jaipur'], ['delhi'])).toBe(false);
+    expect(
+      namesOtherRegion(
+        'Baga Beach , North Goa',
+        ['south goa', 'goa', 'south'],
+        ['north goa', 'north'],
+      ),
+    ).toBe(true);
+  });
+});
+
+describe('mislocatedFamous', () => {
+  it('drops a lone famous name pinned in another city, keeps genuine repeats', () => {
+    const items = [
+      ...Array.from({ length: 4 }, () => ({ region: 'agra', core: 'taj mahal' })),
+      { region: 'delhi', core: 'taj mahal' },
+      ...Array.from({ length: 3 }, () => ({ region: 'delhi', core: 'jama masjid' })),
+      { region: 'agra', core: 'jama masjid' },
+      { region: 'agra', core: 'jama masjid' },
+      { region: 'jaipur', core: 'clock tower' },
+      { region: 'pune', core: 'clock tower' },
+    ];
+    expect([...mislocatedFamous(items)]).toEqual(['delhi|taj mahal']);
   });
 });

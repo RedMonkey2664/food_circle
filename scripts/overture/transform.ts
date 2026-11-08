@@ -283,6 +283,11 @@ export function namesOtherRegion(name: string, own: string[], others: string[]):
   if (i < 0) return false;
   const tail = normalizeName(name.slice(i + 1));
   if (!tail) return false;
+  // A full other-region name wins over a shared word ("North Goa" pinned in South Goa).
+  const fullOthers = others.filter((w) => w.includes(' '));
+  if (fullOthers.some((w) => tail === w || tail.endsWith(` ${w}`)) && !own.includes(tail)) {
+    return true;
+  }
   if (own.some((w) => tail.includes(w))) return false;
   return others.some((w) => tail === w || tail.endsWith(` ${w}`) || tail.startsWith(`${w} `));
 }
@@ -303,16 +308,24 @@ const rank = (c: string | null) => {
   return i < 0 ? CATEGORY_RANK.length : i;
 };
 
-/** Collapses repeated attractions (same core name within `radiusM`), keeping the best one. */
+/**
+ * Collapses repeated attractions, keeping the best one: the same plain name within `radiusM`,
+ * or a "decorated" copy (the name plus place words / filler, e.g. "Amber Fort Jaipur, India")
+ * within `decoratedM`, since those copies are often pinned kilometres away.
+ */
 export function dedupeAttractions(
   rows: ImportRow[],
   placeWords: string[],
   radiusM = 1500,
+  decoratedM = 10_000,
 ): ImportRow[] {
   const food = rows.filter((r) => r.type !== 'attraction');
   const sights = rows
     .filter((r) => r.type === 'attraction')
-    .map((r) => ({ r, core: attractionCore(r.name, placeWords) }))
+    .map((r) => {
+      const core = attractionCore(r.name, placeWords);
+      return { r, core, decorated: normalizeName(r.name) !== core };
+    })
     .filter((x) => x.core.length >= 3)
     .sort(
       (a, b) =>
@@ -320,14 +333,41 @@ export function dedupeAttractions(
         b.r.confidence - a.r.confidence ||
         a.r.name.length - b.r.name.length,
     );
-  const kept: { r: ImportRow; core: string }[] = [];
+  const kept: typeof sights = [];
   for (const x of sights) {
-    const dup = kept.some(
-      (k) =>
-        distanceM(k.r, x.r) <= radiusM &&
-        (k.core === x.core || x.core.startsWith(`${k.core} `) || k.core.startsWith(`${x.core} `)),
-    );
+    const dup = kept.some((k) => {
+      const d = distanceM(k.r, x.r);
+      if (k.core === x.core && (x.decorated || k.decorated) && d <= decoratedM) return true;
+      return (
+        d <= radiusM &&
+        (k.core === x.core || x.core.startsWith(`${k.core} `) || k.core.startsWith(`${x.core} `))
+      );
+    });
     if (!dup) kept.push(x);
   }
   return [...food, ...kept.map((k) => k.r)];
+}
+
+/**
+ * Famous sights get pinned in the wrong city ("Taj Mahal" in Delhi, "Gateway of India" in
+ * Khar). If a name (2+ words) appears 3+ times in one region and only once in another, that
+ * lone copy is a mislocated pin. Returns the keys "<region>|<core>" to drop.
+ */
+export function mislocatedFamous(items: { region: string; core: string }[]): Set<string> {
+  const counts = new Map<string, Map<string, number>>();
+  for (const { region, core } of items) {
+    if (core.split(' ').length < 2) continue;
+    const byRegion = counts.get(core) ?? new Map<string, number>();
+    byRegion.set(region, (byRegion.get(region) ?? 0) + 1);
+    counts.set(core, byRegion);
+  }
+  const drop = new Set<string>();
+  for (const [core, byRegion] of counts) {
+    const home = [...byRegion.entries()].sort((a, b) => b[1] - a[1])[0];
+    if (!home || home[1] < 3) continue;
+    for (const [region, n] of byRegion) {
+      if (region !== home[0] && n === 1) drop.add(`${region}|${core}`);
+    }
+  }
+  return drop;
 }
