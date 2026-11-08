@@ -114,6 +114,9 @@ function pinElement(pin: MapPin): HTMLButtonElement {
   // Glyph + colour + size, so the kinds never rely on colour alone.
   el.style.cssText = `display:flex;align-items:center;justify-content:center;width:${s.size}px;height:${s.size}px;border-radius:9999px;background:${s.bg};color:${s.fg};font:700 ${s.size > 28 ? 15 : 16}px/1 system-ui;border:2px solid ${s.border};box-shadow:0 2px 6px rgb(0 0 0/.3);cursor:pointer;padding:0;outline-offset:3px`;
   el.textContent = s.glyph;
+  // Interactive element: PIN DROP (see .sk-pin in globals.css).
+  el.classList.add('sk-pin');
+  el.style.animationDelay = `${Math.round(Math.random() * 350)}ms`;
   return el;
 }
 

@@ -2,6 +2,7 @@
 
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { GoIcon, OnlyForIcon, SkipIcon } from '@/components/ui/icons';
+import { burstFrom } from '@/components/interactive/burst';
 import { cn } from '@/lib/cn';
 import { ONLY_FOR_MAX, VERDICT_LABEL, type Verdict } from '@/lib/domain/verdict';
 
@@ -49,7 +50,10 @@ export function VerdictButtons({
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
 
-  function tap(verdict: Verdict) {
+  const BURST: Record<Verdict, string> = { go: '#15803d', skip: '#c92a2a', only_for: '#a16207' };
+
+  function tap(verdict: Verdict, el?: HTMLElement) {
+    if (el) burstFrom(el, BURST[verdict]);
     if (verdict === 'only_for') {
       setOpenOnlyFor(true);
       requestAnimationFrame(() => inputRef.current?.focus());
@@ -79,7 +83,7 @@ export function VerdictButtons({
               type="button"
               disabled={disabled}
               aria-pressed={active}
-              onClick={() => tap(verdict)}
+              onClick={(e) => tap(verdict, e.currentTarget)}
               className={cn(
                 'flex min-h-22 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-card)] border-2',
                 'text-base font-extrabold tracking-wide',

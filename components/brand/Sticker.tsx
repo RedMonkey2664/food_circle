@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { TapSticker } from '@/components/interactive/TapSticker';
 import { cn } from '@/lib/cn';
 
 /** Mood-board stickers (public/stickers, white die-cut edge baked in). Sizes are the files'. */
@@ -98,7 +99,14 @@ export function PageTitle({
       <h1 className="font-display text-[2rem] leading-tight font-semibold tracking-tight md:text-[2.4rem]">
         {children}
       </h1>
-      <Sticker name={sticker} size={64} tilt={tilt} className="-mt-3 -mb-2 shrink-0 md:w-[76px]!" />
+      <TapSticker name={sticker}>
+        <Sticker
+          name={sticker}
+          size={64}
+          tilt={tilt}
+          className="-mt-3 -mb-2 shrink-0 md:w-[76px]!"
+        />
+      </TapSticker>
     </div>
   );
 }

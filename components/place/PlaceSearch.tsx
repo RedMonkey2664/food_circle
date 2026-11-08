@@ -62,6 +62,19 @@ export function PlaceSearch({
   // Bumped only when a list appears from nothing, so the entrance animation doesn't replay
   // on every keystroke.
   const [entrance, setEntrance] = useState(0);
+  const [shuffles, setShuffles] = useState(0);
+  const [chips, setChips] = useState<readonly string[]>(copy.search.tryChips);
+  function shuffle() {
+    const pool: string[] = [...copy.interactive.tryPool];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = pool[i] as string;
+      pool[i] = pool[j] as string;
+      pool[j] = tmp;
+    }
+    setChips(pool.slice(0, 8));
+    setShuffles((n) => n + 1);
+  }
 
   const trimmed = query.trim();
 
@@ -206,12 +219,24 @@ export function PlaceSearch({
       {!typing ? (
         <>
           <div className="mt-4">
-            <h2 className="text-muted text-xs font-bold tracking-wide uppercase">
-              {copy.search.tryTitle}
-            </h2>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {copy.search.tryChips.map((chip) => (
-                <li key={chip}>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-muted text-xs font-bold tracking-wide uppercase">
+                {copy.search.tryTitle}
+              </h2>
+              {/* Interactive element: SHUFFLE CHIPS. */}
+              <button
+                type="button"
+                onClick={shuffle}
+                aria-label={copy.interactive.shuffle}
+                className="border-line bg-surface flex size-11 items-center justify-center rounded-full border text-xl transition-transform duration-300 active:scale-90"
+                style={{ rotate: `${shuffles * 180}deg` }}
+              >
+                🎲
+              </button>
+            </div>
+            <ul key={shuffles} className="sk-chips mt-2 flex flex-wrap gap-2">
+              {chips.map((chip, i) => (
+                <li key={chip} style={{ animationDelay: `${i * 35}ms` }}>
                   <button
                     type="button"
                     onClick={() => setAndFocus(chip)}

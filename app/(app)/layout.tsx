@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 import { RouteSettled } from '@/components/motion/RouteSettled';
+import { BackToTop } from '@/components/interactive/BackToTop';
+import { Toaster } from '@/components/interactive/Toast';
 import { BottomNav, BottomNavStatic } from '@/components/nav/BottomNav';
 import { SideNav, SideNavStatic } from '@/components/nav/SideNav';
 import { requireOnboardedUser } from '@/lib/auth';
@@ -41,6 +43,8 @@ export default function AppLayout({ children }: LayoutProps<'/'>) {
       <Suspense fallback={null}>
         <RouteSettled />
       </Suspense>
+      <Toaster />
+      <BackToTop />
     </>
   );
 }
