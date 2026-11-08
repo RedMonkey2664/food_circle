@@ -5,6 +5,7 @@ export const PLACE_TYPES = [
   'bakery',
   'sweet_shop',
   'bar',
+  'attraction',
   'other',
 ] as const;
 export type PlaceType = (typeof PLACE_TYPES)[number];
@@ -16,6 +17,7 @@ export const PLACE_TYPE_LABEL: Record<PlaceType, string> = {
   bakery: 'Bakery',
   sweet_shop: 'Sweet shop',
   bar: 'Bar',
+  attraction: 'Attraction',
   other: 'Food place',
 };
 

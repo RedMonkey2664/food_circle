@@ -13,6 +13,7 @@ const PLACE_TYPES = [
   'bakery',
   'sweet_shop',
   'bar',
+  'attraction',
   'other',
 ] as const;
 const DIET = ['pure_veg', 'veg_options', 'jain', 'halal', 'egg'] as const;

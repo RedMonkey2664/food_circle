@@ -11,7 +11,7 @@ export type OsmElement = {
 };
 
 export type PlaceType =
-  'restaurant' | 'cafe' | 'street_stall' | 'bakery' | 'sweet_shop' | 'bar' | 'other';
+  'restaurant' | 'cafe' | 'street_stall' | 'bakery' | 'sweet_shop' | 'bar' | 'attraction' | 'other';
 
 export type BrandDef = { slug: string; name: string; match: string[] };
 

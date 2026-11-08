@@ -84,6 +84,27 @@ describe('toImportRow', () => {
     );
     expect(r?.brand_slug).toBe('kfc');
   });
+  it('imports confident attractions with their category and no food tags', () => {
+    const fort = toImportRow(
+      { ...base, name: 'Amber Fort', basic_category: 'fort', cat: 'fort', confidence: 0.8 },
+      [],
+    );
+    expect(fort).toMatchObject({
+      type: 'attraction',
+      category: 'fort',
+      diet_flags: [],
+      cuisine_tags: [],
+    });
+    expect(
+      toImportRow(
+        { ...base, name: 'Old Fort', basic_category: 'fort', cat: 'fort', confidence: 0.4 },
+        [],
+      ),
+    ).toBeNull();
+    expect(
+      toImportRow({ ...base, name: 'Ram Park', basic_category: 'park', cat: 'park' }, []),
+    ).toBeNull();
+  });
 });
 
 describe('dedupeRows', () => {
@@ -93,6 +114,7 @@ describe('dedupeRows', () => {
     lat,
     lng: 72.83,
     type: 'restaurant',
+    category: null,
     diet_flags: [],
     cuisine_tags: [],
     brand_slug: null,

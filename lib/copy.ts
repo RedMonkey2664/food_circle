@@ -41,6 +41,14 @@ export const copy = {
     followIntro: 'Their picks show up in your Following feed. Follow as many as you like, or none.',
     followContinue: 'Continue',
   },
+  placeAbout: {
+    about: 'About',
+    photos: 'Photos',
+    fromMember: 'From a SKOOP member',
+    photoBy: (author: string | null, licence: string | null) =>
+      `Photo: ${author ?? 'Wikimedia Commons'}${licence ? ` · ${licence}` : ''}`,
+    fromWikipedia: 'From Wikipedia · CC BY-SA 4.0 ›',
+  },
   home: {
     title: 'Home',
     feedLabel: 'Feed',

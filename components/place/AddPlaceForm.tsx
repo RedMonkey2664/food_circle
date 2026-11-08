@@ -11,7 +11,15 @@ import { cn } from '@/lib/cn';
 import { copy } from '@/lib/copy';
 import { PLACE_TYPE_LABEL } from '@/lib/domain/place';
 
-const TYPES = ['street_stall', 'restaurant', 'cafe', 'bakery', 'sweet_shop', 'bar'] as const;
+const TYPES = [
+  'street_stall',
+  'restaurant',
+  'cafe',
+  'bakery',
+  'sweet_shop',
+  'bar',
+  'attraction',
+] as const;
 const DIETS = ['pure_veg', 'veg_options', 'jain', 'halal', 'egg'] as const;
 const DIET_LABEL: Record<(typeof DIETS)[number], string> = {
   pure_veg: 'Pure veg',

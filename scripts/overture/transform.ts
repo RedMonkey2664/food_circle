@@ -26,11 +26,46 @@ export type ImportRow = {
   brand_name: string | null;
   confident: boolean;
   confidence: number;
+  /** Overture category (basic or taxonomy), e.g. 'fort', 'cafe'. */
+  category: string | null;
+  /** Set by the importer for regions outside Mumbai. */
+  city?: string;
 };
 
 /** Below this Overture confidence a place is dropped; below CONFIDENT it is imported unverified. */
 export const MIN_CONFIDENCE = 0.2;
 export const CONFIDENT = 0.5;
+/** Attractions are noisier (offices named "Heritage..."), so they need more confidence. */
+export const MIN_ATTRACTION_CONFIDENCE = 0.5;
+
+/** Tourist attractions you can log a verdict on (human decision, 2026-11-08). Generic parks are left out. */
+export const ATTRACTIONS = new Set([
+  'historic_site',
+  'monument',
+  'museum',
+  'fort',
+  'palace',
+  'castle',
+  'landmark_and_historical_building',
+  'tourist_attraction',
+  'lake',
+  'beach',
+  'waterfall',
+  'island',
+  'national_park',
+  'nature_reserve',
+  'botanical_garden',
+  'zoo',
+  'mountain',
+  'viewpoint',
+  'scenic_point',
+  'amusement_park',
+  'art_gallery',
+  'science_attraction',
+  'animal_attraction',
+  'cultural_center',
+  'religious_organization',
+]);
 
 const BY_BASIC: Record<string, PlaceType> = {
   restaurant: 'restaurant',
@@ -75,6 +110,7 @@ const NOT_A_PLACE_TO_EAT = new Set([
 ]);
 
 export function placeTypeFor(basic: string | null, cat: string | null): PlaceType | null {
+  if (basic && ATTRACTIONS.has(basic)) return 'attraction';
   if (cat && NOT_A_PLACE_TO_EAT.has(cat)) return null;
   if (cat && BY_CAT[cat]) return BY_CAT[cat];
   if (basic && BY_BASIC[basic]) return BY_BASIC[basic];
@@ -164,6 +200,7 @@ export function toImportRow(r: OvertureRow, brands: BrandDef[]): ImportRow | nul
   if (confidence < MIN_CONFIDENCE) return null;
   const type = placeTypeFor(r.basic_category, r.cat);
   if (!type) return null;
+  if (type === 'attraction' && confidence < MIN_ATTRACTION_CONFIDENCE) return null;
   const name = cleanName(r.name);
   if (!name) return null;
   const brand = matchBrand(r.brand ? { brand: r.brand } : {}, name, brands);
@@ -173,12 +210,15 @@ export function toImportRow(r: OvertureRow, brands: BrandDef[]): ImportRow | nul
     lat: r.lat,
     lng: r.lng,
     type,
-    diet_flags: dietFlagsFor(r.cat, name),
-    cuisine_tags: cuisineTagsFor(r.cat, name),
+    diet_flags: type === 'attraction' ? [] : dietFlagsFor(r.cat, name),
+    cuisine_tags: type === 'attraction' ? [] : cuisineTagsFor(r.cat, name),
     brand_slug: brand?.slug ?? null,
     brand_name: brand?.name ?? null,
     confident: confidence >= CONFIDENT,
     confidence,
+    category:
+      (type === 'attraction' ? r.basic_category : (r.cat ?? r.basic_category))?.slice(0, 60) ??
+      null,
   };
 }
 

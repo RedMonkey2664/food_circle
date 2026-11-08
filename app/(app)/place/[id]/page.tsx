@@ -26,6 +26,8 @@ import { TIER_SUMMARY_HEADING } from '@/lib/domain/tiers';
 import { visitAge } from '@/lib/domain/time';
 import { handoffUrl } from '@/lib/handoff';
 import { placeTopDishes } from '@/lib/data/details';
+import { getPlaceExtras, getPlaceGallery } from '@/lib/data/placeMedia';
+import { PlaceAbout } from '@/components/place/PlaceAbout';
 import { myWantToGoIds } from '@/lib/data/diary';
 import { PlaceFixes } from '@/components/place/PlaceFixes';
 import { WantToGoButton } from '@/components/place/WantToGoButton';
@@ -91,12 +93,14 @@ async function PlaceContent({
   if (!place) notFound();
   if (place.mergedFrom) redirect(`/place/${place.id}`);
 
-  const [summary, verdicts, friendsExist, topDishes, wantIds] = await Promise.all([
+  const [summary, verdicts, friendsExist, topDishes, wantIds, extras, photos] = await Promise.all([
     getPlaceSummary(place.id),
     getPlaceVerdicts(place.id, filter),
     hasFriends(),
     placeTopDishes(place.id),
     myWantToGoIds(),
+    getPlaceExtras(place.id),
+    getPlaceGallery(place.id),
   ]);
 
   const mine = verdicts.find((v) => v.tierNumber === 0);
@@ -147,6 +151,8 @@ async function PlaceContent({
               <DietBadges flags={place.dietFlags} />
             </div>
           </header>
+
+          <PlaceAbout place={place} extras={extras} photos={photos} />
 
           {mine ? (
             <p className="bg-surface border-line mt-4 flex items-center justify-between gap-2 rounded-[var(--radius-button)] border px-3 py-2 text-sm">

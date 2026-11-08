@@ -329,6 +329,46 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"place_info": {
+                  Row: {
+                    "place_id": string,"short_description": string | null,"updated_at": string,"wiki_extract": string | null,"wiki_title": string | null,"wiki_url": string | null,"wikidata": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "place_id": string,"short_description"?: string | null,"updated_at"?: string,"wiki_extract"?: string | null,"wiki_title"?: string | null,"wiki_url"?: string | null,"wikidata": string
+                  }
+                  Update: {
+                    "place_id"?: string,"short_description"?: string | null,"updated_at"?: string,"wiki_extract"?: string | null,"wiki_title"?: string | null,"wiki_url"?: string | null,"wikidata"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "place_info_place_id_fkey"
+      columns: ["place_id"]
+isOneToOne: true
+      referencedRelation: "places"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"place_media": {
+                  Row: {
+                    "author": string | null,"file_title": string,"height": number | null,"id": string,"licence": string | null,"licence_url": string | null,"page_url": string,"place_id": string,"position": number,"source": string,"thumb_url": string,"width": number | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author"?: string | null,"file_title": string,"height"?: number | null,"id"?: string,"licence"?: string | null,"licence_url"?: string | null,"page_url": string,"place_id": string,"position"?: number,"source"?: string,"thumb_url": string,"width"?: number | null
+                  }
+                  Update: {
+                    "author"?: string | null,"file_title"?: string,"height"?: number | null,"id"?: string,"licence"?: string | null,"licence_url"?: string | null,"page_url"?: string,"place_id"?: string,"position"?: number,"source"?: string,"thumb_url"?: string,"width"?: number | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "place_media_place_id_fkey"
+      columns: ["place_id"]
+isOneToOne: false
+      referencedRelation: "places"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"place_suggestions": {
                   Row: {
                     "created_at": string,"field": string,"id": string,"place_id": string,"status": Database["public"]['Enums']["report_status"],"user_id": string,"value": NonNullable<Json>
@@ -357,14 +397,14 @@ isOneToOne: false
                   ]
                 },"places": {
                   Row: {
-                    "aliases": (string)[],"area_id": string | null,"brand_id": string | null,"created_at": string,"created_by": string | null,"cuisine_tags": (string)[],"diet_flags": (string)[],"geom": unknown,"google_place_id": string | null,"id": string,"merged_into": string | null,"name": string,"name_normalized": string,"osm_id": string | null,"overture_id": string | null,"search_text": string,"source": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"],"updated_at": string
+                    "aliases": (string)[],"area_id": string | null,"brand_id": string | null,"category": string | null,"city": string | null,"created_at": string,"created_by": string | null,"cuisine_tags": (string)[],"diet_flags": (string)[],"geom": unknown,"google_place_id": string | null,"id": string,"merged_into": string | null,"name": string,"name_normalized": string,"osm_id": string | null,"overture_id": string | null,"search_text": string,"source": string,"status": Database["public"]['Enums']["place_status"],"type": Database["public"]['Enums']["place_type"],"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom": unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name": string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source": string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
+                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"category"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom": unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name": string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source": string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
                   }
                   Update: {
-                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom"?: unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name"?: string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source"?: string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
+                    "aliases"?: (string)[],"area_id"?: string | null,"brand_id"?: string | null,"category"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"cuisine_tags"?: (string)[],"diet_flags"?: (string)[],"geom"?: unknown,"google_place_id"?: string | null,"id"?: string,"merged_into"?: string | null,"name"?: string,"name_normalized"?: string,"osm_id"?: string | null,"overture_id"?: string | null,"search_text"?: string,"source"?: string,"status"?: Database["public"]['Enums']["place_status"],"type"?: Database["public"]['Enums']["place_type"],"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -790,9 +830,17 @@ isOneToOne: false
             "add_group_member":
 { Args: { "p_group": string,"p_user": string }; Returns: undefined
                            },
+"admin_import_areas":
+{ Args: { "p_rows": Json }; Returns: number
+                           },
 "admin_import_overture":
 { Args: { "p_rows": Json }; Returns: {
               "inserted": number,"linked": number,"skipped": number
+            }[]
+                           },
+"admin_import_wikimedia":
+{ Args: { "p_rows": Json }; Returns: {
+              "matched": number,"photos": number
             }[]
                            },
 "admin_refresh_place_areas":
@@ -1044,7 +1092,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "companion_status": "tagged"|"added"|"dismissed","group_role": "owner"|"member","invite_kind": "friend"|"group","place_status": "unverified"|"confirmed"|"merged"|"closed","place_type": "restaurant"|"cafe"|"street_stall"|"bakery"|"sweet_shop"|"bar"|"other","report_status": "open"|"reviewed"|"actioned"|"dismissed","report_target": "user"|"visit"|"place","request_status": "pending"|"accepted","score_period": "week"|"month"|"all","verdict": "go"|"skip"|"only_for","visibility": "private"|"friends"|"followers"|"public"
+            "companion_status": "tagged"|"added"|"dismissed","group_role": "owner"|"member","invite_kind": "friend"|"group","place_status": "unverified"|"confirmed"|"merged"|"closed","place_type": "restaurant"|"cafe"|"street_stall"|"bakery"|"sweet_shop"|"bar"|"other"|"attraction","report_status": "open"|"reviewed"|"actioned"|"dismissed","report_target": "user"|"visit"|"place","request_status": "pending"|"accepted","score_period": "week"|"month"|"all","verdict": "go"|"skip"|"only_for","visibility": "private"|"friends"|"followers"|"public"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1160,7 +1208,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "companion_status": ["tagged", "added", "dismissed"],"group_role": ["owner", "member"],"invite_kind": ["friend", "group"],"place_status": ["unverified", "confirmed", "merged", "closed"],"place_type": ["restaurant", "cafe", "street_stall", "bakery", "sweet_shop", "bar", "other"],"report_status": ["open", "reviewed", "actioned", "dismissed"],"report_target": ["user", "visit", "place"],"request_status": ["pending", "accepted"],"score_period": ["week", "month", "all"],"verdict": ["go", "skip", "only_for"],"visibility": ["private", "friends", "followers", "public"]
+            "companion_status": ["tagged", "added", "dismissed"],"group_role": ["owner", "member"],"invite_kind": ["friend", "group"],"place_status": ["unverified", "confirmed", "merged", "closed"],"place_type": ["restaurant", "cafe", "street_stall", "bakery", "sweet_shop", "bar", "other", "attraction"],"report_status": ["open", "reviewed", "actioned", "dismissed"],"report_target": ["user", "visit", "place"],"request_status": ["pending", "accepted"],"score_period": ["week", "month", "all"],"verdict": ["go", "skip", "only_for"],"visibility": ["private", "friends", "followers", "public"]
           }
         }
 } as const

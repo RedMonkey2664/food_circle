@@ -20,7 +20,9 @@
     "db:types": "supabase gen types typescript --local --schema public > lib/supabase/database.types.ts",
     "seed:osm": "tsx scripts/seed-osm.ts",
     "seed:osm:sql": "tsx scripts/osm-to-sql.ts",
-    "seed:overture": "tsx scripts/seed-overture.ts"
+    "seed:overture": "tsx scripts/seed-overture.ts",
+    "seed:india": "tsx scripts/seed-india.ts",
+    "seed:wikimedia": "tsx scripts/seed-wikimedia.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

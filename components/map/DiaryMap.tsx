@@ -18,6 +18,7 @@ const EXPLORE_TYPES: PlaceType[] = [
   'bakery',
   'sweet_shop',
   'bar',
+  'attraction',
 ];
 /** Matches the server's limit: bigger views ask you to zoom in instead of loading the city. */
 const MAX_SPAN = 0.25;

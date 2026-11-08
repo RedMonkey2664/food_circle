@@ -5,7 +5,15 @@ import { suggestPlaceFix } from '@/lib/actions/places';
 import { copy } from '@/lib/copy';
 import { PLACE_TYPE_LABEL } from '@/lib/domain/place';
 
-const TYPES = ['restaurant', 'cafe', 'street_stall', 'bakery', 'sweet_shop', 'bar'] as const;
+const TYPES = [
+  'restaurant',
+  'cafe',
+  'street_stall',
+  'bakery',
+  'sweet_shop',
+  'bar',
+  'attraction',
+] as const;
 
 /** P5-05: "Report closed or moved" and "Know this? Suggest". Goes to the admin queue. */
 export function PlaceFixes({ placeId }: { placeId: string }) {
