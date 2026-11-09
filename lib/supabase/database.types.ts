@@ -943,6 +943,11 @@ isOneToOne: false
               "period": Database["public"]['Enums']["score_period"],"period_start": string,"unique_areas": number,"unique_cuisines": number,"unique_places": number,"unique_places_shared": number
             }[]
                            },
+"get_notable_places":
+{ Args: { "p_lat": number,"p_limit"?: number,"p_lng": number,"p_radius_m"?: number }; Returns: {
+              "area_name": string,"distance_m": number,"name": string,"place_id": string,"short_description": string,"thumb_url": string,"type": Database["public"]['Enums']["place_type"]
+            }[]
+                           },
 "get_on_this_day":
 { Args: Record<PropertyKey, never>; Returns: {
               "place_id": string,"place_name": string,"verdict": Database["public"]['Enums']["verdict"],"visit_id": string,"visited_on": string,"years_ago": number
@@ -976,6 +981,11 @@ isOneToOne: false
 "get_profile_stats":
 { Args: { "p_user": string }; Returns: {
               "areas_visible": number,"followers": number,"following": number,"friends": number,"match_rate": number,"places_visible": number,"shared_places": number,"visits_visible": number
+            }[]
+                           },
+"get_recommended_places":
+{ Args: { "p_lat": number,"p_limit"?: number,"p_lng": number,"p_radius_m"?: number }; Returns: {
+              "area_name": string,"distance_m": number,"everyone_go": number,"everyone_went": number,"following_go": number,"following_went": number,"friend_go": number,"friend_went": number,"name": string,"place_id": string,"thumb_url": string,"type": Database["public"]['Enums']["place_type"]
             }[]
                            },
 "get_showcases":

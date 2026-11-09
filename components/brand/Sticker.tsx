@@ -82,7 +82,10 @@ export function Sticker({
       style={{ width: size, rotate: `${tilt}deg` }}
     >
       {taped ? (
-        <span className="sk-dots" style={{ '--dot': pick(DOTS, name, 7) } as React.CSSProperties} />
+        <span
+          className="sk-sticker-dots"
+          style={{ '--dot': pick(DOTS, name, 7) } as React.CSSProperties}
+        />
       ) : null}
       <Image
         src={`/stickers/${name}.webp`}

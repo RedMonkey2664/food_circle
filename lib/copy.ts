@@ -632,6 +632,23 @@ export const copy = {
     noMatch: (q: string) => `No places match “${q}”.`,
     seeAll: (q: string) => `See all results for “${q}”`,
   },
+  discoverPlaces: {
+    tabsLabel: 'Discover sections',
+    friendsTab: 'Friends',
+    placesTab: 'Places',
+    pick: 'Pick a city or tap Near me to see places worth trying around you.',
+    loved: 'Loved by people on SKOOP',
+    lovedHint:
+      'Go verdicts near you, counted separately for friends, people you follow and everyone.',
+    none: 'No SKOOP verdicts around here yet. Be the first: log a place you love.',
+    famous: 'Famous around here',
+    famousHint: 'Well-known spots nearby, with photos from Wikimedia Commons.',
+    friendsGo: (n: number) => (n === 1 ? '1 friend said Go' : `${n} friends said Go`),
+    followingGo: (n: number) => `${n} you follow said Go`,
+    everyoneGo: (n: number, went: number) => `${n} of ${went} on SKOOP said Go`,
+    distance: (m: number) =>
+      m < 1000 ? `${Math.max(10, Math.round(m / 10) * 10)} m` : `${(m / 1000).toFixed(1)} km`,
+  },
   discover: {
     title: 'Discover',
     searchLabel: 'Search people',

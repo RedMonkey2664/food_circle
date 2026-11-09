@@ -15,6 +15,9 @@ import {
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith, type FollowRow, type FriendRow } from '@/lib/domain/relationship';
 import { PageTitle } from '@/components/brand/Sticker';
+import { PlacesTab } from '@/components/discover/PlacesTab';
+import { NavPill } from '@/components/motion/NavPill';
+import { cn } from '@/lib/cn';
 
 export const metadata = { title: 'Discover' };
 
@@ -204,6 +207,45 @@ function SearchBox({ query }: { query: string }) {
   );
 }
 
+/** Friends (people) or Places, as tabs with the gliding underline. */
+async function DiscoverBody({
+  searchParams,
+}: {
+  searchParams: PageProps<'/discover'>['searchParams'];
+}) {
+  const { tab } = await searchParams;
+  const active = tab === 'places' ? 'places' : 'friends';
+  const t = copy.discoverPlaces;
+  const tabs = [
+    { key: 'friends', href: '/discover', label: t.friendsTab },
+    { key: 'places', href: '/discover?tab=places', label: t.placesTab },
+  ] as const;
+  return (
+    <>
+      <nav
+        aria-label={t.tabsLabel}
+        className="border-line relative mt-3 grid grid-cols-2 border-b md:max-w-md"
+      >
+        <NavPill fit="underline" className="bg-primary rounded-full" />
+        {tabs.map((x) => (
+          <Link
+            key={x.key}
+            href={x.href}
+            aria-current={active === x.key ? 'page' : undefined}
+            className={cn(
+              'flex min-h-11 items-center justify-center font-medium',
+              active === x.key ? 'text-primary' : 'text-muted',
+            )}
+          >
+            {x.label}
+          </Link>
+        ))}
+      </nav>
+      {active === 'places' ? <PlacesTab /> : <DiscoverContent searchParams={searchParams} />}
+    </>
+  );
+}
+
 export default function DiscoverPage(props: PageProps<'/discover'>) {
   return (
     <main className="pt-2">
@@ -218,7 +260,7 @@ export default function DiscoverPage(props: PageProps<'/discover'>) {
           </div>
         }
       >
-        <DiscoverContent searchParams={props.searchParams} />
+        <DiscoverBody searchParams={props.searchParams} />
       </Suspense>
     </main>
   );

@@ -506,8 +506,8 @@ html[data-vt='close']::view-transition-old(root) {
 }
 
 /* ---------- Stickers on halftone dots (components/brand/Sticker) ---------- */
-/* Halftone dots behind a taped sticker. */
-.sk-dots {
+/* Halftone dots behind a taped sticker (not .sk-dots: the sign-in wordmark uses that). */
+.sk-sticker-dots {
   position: absolute;
   inset: -16% -14% -8% -16%;
   z-index: -1;
