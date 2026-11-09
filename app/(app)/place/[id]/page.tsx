@@ -31,6 +31,7 @@ import { PlaceAbout } from '@/components/place/PlaceAbout';
 import { myWantToGoIds } from '@/lib/data/diary';
 import { PlaceFixes } from '@/components/place/PlaceFixes';
 import { WantToGoButton } from '@/components/place/WantToGoButton';
+import { googleMapsUrl } from '@/lib/domain/mapsLink';
 
 const FILTERS: TierFilter[] = ['friends', 'friends_following', 'everyone'];
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -153,6 +154,14 @@ async function PlaceContent({
           </header>
 
           <PlaceAbout place={place} extras={extras} photos={photos} />
+          <a
+            href={googleMapsUrl({ name: place.name, areaName: place.areaName, city: extras.city })}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClass({ variant: 'secondary', fullWidth: true, className: 'mt-3' })}
+          >
+            <span aria-hidden>🗺️</span> {copy.googleMaps.open} ↗
+          </a>
 
           {mine ? (
             <p className="bg-surface border-line mt-4 flex items-center justify-between gap-2 rounded-[var(--radius-button)] border px-3 py-2 text-sm">

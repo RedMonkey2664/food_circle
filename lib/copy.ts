@@ -632,6 +632,48 @@ export const copy = {
     noMatch: (q: string) => `No places match “${q}”.`,
     seeAll: (q: string) => `See all results for “${q}”`,
   },
+  takeout: {
+    title: 'Bring your Google reviews',
+    intro:
+      'Turn the reviews you already wrote on Google Maps into SKOOP verdicts in a minute. 4-5 stars become Go, 1-2 become Skip, and you decide on the 3s.',
+    privacy: 'Your file is read on this device. Only the places you tick are sent to SKOOP.',
+    stepsTitle: 'Get your file from Google',
+    steps: [
+      'Open takeout.google.com and sign in.',
+      'Tap "Deselect all", then tick only "Maps (your places)".',
+      'Tap "Next step", then "Create export", and download the zip when it is ready.',
+      'Unzip it and find "Reviews.json" (and "Saved Places.json" if you want your saved spots too).',
+    ],
+    openTakeout: 'Open Google Takeout',
+    choose: 'Choose Reviews.json / Saved Places.json',
+    reading: 'Reading your file…',
+    matching: 'Finding these places on SKOOP…',
+    nothing:
+      'No reviews or saved places found in that file. Pick "Reviews.json" from the Takeout zip.',
+    found: (reviews: number, saved: number) =>
+      `Found ${reviews} review${reviews === 1 ? '' : 's'}${saved ? ` and ${saved} saved place${saved === 1 ? '' : 's'}` : ''}.`,
+    onSkoop: (name: string, area: string | null) =>
+      area ? `On SKOOP: ${name}, ${area}` : `On SKOOP: ${name}`,
+    newPlace: 'Not on SKOOP yet: it will be added',
+    already: 'Already in your diary',
+    savedLabel: 'Want to go',
+    pickVerdict: 'You gave 3 stars: Go or Skip?',
+    stars: (n: number) => '★'.repeat(n) + '☆'.repeat(5 - n),
+    bringText: 'Bring my review text as the note',
+    audience: 'Who can see the imported verdicts',
+    importBtn: (n: number) => `Import ${n} place${n === 1 ? '' : 's'}`,
+    importing: (done: number, total: number) => `Importing… ${done} of ${total}`,
+    done: (s: { logged: number; saved: number; added: number }) =>
+      `Done: ${s.logged} verdict${s.logged === 1 ? '' : 's'} logged, ${s.saved} saved to Want to go${s.added ? `, ${s.added} new place${s.added === 1 ? '' : 's'} added` : ''}.`,
+    openDiary: 'Open my diary',
+    failed: 'Something went wrong. Nothing was lost; try again.',
+    entry: 'Import from Google Maps',
+    entryHint: 'Bring the reviews you wrote on Google in one go.',
+  },
+  googleMaps: {
+    open: 'See on Google Maps',
+    hint: 'Opens Google Maps to compare',
+  },
   discoverPlaces: {
     tabsLabel: 'Discover sections',
     friendsTab: 'Friends',

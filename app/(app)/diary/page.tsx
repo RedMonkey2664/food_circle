@@ -153,6 +153,12 @@ async function DiaryContent({
           >
             🗓️ {copy.recap.open} ›
           </Link>
+          <Link
+            href="/import"
+            className="text-primary mt-2 ml-4 inline-flex min-h-11 items-center text-sm font-semibold"
+          >
+            ⬇ {copy.takeout.entry} ›
+          </Link>
         </div>
       ) : null}
       {!cursor ? <OnThisDay /> : null}

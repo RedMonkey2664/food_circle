@@ -1012,6 +1012,11 @@ isOneToOne: false
 "log_visit_for_groups":
 { Args: { "p_groups": (string)[],"p_only_for_text"?: string,"p_place": string,"p_verdict": Database["public"]['Enums']["verdict"],"p_visited_on"?: string }; Returns: string
                            },
+"match_import_places":
+{ Args: { "p_items": Json }; Returns: {
+              "area_name": string,"distance_m": number,"idx": number,"place_id": string,"place_name": string,"visited": boolean
+            }[]
+                           },
 "merge_places":
 { Args: { "p_source": string,"p_target": string }; Returns: {
               "affected_users": number,"moved_visits": number

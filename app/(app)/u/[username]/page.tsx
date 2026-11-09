@@ -197,6 +197,12 @@ async function ProfileContent({ params }: { params: PageProps<'/u/[username]'>['
               🗓️ {copy.recap.open} ›
             </Link>
             <ShareButton target={{ kind: 'journey' }} text={copy.share.journeyText} />
+            <Link
+              href="/import"
+              className="text-primary inline-flex min-h-11 items-center text-sm font-semibold"
+            >
+              ⬇ {copy.takeout.entry} ›
+            </Link>
           </div>
           <InstallPrompt />
           {pushKey ? (
