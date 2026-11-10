@@ -13,7 +13,7 @@ import {
 } from '@/lib/domain/review';
 
 const chip =
-  'min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors duration-150';
+  'min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors duration-(--dur-tap)';
 const chipOn = 'border-primary bg-primary-soft text-primary';
 const chipOff = 'border-line bg-surface text-ink';
 

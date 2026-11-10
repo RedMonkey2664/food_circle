@@ -114,7 +114,7 @@ function SideNavView({ pathname }: { pathname: string | null }) {
       <CircleOpenLink
         href="/log"
         aria-label={copy.nav.log}
-        className="bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(176_20_27/0.55)] transition-[transform,background-color] duration-150 active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
+        className="bg-primary text-on-primary hover:bg-primary-press mx-auto mb-6 flex size-14 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgb(176_20_27/0.55)] transition-[transform,background-color] duration-(--dur-tap) active:scale-[0.96] lg:mx-0 lg:h-12 lg:w-full lg:gap-2 lg:rounded-[var(--radius-button)]"
       >
         <PlusIcon size={22} strokeWidth={2.5} />
         <span className="hidden font-semibold lg:inline">{copy.nav.log}</span>
@@ -130,7 +130,7 @@ function SideNavView({ pathname }: { pathname: string | null }) {
                 href={href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'relative z-[1] flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-button)] text-[11px] font-medium transition-colors duration-200',
+                  'relative z-[1] flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-button)] text-[11px] font-medium transition-colors duration-(--dur-quick)',
                   'lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-[15px]',
                   active ? 'text-primary' : 'text-muted hover:text-ink',
                 )}

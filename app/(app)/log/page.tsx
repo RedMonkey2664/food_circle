@@ -90,7 +90,7 @@ export default function LogPage(props: PageProps<'/log'>) {
         <p className="text-bg/85 text-sm font-semibold tracking-wide">{copy.log.title}</p>
         <CircleCloseLink
           aria-label={copy.log.close}
-          className="bg-ink text-bg flex size-11 items-center justify-center rounded-full transition-transform duration-150 active:scale-[0.92]"
+          className="bg-ink text-bg flex size-11 items-center justify-center rounded-full transition-transform duration-(--dur-tap) active:scale-[0.92]"
         >
           <CloseIcon size={20} strokeWidth={2.4} />
         </CircleCloseLink>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { gsap, motionOK, useGSAP } from './gsap';
+import { DUR, EASE, gsap, motionOK, useGSAP } from './gsap';
 
 /**
  * A number that counts up from zero the first time it is seen. The server renders the final
@@ -21,8 +21,8 @@ export function CountUp({ value, className }: { value: number; className?: strin
           io.disconnect();
           gsap.to(box, {
             v: value,
-            duration: Math.min(1.6, 0.6 + value / 60),
-            ease: 'power3.out',
+            duration: DUR.scene,
+            ease: EASE.out,
             onUpdate: () => {
               el.textContent = Math.round(box.v).toLocaleString('en-IN');
             },

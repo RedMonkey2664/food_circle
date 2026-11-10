@@ -2,7 +2,7 @@
 
 import { useRef, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
-import { gsap, motionOK, useGSAP } from './gsap';
+import { DUR, EASE, gsap, motionOK, useGSAP } from './gsap';
 
 const BITS = ['✦', '★', '●', '✸', '♥'];
 const COLORS = ['#b0141b', '#f6b500', '#2e4fae', '#e5487c', '#161412'];
@@ -34,11 +34,11 @@ export function Burst({
         scale: 0.7,
         autoAlpha: 0,
         y: 18,
-        duration: 0.8,
-        ease: 'elastic.out(1, 0.6)',
+        duration: DUR.enter,
+        ease: EASE.spring,
       });
       if (icon) {
-        tl.from(icon, { scale: 0, rotate: -180, duration: 0.7, ease: 'back.out(2.2)' }, '-=0.6');
+        tl.from(icon, { scale: 0, rotate: -180, duration: DUR.enter, ease: EASE.spring }, '-=0.3');
       }
       const bits = Array.from({ length: 18 }, (_, i) => {
         const b = document.createElement('span');
@@ -57,12 +57,12 @@ export function Burst({
           y: () => gsap.utils.random(-110, 40),
           rotate: () => gsap.utils.random(-260, 260),
           scale: () => gsap.utils.random(0.8, 1.5),
-          duration: 1.1,
-          ease: 'expo.out',
+          duration: DUR.scene,
+          ease: EASE.out,
           stagger: 0.01,
         },
-        '-=0.55',
-      ).to(bits, { opacity: 0, y: '+=40', duration: 0.6, ease: 'power1.in' }, '-=0.45');
+        '-=0.3',
+      ).to(bits, { opacity: 0, y: '+=40', duration: DUR.enter, ease: EASE.stamp }, '-=0.35');
       tl.eventCallback('onComplete', () => bits.forEach((b) => b.remove()));
       return () => bits.forEach((b) => b.remove());
     },

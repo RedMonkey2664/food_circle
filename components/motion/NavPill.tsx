@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { cn } from '@/lib/cn';
-import { gsap, motionOK, useGSAP } from './gsap';
+import { DUR, EASE, gsap, motionOK, useGSAP } from './gsap';
 
 type Box = { x: number; y: number; width: number; height: number };
 // Last spot per bar, so a highlight still glides when navigation re-creates the bar.
@@ -41,7 +41,7 @@ export function NavPill({
       const place = (animate: boolean) => {
         const active = list.querySelector<HTMLElement>('[aria-current="page"]');
         if (!active) {
-          gsap.to(pill, { autoAlpha: 0, duration: 0.2 });
+          gsap.to(pill, { autoAlpha: 0, duration: DUR.quick });
           placed.current = false;
           return;
         }
@@ -73,12 +73,12 @@ export function NavPill({
         } else {
           // A little stretch while it travels, like ink being dragged. (No clearProps here:
           // clearing any transform part also wipes x/y and the bar would jump to the corner.)
-          gsap.to(pill, { ...to, autoAlpha: 1, duration: 0.6, ease: 'expo.out' });
+          gsap.to(pill, { ...to, autoAlpha: 1, duration: DUR.enter, ease: EASE.out });
           if (fit !== 'link') {
             gsap.fromTo(
               pill,
               { scaleY: fit === 'underline' ? 1.8 : 0.85 },
-              { scaleY: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)' },
+              { scaleY: 1, duration: DUR.enter, ease: EASE.spring },
             );
           }
           const icon = active.querySelector('svg');
@@ -89,8 +89,8 @@ export function NavPill({
               {
                 scale: 1,
                 rotate: 0,
-                duration: 0.6,
-                ease: 'back.out(2.6)',
+                duration: DUR.enter,
+                ease: EASE.spring,
                 clearProps: 'transform',
               },
             );

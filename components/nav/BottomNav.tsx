@@ -63,7 +63,7 @@ function BottomNavView({ pathname }: { pathname: string | null }) {
           <CircleOpenLink
             href="/log"
             aria-label={copy.nav.log}
-            className="bg-primary text-on-primary relative z-[1] -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(176_20_27/0.55)] transition-transform duration-150 active:scale-[0.94]"
+            className="bg-primary text-on-primary relative z-[1] -mt-5 flex size-14 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_rgb(176_20_27/0.55)] transition-transform duration-(--dur-tap) active:scale-[0.94]"
           >
             <PlusIcon size={26} strokeWidth={2.5} />
           </CircleOpenLink>
@@ -95,7 +95,7 @@ function NavItem({
         href={href}
         aria-current={active ? 'page' : undefined}
         className={cn(
-          'relative z-[1] flex min-h-14 min-w-14 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors duration-200',
+          'relative z-[1] flex min-h-14 min-w-14 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors duration-(--dur-quick)',
           active ? 'text-primary' : 'text-muted',
         )}
       >

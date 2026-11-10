@@ -11,7 +11,7 @@ import { PhotoGrid, type GridPhoto } from './PhotoGrid';
 type Friend = { id: string; name: string };
 
 const chip =
-  'min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors duration-150';
+  'min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors duration-(--dur-tap)';
 const on = 'border-primary bg-primary-soft text-primary';
 const off = 'border-line bg-surface';
 

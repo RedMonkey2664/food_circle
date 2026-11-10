@@ -228,7 +228,7 @@ export function PlaceSearch({
                 type="button"
                 onClick={shuffle}
                 aria-label={copy.interactive.shuffle}
-                className="border-line bg-surface flex size-11 items-center justify-center rounded-full border text-xl transition-transform duration-300 active:scale-90"
+                className="border-line bg-surface flex size-11 items-center justify-center rounded-full border text-xl transition-transform duration-(--dur-quick) active:scale-90"
                 style={{ rotate: `${shuffles * 180}deg` }}
               >
                 🎲
@@ -240,7 +240,7 @@ export function PlaceSearch({
                   <button
                     type="button"
                     onClick={() => setAndFocus(chip)}
-                    className="border-line bg-surface hover:border-primary active:bg-primary-soft min-h-10 rounded-full border px-3.5 text-sm font-medium transition-colors duration-150"
+                    className="border-line bg-surface hover:border-primary active:bg-primary-soft min-h-10 rounded-full border px-3.5 text-sm font-medium transition-colors duration-(--dur-tap)"
                   >
                     {chip}
                   </button>
@@ -266,7 +266,7 @@ export function PlaceSearch({
           role="listbox"
           aria-label={copy.search.label}
           className={cn(
-            'divide-line mt-2 divide-y transition-opacity duration-150',
+            'divide-line mt-2 divide-y transition-opacity duration-(--dur-tap)',
             loading && 'opacity-60',
           )}
         >
@@ -284,7 +284,7 @@ export function PlaceSearch({
                 prefetch={false}
                 onMouseEnter={() => setActive(i)}
                 className={cn(
-                  '-mx-2 flex min-h-14 flex-col justify-center gap-0.5 rounded-[var(--radius-button)] px-2 py-2.5 transition-colors duration-100',
+                  '-mx-2 flex min-h-14 flex-col justify-center gap-0.5 rounded-[var(--radius-button)] px-2 py-2.5 transition-colors duration-(--dur-tap)',
                   i === active ? 'bg-primary-soft' : 'active:bg-primary-soft',
                 )}
               >

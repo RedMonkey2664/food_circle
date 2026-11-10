@@ -80,7 +80,7 @@ export function DictateButton({ onText }: { onText: (text: string) => void }) {
         onClick={toggle}
         aria-pressed={listening}
         className={cn(
-          'inline-flex min-h-9 items-center gap-1 rounded-full border px-3 text-xs font-semibold transition-colors duration-150',
+          'inline-flex min-h-9 items-center gap-1 rounded-full border px-3 text-xs font-semibold transition-colors duration-(--dur-tap)',
           listening
             ? 'border-skip bg-skip-soft text-skip motion-safe:animate-pulse'
             : 'border-line bg-surface',

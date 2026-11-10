@@ -41,7 +41,7 @@ export function CreateGroupForm() {
               aria-pressed={kind === k}
               onClick={() => setKind(k)}
               className={cn(
-                'min-h-11 rounded-full border px-4 text-sm font-medium transition-colors duration-150',
+                'min-h-11 rounded-full border px-4 text-sm font-medium transition-colors duration-(--dur-tap)',
                 kind === k
                   ? 'border-primary bg-primary-soft text-primary'
                   : 'border-line bg-surface text-ink',

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, type ReactNode } from 'react';
-import { gsap, useGSAP } from './gsap';
+import { DUR, EASE, gsap, useGSAP } from './gsap';
 
 /**
  * The app's motion layer (one per page; app/(app)/template.tsx re-mounts it on navigation).
@@ -27,7 +27,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
         root.dataset.motion = 'on';
         // The log takeover has its own circle reveal; everything else eases in.
         if (!window.location.pathname.startsWith('/log')) {
-          gsap.from(root, { autoAlpha: 0, y: 14, duration: 0.5, clearProps: 'all' });
+          gsap.from(root, { autoAlpha: 0, y: 14, duration: DUR.enter, clearProps: 'all' });
         }
 
         const watched = new WeakSet<Element>();
@@ -42,18 +42,17 @@ export function PageMotion({ children }: { children: ReactNode }) {
           if (stamps.length) {
             gsap.fromTo(
               stamps,
-              { scale: 2.2, rotate: -14, autoAlpha: 0, filter: 'blur(3px)' },
+              { scale: 2.2, rotate: -14, autoAlpha: 0 },
               {
                 scale: 1,
                 rotate: 0,
                 autoAlpha: 1,
-                filter: 'blur(0px)',
-                duration: 0.5,
-                ease: 'back.out(2.4)',
-                stagger: 0.08,
-                delay: at + 0.25,
+                duration: DUR.enter,
+                ease: EASE.spring,
+                stagger: 0.06,
+                delay: at + DUR.quick,
                 transformOrigin: '0% 50%',
-                clearProps: 'transform,filter,opacity,visibility',
+                clearProps: 'transform,opacity,visibility',
               },
             );
           }
@@ -67,10 +66,10 @@ export function PageMotion({ children }: { children: ReactNode }) {
               {
                 scale: 1,
                 autoAlpha: 1,
-                duration: 1.1,
-                ease: 'power3.out',
+                duration: DUR.scene,
+                ease: EASE.out,
                 stagger: 0.06,
-                delay: at + 0.1,
+                delay: at + DUR.tap,
                 clearProps: 'transform,opacity,visibility',
               },
             );
@@ -82,10 +81,10 @@ export function PageMotion({ children }: { children: ReactNode }) {
             gsap.from(bars, {
               scaleX: 0,
               transformOrigin: '0 50%',
-              duration: 1.2,
-              delay: at + 0.25,
-              ease: 'power3.out',
-              stagger: 0.05,
+              duration: DUR.scene,
+              delay: at + DUR.quick,
+              ease: EASE.out,
+              stagger: 0.06,
               clearProps: 'transform',
             });
           }
@@ -108,8 +107,8 @@ export function PageMotion({ children }: { children: ReactNode }) {
               deal,
               {
                 autoAlpha: 0,
-                y: 46,
-                x: () => (dealt++ % 2 ? 18 : -18),
+                y: 32,
+                x: () => (dealt++ % 2 ? 14 : -14),
                 rotate: (i) => (i % 2 ? 2.4 : -2.4),
                 scale: 0.97,
               },
@@ -119,9 +118,9 @@ export function PageMotion({ children }: { children: ReactNode }) {
                 x: 0,
                 rotate: 0,
                 scale: 1,
-                duration: 0.9,
-                ease: 'expo.out',
-                stagger: 0.08,
+                duration: DUR.enter,
+                ease: EASE.out,
+                stagger: 0.06,
                 ...done,
               },
             );
@@ -134,9 +133,9 @@ export function PageMotion({ children }: { children: ReactNode }) {
                 autoAlpha: 1,
                 scale: 1,
                 y: 0,
-                duration: 0.7,
-                ease: 'back.out(1.7)',
-                stagger: { each: 0.05, from: 'start' },
+                duration: DUR.enter,
+                ease: EASE.spring,
+                stagger: { each: 0.06, from: 'start' },
                 ...done,
               },
             );
@@ -151,7 +150,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
                 transformPerspective: 900,
                 transformOrigin: '50% 100%',
               },
-              { autoAlpha: 1, rotateX: 0, y: 0, duration: 1.1, ease: 'expo.out', ...done },
+              { autoAlpha: 1, rotateX: 0, y: 0, duration: DUR.scene, ease: EASE.out, ...done },
             );
           }
           details(els, 0);
@@ -180,7 +179,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
         const headline = () => {
           if (titled) return;
           const h = root.querySelector<HTMLElement>('h1');
-          if (!h || h.closest('[data-no-motion]') || !hydrated(h)) return;
+          if (!h || h.closest('[data-no-motion], [data-takeover]') || !hydrated(h)) return;
           titled = true;
           gsap.fromTo(
             h,
@@ -189,7 +188,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
               clipPath: 'inset(0 0 -20% 0)',
               yPercent: 0,
               skewY: 0,
-              duration: 0.9,
+              duration: DUR.scene,
               clearProps: 'clipPath,transform',
             },
           );
@@ -202,7 +201,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
             stuck.add(s);
             // Slapped on: drops in big and tilted, squashes, then settles at its own tilt.
             gsap
-              .timeline({ delay: 0.35 })
+              .timeline({ delay: DUR.quick })
               .fromTo(
                 s,
                 { autoAlpha: 0, scale: 1.9, y: -40, rotate: '-=28' },
@@ -211,11 +210,11 @@ export function PageMotion({ children }: { children: ReactNode }) {
                   scale: 0.92,
                   y: 0,
                   rotate: '+=28',
-                  duration: 0.38,
-                  ease: 'power3.in',
+                  duration: DUR.quick,
+                  ease: EASE.stamp,
                 },
               )
-              .to(s, { scale: 1, duration: 0.6, ease: 'elastic.out(1.1, 0.45)' })
+              .to(s, { scale: 1, duration: DUR.enter, ease: EASE.spring })
               .set(s, { clearProps: 'opacity,visibility,transform' });
           });
         };
@@ -224,19 +223,29 @@ export function PageMotion({ children }: { children: ReactNode }) {
           root.querySelectorAll('[data-reveal]:not([data-revealed])').forEach((el) => {
             if (watched.has(el)) return;
             watched.add(el);
-            io.observe(el);
+            // The logging takeover is the fast path: its cards are simply there.
+            if (el.closest('[data-takeover]')) el.setAttribute('data-revealed', '');
+            else io.observe(el);
           });
           headline();
           stickers();
         };
 
         scan();
-        const mo = new MutationObserver(scan);
+        let scanFrame = 0;
+        const mo = new MutationObserver(() => {
+          if (scanFrame) return;
+          scanFrame = requestAnimationFrame(() => {
+            scanFrame = 0;
+            scan();
+          });
+        });
         mo.observe(root, { childList: true, subtree: true });
         return () => {
           mo.disconnect();
           io.disconnect();
           if (frame) cancelAnimationFrame(frame);
+          if (scanFrame) cancelAnimationFrame(scanFrame);
           timers.forEach((t) => window.clearTimeout(t));
         };
       });

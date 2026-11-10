@@ -47,7 +47,7 @@ export async function HomeAside() {
               <li key={g.id}>
                 <Link
                   href={`/?group=${g.id}`}
-                  className="hover:bg-bg -mx-2 flex min-h-11 items-center justify-between rounded-[var(--radius-button)] px-2 transition-colors duration-150"
+                  className="hover:bg-bg -mx-2 flex min-h-11 items-center justify-between rounded-[var(--radius-button)] px-2 transition-colors duration-(--dur-tap)"
                 >
                   <span className="truncate font-medium">{g.name}</span>
                   <span className="text-muted text-xs">{copy.groups.members(g.memberCount)}</span>

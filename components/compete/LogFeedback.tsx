@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Burst } from '@/components/motion/Burst';
+import { DUR } from '@/components/motion/tokens';
 import { visitFeedback, type VisitFeedback } from '@/lib/actions/achievements';
 import { copy } from '@/lib/copy';
 
@@ -34,7 +35,7 @@ export function LogFeedback({ visitId }: { visitId: string }) {
       {fb.unlocked.map((u, i) => (
         <Burst
           key={u.name}
-          delay={i * 0.35}
+          delay={i * DUR.quick}
           className="border-primary/40 bg-primary-soft flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
         >
           <span aria-hidden data-burst-icon className="inline-block text-3xl leading-none">

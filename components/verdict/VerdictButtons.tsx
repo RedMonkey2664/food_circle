@@ -87,7 +87,7 @@ export function VerdictButtons({
               className={cn(
                 'flex min-h-22 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-card)] border-2',
                 'text-base font-extrabold tracking-wide',
-                'transition-[transform,background-color,color] duration-150 ease-[var(--ease-out)] active:scale-[0.96]',
+                'transition-[transform,background-color,color] duration-(--dur-tap) ease-(--ease-out) active:scale-[0.96]',
                 'disabled:opacity-50',
                 active ? picked : idle,
               )}
@@ -124,7 +124,7 @@ export function VerdictButtons({
           <button
             type="submit"
             disabled={disabled || !text.trim()}
-            className="bg-onlyfor min-h-11 rounded-[var(--radius-button)] px-4 font-bold text-white transition-transform duration-150 active:scale-[0.97] disabled:opacity-50"
+            className="bg-onlyfor min-h-11 rounded-[var(--radius-button)] px-4 font-bold text-white transition-transform duration-(--dur-tap) active:scale-[0.97] disabled:opacity-50"
           >
             Save
           </button>

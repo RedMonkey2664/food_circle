@@ -4,6 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import type { Map as MlMap, Marker, Popup } from 'maplibre-gl';
 import { useEffect, useRef, useState } from 'react';
 import { MAP_STYLE_URL, MUMBAI_CENTER } from '@/lib/config';
+import { DUR_MS, motionOK } from '@/components/motion/tokens';
 import type { MapCard } from '@/lib/domain/mapCard';
 
 export type MapPin = {
@@ -172,7 +173,7 @@ export function MapView({
     const m = map.current;
     if (!ready || !m || !focus) return;
     fitted.current = true;
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const still = !motionOK();
     m.flyTo({
       center: [focus.lng, focus.lat],
       zoom: focus.zoom,
@@ -312,7 +313,11 @@ export function MapView({
         picker.current.setLngLat([pick.lng, pick.lat]);
       }
       // Zoom to street level so the pin can be placed precisely (never zoom back out).
-      m.easeTo({ center: [pick.lng, pick.lat], zoom: Math.max(m.getZoom(), 16), duration: 400 });
+      m.easeTo({
+        center: [pick.lng, pick.lat],
+        zoom: Math.max(m.getZoom(), 16),
+        duration: DUR_MS.enter,
+      });
     });
     return () => {
       cancelled = true;

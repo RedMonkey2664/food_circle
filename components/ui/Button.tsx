@@ -26,7 +26,7 @@ export function buttonClass({
 }: StyleOptions = {}) {
   return cn(
     'inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] font-semibold',
-    'transition-[transform,translate,box-shadow,background-color,border-color] duration-150 ease-[var(--ease-out)]',
+    'transition-[transform,translate,box-shadow,background-color,border-color] duration-(--dur-tap) ease-(--ease-out)',
     'active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
     variants[variant],
     sizes[size],

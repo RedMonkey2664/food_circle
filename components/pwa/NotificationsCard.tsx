@@ -129,14 +129,14 @@ export function NotificationsCard({
               onClick={toggleVerdicts}
               disabled={pending}
               className={cn(
-                'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-150',
+                'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-(--dur-tap)',
                 verdicts ? 'bg-primary' : 'bg-line',
               )}
             >
               <span className="sr-only">{t.friendVerdicts}</span>
               <span
                 className={cn(
-                  'inline-block size-5 rounded-full bg-white shadow transition-transform duration-150',
+                  'inline-block size-5 rounded-full bg-white shadow transition-transform duration-(--dur-tap)',
                   verdicts ? 'translate-x-6' : 'translate-x-1',
                 )}
               />

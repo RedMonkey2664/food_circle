@@ -24,7 +24,8 @@ const EXPLORE_TYPES: PlaceType[] = [
 ];
 /** Matches the server's limit: bigger views ask you to zoom in instead of loading the city. */
 const MAX_SPAN = 0.25;
-const chip = 'min-h-10 rounded-full border px-3 text-sm font-medium transition-colors duration-150';
+const chip =
+  'min-h-10 rounded-full border px-3 text-sm font-medium transition-colors duration-(--dur-tap)';
 
 function explorePin(p: ExplorePlace): MapPin {
   return {
@@ -192,7 +193,7 @@ export function DiaryMap({ pins, near = null }: { pins: MapPin[]; near?: Near | 
           aria-checked={exploreOn}
           onClick={() => setExploreOn((v) => !v)}
           className={cn(
-            'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors duration-150',
+            'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors duration-(--dur-tap)',
             exploreOn ? 'border-ink bg-ink text-bg' : 'border-line bg-surface text-ink',
           )}
         >

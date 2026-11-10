@@ -1,12 +1,16 @@
 'use client';
 
+import { CSS_EASE, DUR_MS, motionOK, motionTier } from '@/components/motion/tokens';
+
 /**
  * Interactive element: VERDICT BURST. A quick confetti of paper bits from a tapped element, in
  * the given colour, plus a tiny vibration on phones. Used by the Go / Skip / Only for buttons.
  */
-export function burstFrom(el: HTMLElement, color: string, count = 14) {
+export function burstFrom(el: HTMLElement, color: string) {
   navigator.vibrate?.(14);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!motionOK()) return;
+  // Fewer bits on phones: the burst must never cost a frame of the logging flow.
+  const count = motionTier() === 'phone' ? 10 : 14;
   const r = el.getBoundingClientRect();
   const cx = r.left + r.width / 2;
   const cy = r.top + r.height / 2;
@@ -36,7 +40,7 @@ export function burstFrom(el: HTMLElement, color: string, count = 14) {
             opacity: 0,
           },
         ],
-        { duration: 750 + Math.random() * 250, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
+        { duration: DUR_MS.scene, easing: CSS_EASE.out },
       )
       .finished.then(
         () => bit.remove(),

@@ -37,7 +37,7 @@ export function WantToGoButton({
       aria-pressed={saved}
       disabled={pending}
       className={cn(
-        'inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-button)] border font-semibold transition-colors duration-150',
+        'inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-button)] border font-semibold transition-colors duration-(--dur-tap)',
         compact ? 'min-h-9 px-2.5 text-xs' : 'min-h-11 w-full px-4 text-sm',
         saved
           ? 'border-following-fg bg-following-bg text-following-fg'

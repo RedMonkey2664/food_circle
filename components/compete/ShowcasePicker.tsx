@@ -70,7 +70,7 @@ export function ShowcasePicker({ earned, initial }: { earned: Option[]; initial:
                     aria-pressed={on}
                     onClick={() => toggle(b.slug)}
                     className={cn(
-                      'inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 text-sm font-medium transition-colors duration-150',
+                      'inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 text-sm font-medium transition-colors duration-(--dur-tap)',
                       on ? 'border-primary bg-primary-soft text-primary' : 'border-line bg-surface',
                     )}
                   >

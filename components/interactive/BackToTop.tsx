@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motionOK } from '@/components/motion/tokens';
 import { copy } from '@/lib/copy';
 
 /**
@@ -21,13 +22,11 @@ export function BackToTop() {
       window.removeEventListener('scroll', on);
     };
   }, []);
-  const still =
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   return (
     <button
       type="button"
       aria-label={copy.interactive.backToTop}
-      onClick={() => window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' })}
+      onClick={() => window.scrollTo({ top: 0, behavior: motionOK() ? 'smooth' : 'auto' })}
       className={`sk-back-top fixed right-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 flex size-12 items-center justify-center rounded-full bg-[#161412] text-xl text-[#f6b500] shadow-[0_10px_24px_-10px_rgb(0_0_0/0.6)] md:bottom-8 ${show ? 'is-on' : ''}`}
       tabIndex={show ? 0 : -1}
     >

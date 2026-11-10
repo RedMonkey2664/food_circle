@@ -62,7 +62,7 @@
   --color-focus: var(--c-focus);
 
   /* Search suggestions: a short rise-and-fade when a list first appears (not per keystroke). */
-  --animate-suggest-in: suggest-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-suggest-in: suggest-in var(--dur-quick) var(--ease-out) both;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
@@ -143,6 +143,15 @@
   Tune here: durations and easings.
 */
 :root {
+  /* Motion tokens (same values as components/motion/tokens.ts; change both together). */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-stamp: cubic-bezier(0.32, 0, 0.67, 0);
+  --ease-draw: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-tap: 120ms;
+  --dur-quick: 200ms;
+  --dur-enter: 450ms;
+  --dur-scene: 800ms;
+
   --vt-open-duration: 520ms;
   --vt-open-ease: cubic-bezier(0.32, 0.72, 0, 1);
   --vt-close-duration: 340ms;
@@ -291,26 +300,6 @@ html[data-vt='close']::view-transition-old(root) {
   cursor: pointer;
 }
 
-/* Page entrance for in-app navigation (app/(app)/template.tsx). Transform + opacity only, so
-   it runs on the compositor and never causes layout work. */
-@keyframes page-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-}
-.page-in {
-  animation: page-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-.page-in:has([data-takeover]) {
-  animation: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .page-in {
-    animation: none;
-  }
-}
-
 /* ---------- SKOOP surfaces ---------- */
 @layer components {
   /* Cards sit on the paper like cut card stock: warm white, soft drop, lift on hover. */
@@ -320,8 +309,8 @@ html[data-vt='close']::view-transition-old(root) {
       0 1px 2px rgb(60 30 10 / 0.06),
       0 14px 30px -24px rgb(60 25 5 / 0.45);
     transition:
-      box-shadow 0.35s var(--ease-out),
-      translate 0.35s var(--ease-out);
+      box-shadow var(--dur-quick) var(--ease-out),
+      translate var(--dur-quick) var(--ease-out);
   }
   @media (hover: hover) {
     a.sk-card:hover,
@@ -359,8 +348,8 @@ html[data-vt='close']::view-transition-old(root) {
 /* Bottom bar highlight: glides between tabs with a small overshoot. */
 .sk-tab-glide {
   transition:
-    transform 0.55s cubic-bezier(0.34, 1.45, 0.64, 1),
-    opacity 0.2s;
+    transform var(--dur-enter) var(--ease-spring),
+    opacity var(--dur-quick);
 }
 @media (prefers-reduced-motion: reduce) {
   .sk-tab-glide {
@@ -371,7 +360,7 @@ html[data-vt='close']::view-transition-old(root) {
 /* ---------- Interactive elements (components/interactive) ---------- */
 /* TOAST */
 .sk-toast {
-  animation: sk-toast-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: sk-toast-in var(--dur-enter) var(--ease-spring) both;
 }
 @keyframes sk-toast-in {
   from {
@@ -383,7 +372,7 @@ html[data-vt='close']::view-transition-old(root) {
 /* DOUBLE-TAP SAVE */
 .sk-star-pop {
   translate: -50% -50%;
-  animation: sk-star-pop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation: sk-star-pop var(--dur-scene) var(--ease-out) both;
 }
 @keyframes sk-star-pop {
   0% {
@@ -408,7 +397,7 @@ html[data-vt='close']::view-transition-old(root) {
 }
 /* TAP STICKER */
 .sk-sticker-spin {
-  animation: sk-sticker-spin 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: sk-sticker-spin var(--dur-scene) var(--ease-spring);
 }
 @keyframes sk-sticker-spin {
   0% {
@@ -430,12 +419,12 @@ html[data-vt='close']::view-transition-old(root) {
 }
 .sk-bubble {
   transform-origin: 100% 0;
-  animation: sk-toast-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: sk-toast-in var(--dur-quick) var(--ease-spring) both;
 }
 /* FLIP BADGE */
 .sk-flip-inner {
   transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.34, 1.3, 0.64, 1);
+  transition: transform var(--dur-enter) var(--ease-spring);
 }
 .sk-flip-inner.is-flipped {
   transform: rotateY(180deg);
@@ -453,7 +442,7 @@ html[data-vt='close']::view-transition-old(root) {
 }
 /* PIN DROP (individual properties, so MapLibre's own transform still places the pin) */
 .sk-pin {
-  animation: sk-pin-drop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: sk-pin-drop var(--dur-enter) var(--ease-spring) both;
 }
 @keyframes sk-pin-drop {
   from {
@@ -464,7 +453,7 @@ html[data-vt='close']::view-transition-old(root) {
 }
 /* SHUFFLE CHIPS */
 .sk-chips > li {
-  animation: sk-chip-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: sk-chip-in var(--dur-enter) var(--ease-spring) both;
 }
 @keyframes sk-chip-in {
   from {
@@ -480,9 +469,9 @@ html[data-vt='close']::view-transition-old(root) {
   scale: 0.8;
   pointer-events: none;
   transition:
-    opacity 0.25s,
-    translate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity var(--dur-quick),
+    translate var(--dur-enter) var(--ease-spring),
+    scale var(--dur-enter) var(--ease-spring);
 }
 .sk-back-top.is-on {
   opacity: 1;
@@ -519,7 +508,7 @@ html[data-vt='close']::view-transition-old(root) {
 .sk-underline path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: sk-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
+  animation: sk-draw var(--dur-scene) var(--ease-draw) var(--dur-enter) forwards;
 }
 @keyframes sk-draw {
   to {
