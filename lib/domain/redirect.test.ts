@@ -18,6 +18,7 @@ describe('isPublicPath', () => {
     expect(isPublicPath('/login')).toBe(true);
     expect(isPublicPath('/auth/callback')).toBe(true);
     expect(isPublicPath('/invite/abc')).toBe(true);
+    expect(isPublicPath('/welcome')).toBe(true);
   });
   it('protects everything else', () => {
     expect(isPublicPath('/')).toBe(false);

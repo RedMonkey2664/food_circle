@@ -49,7 +49,6 @@ export function Scribble({
         stroke={color}
         strokeWidth={width}
         strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );

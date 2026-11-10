@@ -719,6 +719,157 @@ export const copy = {
     body: 'The link may be old, or the page may have moved.',
     home: 'Go home',
   },
+  /** The public marketing page (/welcome). Examples on it are illustrative and labelled so. */
+  landing: {
+    metaTitle: 'Eat where your people eat',
+    metaDescription:
+      'SKOOP shows you Go or Skip verdicts on restaurants, cafes and street food from friends and people you follow. Not star ratings from strangers.',
+    cta: `Get ${APP_NAME}`,
+    nav: { how: 'How it works', circles: 'Your circles', cities: 'Cities', faq: 'FAQ' },
+    hero: {
+      before: 'Stop asking',
+      cut: 'strangers',
+      after: 'where to eat.',
+      sub: 'Go or Skip verdicts from friends, classmates and people you follow. Not 4.3 stars from nobody you know.',
+      secondary: 'See how it works',
+      stamp: 'GO',
+      scribble: 'your friends already ate here',
+    },
+    statement: {
+      a: 'A 4.3 from two thousand strangers',
+      /** The word in `a` that gets struck out, and the word in `b` that gets circled. */
+      aMark: 'strangers',
+      aEnd: 'tells you nothing.',
+      b: 'One friend saying “skip the biryani”',
+      bMark: 'friend',
+      bEnd: 'tells you everything.',
+    },
+    demo: {
+      title: 'A review takes one tap.',
+      sub: 'No essays. No star maths. Try it on this one.',
+      example: 'Example place',
+      placeName: 'Sharma Ji Maggi Point',
+      placeWhere: 'Behind the college back gate',
+      prompt: 'So, how was it?',
+      result: {
+        go: 'Stamped. Your friends now know it is worth the walk.',
+        skip: 'Stamped. You just saved someone a sad dinner.',
+        only_for: (what: string) => `Stamped. Only for ${what}. Honest and useful.`,
+      },
+      again: 'Tap another one to change your mind.',
+      onlyForPlaceholder: 'the cheese Maggi',
+      steps: [
+        {
+          title: 'Find the place',
+          body: 'Search by name, dish or area. If it is missing, add it.',
+        },
+        { title: 'Tap Go, Skip or Only for', body: 'That is the whole review. Under ten seconds.' },
+        {
+          title: 'Pick who sees it',
+          body: 'Only you, friends, followers or everyone. Shown before you post.',
+        },
+      ],
+    },
+    circles: {
+      title: 'Three circles. Never mixed.',
+      sub: 'There is no blended score on SKOOP. You always know whose opinion you are reading.',
+      example: 'Example',
+      cards: [
+        {
+          tier: 'friend',
+          title: 'Friends',
+          body: 'People you both added. Their verdicts come first.',
+          line: '3 of your friends went. 2 said Go, 1 said Skip.',
+        },
+        {
+          tier: 'following',
+          title: 'Following',
+          body: 'People whose taste you trust. A senior, a food page, that one cousin.',
+          line: '5 people you follow went. 4 said Go.',
+        },
+        {
+          tier: 'public',
+          title: 'Everyone',
+          body: 'The rest of SKOOP. Shown last, labelled clearly, never averaged in.',
+          line: '41 others went. 29 said Go.',
+        },
+      ],
+    },
+    more: {
+      title: 'It remembers every meal, too.',
+      cells: {
+        diary: {
+          title: 'Your food diary',
+          body: 'Every visit saved with notes and photos. Private unless you say otherwise.',
+        },
+        recap: {
+          title: 'Year in food',
+          body: 'Your year of eating, wrapped up and ready to share.',
+        },
+        badges: {
+          title: 'Weird little badges',
+          body: 'Unlock them by exploring. No leaderboards, no races.',
+        },
+        groups: {
+          title: 'College gang, family, flatmates',
+          body: 'Make a group and see where your people actually eat.',
+        },
+        map: { title: 'Your city, pinned', body: 'Everywhere you have eaten, on one map.' },
+      },
+    },
+    cities: {
+      title: 'From Mumbai to Manali.',
+      places: '1.6 lakh+ places',
+      count: (n: number) => `${n} cities and towns`,
+      body: 'Restaurants, cafes, street food and sights across India. If your spot is missing, add it in a minute.',
+    },
+    rules: {
+      title: 'House rules',
+      rows: [
+        {
+          title: 'Private by default.',
+          body: 'Notes, photos and who you went with stay yours until you choose otherwise.',
+        },
+        {
+          title: 'You pick the audience.',
+          body: 'Every single post shows who can see it before it goes out.',
+        },
+        {
+          title: 'No blended scores.',
+          body: 'Friends, following and everyone are counted separately. Always.',
+        },
+        { title: 'No city-wide leaderboard.', body: 'This is not a competition. It is dinner.' },
+      ],
+    },
+    faq: {
+      title: 'Quick answers',
+      items: [
+        { q: 'Is it free?', a: 'Yes. SKOOP is free to use right now.' },
+        {
+          q: 'Do I have to download an app?',
+          a: 'No. It runs in your browser. Add it to your home screen and it opens like an app.',
+        },
+        {
+          q: 'How do I sign in?',
+          a: 'With your Google account. We only use your name and photo.',
+        },
+        {
+          q: 'Who can see what I post?',
+          a: 'You choose each time: only you, friends, followers or everyone. Photos and notes start private.',
+        },
+        {
+          q: 'Is my city covered?',
+          a: 'Mumbai first, plus metros and tourist towns across India. Any place that is missing can be added by you.',
+        },
+      ],
+    },
+    final: {
+      title: 'Your friends already know where to eat.',
+      sub: 'Go get the scoop.',
+    },
+    footerNote:
+      'Example names, places and numbers on this page are illustrations, not real reviews.',
+  },
   errors: {
     generic: 'Something went wrong. Please try again.',
     retry: 'Try again',

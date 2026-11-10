@@ -7,5 +7,7 @@ import { DUR, EASE, motionOK } from './tokens';
 
 gsap.registerPlugin(useGSAP);
 gsap.defaults({ ease: EASE.out, duration: DUR.enter });
+// An empty selection is normal here (a page with no stamps, a list with no icons).
+gsap.config({ nullTargetWarn: false });
 
 export { gsap, useGSAP, motionOK, DUR, EASE };
