@@ -14,13 +14,23 @@ const Icon = { go: GoIcon, skip: SkipIcon, only_for: OnlyForIcon } as const;
 export function VerdictLabel({
   verdict,
   onlyForText,
+  stamped = false,
 }: {
   verdict: Verdict;
   onlyForText?: string | null;
+  /** Rubber-stamp it in as soon as it appears (the "Logged" confirmation). */
+  stamped?: boolean;
 }) {
   const I = Icon[verdict];
   return (
-    <span data-stamp="" className={cn('inline-flex items-center gap-1.5 font-bold', tone[verdict])}>
+    <span
+      data-stamp=""
+      className={cn(
+        'relative inline-flex items-center gap-1.5 font-bold',
+        tone[verdict],
+        stamped && 'sk-stamp-in',
+      )}
+    >
       <I size={18} />
       <span>{verdictText(verdict, onlyForText)}</span>
     </span>

@@ -32,7 +32,7 @@ export function PlaceAbout({
           aria-label={t.photos}
           className="-mx-4 flex snap-x [scrollbar-width:none] gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0"
         >
-          {photos.map((ph) => (
+          {photos.map((ph, i) => (
             <li key={ph.key} className="w-[220px] shrink-0 snap-start" data-reveal="pop">
               <figure>
                 <Image
@@ -41,6 +41,7 @@ export function PlaceAbout({
                   width={ph.width ?? 440}
                   height={ph.height ?? 330}
                   unoptimized
+                  data-torn={i === 0 ? 'first' : 'more'}
                   className="aspect-[4/3] w-full rounded-[var(--radius-button)] object-cover"
                 />
                 {ph.credit ? (

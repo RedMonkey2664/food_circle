@@ -11,7 +11,8 @@ import { DUR, EASE, gsap, useGSAP } from './gsap';
  *  - cards [data-reveal]: dealt in like playing cards (alternating tilt), as they scroll in
  *  - tiles [data-reveal="pop"]: pop up in a ripple
  *  - ink cards [data-reveal="flip"]: flip up from the table
- *  - verdicts [data-stamp] inside a card: stamped down; photos settle in; bars fill up
+ *  - verdicts [data-stamp] inside a card: rubber-stamped (CSS .sk-stamp-in); photos settle
+ *    in; bars fill up
  * Uses IntersectionObserver (works in scrolling panels), waits until React has hydrated a node
  * before touching it, and does nothing at all for prefers-reduced-motion.
  */
@@ -39,23 +40,13 @@ export function PageMotion({ children }: { children: ReactNode }) {
 
         const details = (els: Element[], at: number) => {
           const stamps = els.flatMap((el) => [...el.querySelectorAll('[data-stamp]')]);
-          if (stamps.length) {
-            gsap.fromTo(
-              stamps,
-              { scale: 2.2, rotate: -14, autoAlpha: 0 },
-              {
-                scale: 1,
-                rotate: 0,
-                autoAlpha: 1,
-                duration: DUR.enter,
-                ease: EASE.spring,
-                stagger: 0.06,
-                delay: at + DUR.quick,
-                transformOrigin: '0% 50%',
-                clearProps: 'transform,opacity,visibility',
-              },
-            );
-          }
+          // Rubber Stamp: comes down hard, recoils, leaves a ring of ink (CSS .sk-stamp-in).
+          stamps.forEach((s, i) => {
+            if (!(s instanceof HTMLElement)) return;
+            const delay = Math.round((at + DUR.quick) * 1000) + i * 60;
+            s.style.setProperty('--stamp-delay', `${delay}ms`);
+            s.classList.add('sk-stamp-in');
+          });
           const photos = els.flatMap((el) => [
             ...el.querySelectorAll<HTMLElement>('img:not([data-sticker] img)'),
           ]);
@@ -145,9 +136,9 @@ export function PageMotion({ children }: { children: ReactNode }) {
               flip,
               {
                 autoAlpha: 0,
+                // No perspective: the card folds up flat, so it never widens over its neighbours.
                 rotateX: -72,
                 y: 30,
-                transformPerspective: 900,
                 transformOrigin: '50% 100%',
               },
               { autoAlpha: 1, rotateX: 0, y: 0, duration: DUR.scene, ease: EASE.out, ...done },
@@ -204,12 +195,12 @@ export function PageMotion({ children }: { children: ReactNode }) {
               .timeline({ delay: DUR.quick })
               .fromTo(
                 s,
-                { autoAlpha: 0, scale: 1.9, y: -40, rotate: '-=28' },
+                { autoAlpha: 0, scale: 1.35, y: -16, rotate: '-=20' },
                 {
                   autoAlpha: 1,
                   scale: 0.92,
                   y: 0,
-                  rotate: '+=28',
+                  rotate: '+=20',
                   duration: DUR.quick,
                   ease: EASE.stamp,
                 },

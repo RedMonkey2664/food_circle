@@ -1,3 +1,4 @@
+import { Scribble } from '@/components/brand/Scribble';
 import { FlipBadge } from '@/components/interactive/FlipBadge';
 import { ShareButton } from '@/components/share/ShareButton';
 import { cn } from '@/lib/cn';
@@ -67,11 +68,19 @@ export function AchievementGrid({
                   <span
                     aria-hidden
                     className={cn(
-                      'flex size-12 shrink-0 items-center justify-center rounded-full text-2xl',
+                      'relative flex size-12 shrink-0 items-center justify-center rounded-full text-2xl',
                       earned ? 'bg-primary-soft' : 'bg-line/60 grayscale',
                     )}
                   >
                     {a.icon}
+                    {earned ? (
+                      <Scribble
+                        shape="circle"
+                        width={2.5}
+                        delayMs={200}
+                        className="-top-1 -left-1 size-[calc(100%+0.5rem)]"
+                      />
+                    ) : null}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className={cn('block font-semibold', !earned && 'text-ink/70')}>

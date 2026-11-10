@@ -521,3 +521,196 @@ html[data-vt='close']::view-transition-old(root) {
     stroke-dashoffset: 0;
   }
 }
+
+/* ---------- Theme animations (scrapbook set; all one-off, decoration only) ---------- */
+/* RUBBER STAMP: a verdict comes down hard, recoils, and leaves a ring of ink. */
+.sk-stamp-in {
+  transform-origin: 0 50%;
+  animation: sk-stamp var(--dur-enter) both;
+  animation-delay: var(--stamp-delay, 0ms);
+}
+.sk-stamp-in::after {
+  content: '';
+  position: absolute;
+  inset: -2px -6px;
+  border: 2px solid currentColor;
+  border-radius: 9px 12px 10px 13px;
+  opacity: 0;
+  pointer-events: none;
+  animation: sk-ink-ring var(--dur-enter) var(--ease-out) both;
+  animation-delay: calc(var(--stamp-delay, 0ms) + var(--dur-quick));
+}
+@keyframes sk-stamp {
+  0% {
+    opacity: 0;
+    scale: 1.7;
+    rotate: -9deg;
+    animation-timing-function: var(--ease-stamp);
+  }
+  45% {
+    opacity: 1;
+    scale: 0.93;
+    rotate: 0deg;
+    animation-timing-function: var(--ease-spring);
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+@keyframes sk-ink-ring {
+  from {
+    opacity: 0.5;
+    scale: 0.98;
+  }
+  to {
+    opacity: 0;
+    scale: 1.07;
+  }
+}
+
+/* TORN REVEAL: the photo itself is uncovered along a torn edge (nothing sits on top of it).
+   Browsers that cannot animate the custom property simply show the photo. */
+@property --sk-tear {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 115%;
+}
+[data-motion='on'] [data-revealed] [data-torn] {
+  clip-path: polygon(
+    0 0,
+    calc(var(--sk-tear) - 3%) 0,
+    calc(var(--sk-tear) + 2%) 9%,
+    calc(var(--sk-tear) - 4%) 21%,
+    calc(var(--sk-tear) + 1%) 34%,
+    calc(var(--sk-tear) - 5%) 48%,
+    calc(var(--sk-tear) + 3%) 61%,
+    calc(var(--sk-tear) - 2%) 74%,
+    calc(var(--sk-tear) + 2%) 87%,
+    calc(var(--sk-tear) - 4%) 100%,
+    0 100%
+  );
+  animation: sk-tear var(--dur-scene) var(--ease-out) both;
+}
+@keyframes sk-tear {
+  from {
+    --sk-tear: -6%;
+  }
+  to {
+    --sk-tear: 115%;
+  }
+}
+/* Phones: only the first photo tears open; the rest are simply there. */
+@media (pointer: coarse) and (max-width: 767px) {
+  [data-motion='on'] [data-revealed] [data-torn='more'] {
+    clip-path: none;
+    animation: none;
+  }
+}
+
+/* TAPE PEEL: a photo lifts from one corner. Hover with a mouse, press on touch. */
+.sk-peel {
+  transform-origin: 0 0;
+  transition:
+    rotate var(--dur-quick) var(--ease-out),
+    translate var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sk-peel:hover {
+    rotate: -1.6deg;
+    translate: 0 -3px;
+    box-shadow: 0 16px 22px -14px rgb(60 25 5 / 0.55);
+  }
+}
+@media (pointer: coarse) {
+  .sk-peel:active {
+    rotate: -1.6deg;
+    translate: 0 -3px;
+    box-shadow: 0 16px 22px -14px rgb(60 25 5 / 0.55);
+  }
+}
+
+/* RIBBON DRAW: marker lines that draw themselves once (components/brand/Scribble). */
+.sk-scribble path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sk-draw var(--dur-scene) var(--ease-draw) forwards;
+  animation-delay: var(--draw-delay, 0ms);
+}
+/* Inside a card that has not been revealed yet, wait for it. */
+[data-motion='on'] [data-reveal]:not([data-revealed]) .sk-scribble path {
+  animation: none;
+}
+/* Confirmation lines fade away after a beat. */
+.sk-scribble-fade {
+  animation: sk-fade-out var(--dur-enter) var(--ease-stamp) forwards;
+  animation-delay: calc(var(--dur-scene) * 2);
+}
+@keyframes sk-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* POP: small things that land with a spring (the saved star, margin stickers). */
+.sk-pop {
+  animation: sk-pop var(--dur-enter) var(--ease-spring) both;
+}
+@keyframes sk-pop {
+  from {
+    opacity: 0;
+    scale: 0.3;
+    rotate: -25deg;
+  }
+}
+
+/* RANSOM FLIP: numbers as cut-out letter tiles that flip up one by one. */
+.sk-tile {
+  display: inline-block;
+  margin-inline: 1px;
+  padding-inline: 0.18em;
+  border-radius: 3px;
+  background: #fbf3e6;
+  color: var(--c-ink);
+  line-height: 1.2;
+  rotate: -3deg;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 0.4);
+}
+.sk-tile:nth-child(even) {
+  rotate: 2.5deg;
+  background: var(--c-sun);
+}
+.sk-tile:nth-child(3n) {
+  rotate: -1.5deg;
+  background: #fff;
+}
+[data-motion='on'] [data-revealed] .sk-tile {
+  transform-origin: 50% 100%;
+  animation: sk-tile-flip var(--dur-enter) var(--ease-spring) both;
+  animation-delay: calc(var(--dur-enter) + var(--i, 0) * 70ms);
+}
+@keyframes sk-tile-flip {
+  from {
+    opacity: 0;
+    transform: perspective(240px) rotateX(-88deg);
+  }
+}
+
+/* Reduced motion: every piece shows its finished state (stamp inked, line drawn, photo open). */
+@media (prefers-reduced-motion: reduce) {
+  .sk-stamp-in,
+  .sk-stamp-in::after,
+  .sk-pop,
+  .sk-scribble-fade {
+    animation: none;
+  }
+  .sk-scribble path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .sk-peel {
+    transition: none;
+  }
+}

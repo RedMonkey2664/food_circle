@@ -91,7 +91,7 @@ export function LogSheet({
       >
         <p className="font-display text-2xl font-semibold">{t.logged}</p>
         <p className="mt-2">
-          {place.name}: <VerdictLabel verdict={saved.verdict} onlyForText={saved.onlyFor} />
+          {place.name}: <VerdictLabel verdict={saved.verdict} onlyForText={saved.onlyFor} stamped />
         </p>
         <LogFeedback visitId={saved.visitId} />
         <QuickExtras visitId={saved.visitId} suggestions={dishSuggestions} />

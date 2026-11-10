@@ -19,11 +19,13 @@ export function WantToGoButton({
 }) {
   const [saved, setSaved] = useState(initialSaved);
   const [pending, start] = useTransition();
+  const [tapped, setTapped] = useState(false);
   const t = copy.placeExtra;
 
   function toggle() {
     const next = !saved;
     setSaved(next);
+    setTapped(true);
     start(async () => {
       const r = await setWantToGo({ placeId, save: next, ...(fromVisit ? { fromVisit } : {}) });
       if (!r.ok) setSaved(!next);
@@ -44,7 +46,13 @@ export function WantToGoButton({
           : 'border-line bg-surface text-ink hover:border-muted',
       )}
     >
-      <span aria-hidden>{saved ? '★' : '☆'}</span>
+      <span
+        aria-hidden
+        key={saved ? 'on' : 'off'}
+        className={cn('inline-block', saved && tapped && 'sk-pop')}
+      >
+        {saved ? '★' : '☆'}
+      </span>
       {saved ? t.saved : compact ? t.save : t.wantToGo}
     </button>
   );

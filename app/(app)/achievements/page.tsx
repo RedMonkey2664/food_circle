@@ -6,6 +6,7 @@ import { requireOnboardedUser } from '@/lib/auth';
 import { copy } from '@/lib/copy';
 import { achievements, myProgress } from '@/lib/data/achievements';
 import { PageTitle } from '@/components/brand/Sticker';
+import { RailCollage } from '@/components/motion/RailCollage';
 
 export const metadata = { title: 'Achievements' };
 
@@ -56,6 +57,7 @@ async function Content() {
 export default function AchievementsPage() {
   return (
     <main className="pt-2">
+      <RailCollage stickers={['spiral-star', 'red-flower', 'vinyl']} />
       <PageTitle sticker="torn-stars" tilt={-8}>
         {copy.achieve.title}
       </PageTitle>

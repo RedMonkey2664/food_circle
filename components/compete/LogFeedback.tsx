@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Scribble } from '@/components/brand/Scribble';
 import { Burst } from '@/components/motion/Burst';
 import { DUR } from '@/components/motion/tokens';
 import { visitFeedback, type VisitFeedback } from '@/lib/actions/achievements';
@@ -38,8 +39,16 @@ export function LogFeedback({ visitId }: { visitId: string }) {
           delay={i * DUR.quick}
           className="border-primary/40 bg-primary-soft flex items-start gap-3 rounded-[var(--radius-card)] border p-3"
         >
-          <span aria-hidden data-burst-icon className="inline-block text-3xl leading-none">
-            {u.icon}
+          <span aria-hidden className="relative inline-block shrink-0">
+            <span data-burst-icon className="inline-block text-3xl leading-none">
+              {u.icon}
+            </span>
+            <Scribble
+              shape="circle"
+              width={2.5}
+              delayMs={450 + i * 200}
+              className="-top-1.5 -left-1.5 size-[calc(100%+0.75rem)]"
+            />
           </span>
           <span>
             <span className="text-primary block text-xs font-bold tracking-wide uppercase">

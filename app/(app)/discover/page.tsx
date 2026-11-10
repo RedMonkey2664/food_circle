@@ -15,6 +15,7 @@ import {
 import { myGraph } from '@/lib/data/social';
 import { relationshipWith, type FollowRow, type FriendRow } from '@/lib/domain/relationship';
 import { PageTitle } from '@/components/brand/Sticker';
+import { RailCollage } from '@/components/motion/RailCollage';
 import { PlacesTab } from '@/components/discover/PlacesTab';
 import { NavPill } from '@/components/motion/NavPill';
 import { cn } from '@/lib/cn';
@@ -249,6 +250,7 @@ async function DiscoverBody({
 export default function DiscoverPage(props: PageProps<'/discover'>) {
   return (
     <main className="pt-2">
+      <RailCollage stickers={['sunflower', 'iced-coffee', 'spiral-star']} />
       <PageTitle sticker="eyes" tilt={-6}>
         {copy.discover.title}
       </PageTitle>

@@ -61,7 +61,7 @@ export function VerdictDetails({ details }: { details: VisitDetails }) {
             {details.photos.map((p) => (
               <li
                 key={p.path}
-                className="aspect-square overflow-hidden rounded-[var(--radius-button)]"
+                className="sk-peel aspect-square overflow-hidden rounded-[var(--radius-button)]"
               >
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
                   {/* eslint-disable-next-line @next/next/no-img-element -- signed, short-lived URLs */}

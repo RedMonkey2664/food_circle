@@ -1,7 +1,9 @@
 'use client';
 
 import { useActionState } from 'react';
+import { Scribble } from '@/components/brand/Scribble';
 import { Button, type ButtonProps } from '@/components/ui/Button';
+import { cn } from '@/lib/cn';
 import type { ActionResult } from '@/lib/domain/errors';
 
 type ServerAction = (
@@ -37,10 +39,21 @@ export function ActionButton({
   doneLabel?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, null);
+  // It worked: a marker line draws under the label once, then fades (Ribbon Draw).
+  const done = state?.ok ? (
+    <Scribble shape="underline" color="currentColor" fade className="inset-x-3 bottom-1 h-2" />
+  ) : null;
   if (doneLabel && state?.ok) {
     return (
-      <Button type="button" variant="ghost" size={size} disabled className={className}>
+      <Button
+        type="button"
+        variant="ghost"
+        size={size}
+        disabled
+        className={cn('relative', className)}
+      >
         {doneLabel}
+        {done}
       </Button>
     );
   }
@@ -55,8 +68,15 @@ export function ActionButton({
       {Object.entries(fields).map(([k, v]) => (
         <input key={k} type="hidden" name={k} value={v} />
       ))}
-      <Button type="submit" variant={variant} size={size} disabled={pending} className={className}>
+      <Button
+        type="submit"
+        variant={variant}
+        size={size}
+        disabled={pending}
+        className={cn('relative', className)}
+      >
         {pending ? (pendingLabel ?? label) : label}
+        {pending ? null : done}
       </Button>
       {state && !state.ok ? (
         <span role="alert" className="text-skip mt-1 max-w-48 text-right text-xs">

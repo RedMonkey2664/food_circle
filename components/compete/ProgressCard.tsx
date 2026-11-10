@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CountUp } from '@/components/motion/CountUp';
+import { RansomNumber } from '@/components/motion/RansomNumber';
 import { copy } from '@/lib/copy';
 import type { Progress } from '@/lib/data/achievements';
 
@@ -35,7 +35,7 @@ export function ProgressCard({ progress, link = true }: { progress: Progress; li
         ).map(([label, n, of]) => (
           <div key={label} className="rounded-[var(--radius-button)] bg-white/[0.07] py-2.5">
             <dd className="font-display text-2xl font-semibold">
-              <CountUp value={n} />
+              <RansomNumber value={n} />
               {of !== null ? <span className="text-base text-white/60">/{of}</span> : null}
             </dd>
             <dt className="text-xs text-white/70">{label}</dt>
