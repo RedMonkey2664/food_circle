@@ -83,6 +83,25 @@ export function cityCenter(c: Region): { lat: number; lng: number } {
 
 /** The search/map focus kept in a cookie: a city, or an approximate "near me" point. */
 export type Near = { slug: string; lat: number; lng: number };
+
+/** The city for a chosen place or "near me" point: the picked city, else the nearest one. */
+export function cityForNear(near: Near | null): Region {
+  if (!near) return MUMBAI;
+  const picked = CITIES.find((c) => c.slug === near.slug);
+  if (picked) return picked;
+  let best = MUMBAI;
+  let bestD = Infinity;
+  for (const c of CITIES) {
+    const m = cityCenter(c);
+    const d =
+      (m.lat - near.lat) ** 2 + ((m.lng - near.lng) * Math.cos((near.lat * Math.PI) / 180)) ** 2;
+    if (d < bestD) {
+      bestD = d;
+      best = c;
+    }
+  }
+  return best;
+}
 export const NEAR_COOKIE = 'skoop_near';
 
 /** "jaipur|26.90,75.80" -> Near. Anything malformed or outside India is ignored. */

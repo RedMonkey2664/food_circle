@@ -7,6 +7,7 @@ import { NavPill } from '@/components/motion/NavPill';
 import {
   BookIcon,
   CompassIcon,
+  ExploreIcon,
   HomeIcon,
   PersonIcon,
   PlusIcon,
@@ -33,6 +34,12 @@ const ITEMS: Item[] = [
     label: copy.nav.discover,
     Icon: CompassIcon,
     match: (p) => p.startsWith('/discover'),
+  },
+  {
+    href: '/explore',
+    label: copy.explore.navLabel,
+    Icon: ExploreIcon,
+    match: (p) => p.startsWith('/explore'),
   },
   { href: '/diary', label: copy.nav.diary, Icon: BookIcon, match: (p) => p.startsWith('/diary') },
   {

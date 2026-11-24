@@ -19,6 +19,7 @@ import { RailCollage } from '@/components/motion/RailCollage';
 import { PlacesTab } from '@/components/discover/PlacesTab';
 import { NavPill } from '@/components/motion/NavPill';
 import { cn } from '@/lib/cn';
+import { ExploreIcon } from '@/components/ui/icons';
 
 export const metadata = { title: 'Discover' };
 
@@ -254,6 +255,22 @@ export default function DiscoverPage(props: PageProps<'/discover'>) {
       <PageTitle sticker="eyes" tilt={-6}>
         {copy.discover.title}
       </PageTitle>
+      {/* Phones reach Explore from here (wider screens have it in the side menu). */}
+      <Link
+        href="/explore"
+        className="sk-ink-card mt-4 flex min-h-16 items-center gap-3 rounded-[var(--radius-card)] px-4 py-3 text-[#fbf3e6] md:hidden"
+      >
+        <ExploreIcon size={26} className="text-sun shrink-0" />
+        <span className="min-w-0 flex-1">
+          <span className="font-display block text-lg leading-tight font-semibold">
+            {copy.explore.banner}
+          </span>
+          <span className="block text-xs text-white/70">{copy.explore.bannerHint}</span>
+        </span>
+        <span aria-hidden className="text-sun text-xl">
+          →
+        </span>
+      </Link>
       <Suspense
         fallback={
           <div aria-busy="true" className="mt-3 space-y-3">

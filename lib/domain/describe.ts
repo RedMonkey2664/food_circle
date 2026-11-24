@@ -46,7 +46,7 @@ const pretty = (tag: string) =>
   tag
     .replace(/_/g, ' ')
     .replace(
-      /\b(udupi|irani|punjabi|bengali|gujarati|chinese|italian|mughlai|goan|kerala)\b/g,
+      /\b(udupi|irani|punjabi|bengali|gujarati|chinese|italian|mughlai|goan|kerala|maharashtrian|malvani|parsi|hyderabadi|rajasthani|chettinad|lebanese|japanese|mexican|thai|american|european|asian|korean|tibetan|continental)\b/g,
       (w) => w.charAt(0).toUpperCase() + w.slice(1),
     );
 
@@ -70,7 +70,15 @@ export function describePlace(p: {
       : (p.cuisineTags ?? []).includes('ice_cream')
         ? 'ice cream place'
         : null;
-    noun = special ?? (cuisine ? `${pretty(cuisine)} ${TYPE_NOUN[p.type]}` : TYPE_NOUN[p.type]);
+    // "irani_cafe" on a cafe is an "Irani cafe", not an "Irani cafe cafe".
+    const kind = cuisine ? pretty(cuisine) : null;
+    noun =
+      special ??
+      (kind
+        ? kind.toLowerCase().endsWith(TYPE_NOUN[p.type])
+          ? kind
+          : `${kind} ${TYPE_NOUN[p.type]}`
+        : TYPE_NOUN[p.type]);
     if (p.dietFlags?.includes('pure_veg')) noun = `pure-veg ${noun}`;
   }
   const area = p.areaName?.trim() || null;

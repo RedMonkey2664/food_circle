@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { describePlace } from './describe';
 
 describe('describePlace', () => {
+  it('does not repeat the kind of place', () => {
+    expect(
+      describePlace({
+        type: 'cafe',
+        cuisineTags: ['irani_cafe'],
+        areaName: 'Kalbadevi',
+        city: 'Mumbai',
+      }),
+    ).toBe('An Irani cafe in Kalbadevi, Mumbai.');
+  });
+
   it('describes a cafe with its area and city', () => {
     expect(describePlace({ type: 'cafe', areaName: 'Bandra West', city: 'Mumbai' })).toBe(
       'A cafe in Bandra West, Mumbai.',

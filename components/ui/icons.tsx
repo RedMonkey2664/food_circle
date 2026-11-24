@@ -110,6 +110,18 @@ export function CloseIcon(props: IconProps) {
   );
 }
 
+/** Explore: a serving cloche on a plate. */
+export function ExploreIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M3 18h18" />
+      <path d="M5 18a7 7 0 0 1 14 0" />
+      <path d="M12 11V9" />
+      <path d="M10.5 9h3" />
+    </svg>
+  );
+}
+
 export function CompassIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

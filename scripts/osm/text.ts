@@ -1,12 +1,5 @@
-/** Same rules as the SQL normalize_name(): lowercase, & -> and, strip punctuation, collapse spaces. */
-export function normalizeName(n: string): string {
-  return n
-    .replace(/&/g, ' and ')
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// One normaliser for the app and the import scripts (lib/domain/normalize.ts).
+export { normalizeName } from '../../lib/domain/normalize';
 
 /** Lowercase kebab slug: 'Bandra (West)' -> 'bandra-west'. ASCII only. */
 export function slugify(s: string): string {
