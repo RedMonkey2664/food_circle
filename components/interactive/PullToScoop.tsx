@@ -70,7 +70,8 @@ function creasePaths(w: number, h: number, fx: number): string[] {
  * refreshes, then flicks it back up. Let go early and the page simply settles back.
  *
  * Decoration stays in the gap the pull opens above the page, so it never covers content.
- * Touch only (mouse screens have no pull), skipped on maps, dialogs, form fields and the
+ * Laptops and desktops: keep scrolling up at the top of the page (trackpad or wheel); it lets
+ * go when the scrolling stops. Skipped on maps, dialogs, form fields and the
  * logging takeover. Reduced motion: the page still follows the finger (direct manipulation)
  * but settles back instantly, with no flick.
  */
@@ -104,7 +105,6 @@ export function PullToScoop() {
   }, [pending]);
 
   useEffect(() => {
-    if (!window.matchMedia('(pointer: coarse)').matches) return;
     const column = document.querySelector<HTMLElement>('[data-app-column]');
     if (!column) return;
     const root = document.documentElement;
@@ -118,6 +118,25 @@ export function PullToScoop() {
     let tracking = false;
     let decided = false;
     let ready = false;
+    // Where the paper opens: the whole width on phones, over the page column on wider screens
+    // (so it never covers the side menu).
+    let bandLeft = 0;
+    let bandW = window.innerWidth;
+    const place = () => {
+      if (window.innerWidth < 768) {
+        bandLeft = 0;
+        bandW = window.innerWidth;
+      } else {
+        const r = column.getBoundingClientRect();
+        bandLeft = r.left;
+        bandW = r.width;
+      }
+      if (band.current) {
+        band.current.style.left = `${bandLeft}px`;
+        band.current.style.width = `${bandW}px`;
+      }
+      s.fx = bandW / 2;
+    };
 
     const render = () => {
       const p = s.p;
@@ -129,7 +148,7 @@ export function PullToScoop() {
         b.style.height = `${shown.toFixed(1)}px`;
         b.style.visibility = shown > 0.5 ? 'visible' : 'hidden';
       }
-      const w = window.innerWidth;
+      const w = bandW;
       const fx = s.fx || w / 2;
       if (h) {
         const tipY = shown - 3 + s.press - s.lift;
@@ -247,19 +266,29 @@ export function PullToScoop() {
           return;
         }
         decided = true;
-        stage.current = 'pulling';
-        setArmed(true);
-        setLabel(t.pullHint);
+        startPull(t.pullHint);
       }
       e.preventDefault();
-      s.p = rubber(dy - 8);
       // The hand leans toward the finger a little.
-      const mid = window.innerWidth / 2;
-      s.fx = mid + (touch.clientX - mid) * 0.3;
+      s.fx = bandW / 2 + (touch.clientX - (bandLeft + bandW / 2)) * 0.3;
+      pullTo(rubber(dy - 8));
+    };
+
+    const startPull = (hint: string) => {
+      place();
+      stage.current = 'pulling';
+      ready = false;
+      setArmed(true);
+      setLabel(hint);
+    };
+
+    /** Moves the page to `p` and handles crossing the line. */
+    const pullTo = (p: number) => {
+      s.p = p;
       const nowReady = s.p >= READY;
       if (nowReady !== ready) {
         ready = nowReady;
-        setLabel(ready ? t.pullRelease : t.pullHint);
+        setLabel(ready ? t.pullRelease : tracking ? t.pullHint : t.pullHintWheel);
         if (ready) {
           navigator.vibrate?.(10);
           if (motionOK()) {
@@ -284,6 +313,10 @@ export function PullToScoop() {
     const onEnd = () => {
       if (!tracking) return;
       tracking = false;
+      release();
+    };
+
+    const release = () => {
       if (stage.current !== 'pulling') return;
       if (ready) return begin();
       if (!motionOK()) return settle();
@@ -299,11 +332,37 @@ export function PullToScoop() {
       });
     };
 
+    // Laptops and desktops: keep scrolling up (trackpad or wheel) at the top of the page.
+    // The pull lets go when the scrolling stops.
+    let wheelDist = 0;
+    let wheelTimer = 0;
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.deltaX * e.deltaX > e.deltaY * e.deltaY) return;
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+      const pulling = stage.current === 'pulling' && !tracking;
+      if (!pulling) {
+        if (stage.current !== 'idle' || dy >= 0 || window.scrollY > 0) return;
+        if (document.querySelector('[data-takeover]')) return;
+        const target = e.target instanceof Element ? e.target : null;
+        if (target?.closest(IGNORE) || insideScrolled(target)) return;
+        wheelDist = 0;
+        startPull(t.pullHintWheel);
+      }
+      wheelDist = Math.max(0, wheelDist - dy * 0.5);
+      pullTo(rubber(wheelDist));
+      window.clearTimeout(wheelTimer);
+      // Scrolling back down puts the page away; otherwise wait for the scrolling to stop.
+      wheelTimer = window.setTimeout(release, wheelDist > 0 ? 220 : 0);
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd, { passive: true });
     window.addEventListener('touchcancel', onEnd, { passive: true });
     return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.clearTimeout(wheelTimer);
       window.removeEventListener('touchstart', onStart);
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onEnd);
@@ -321,7 +380,7 @@ export function PullToScoop() {
       <div
         ref={band}
         aria-hidden
-        className="sk-pull pointer-events-none fixed inset-x-0 top-0 z-20 overflow-hidden"
+        className="sk-pull pointer-events-none fixed top-0 left-0 z-20 w-full overflow-hidden"
         style={{ height: 0, visibility: 'hidden' }}
       >
         <svg ref={svg} className="absolute inset-0 size-full" preserveAspectRatio="none">

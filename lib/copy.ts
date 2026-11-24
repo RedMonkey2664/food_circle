@@ -47,6 +47,7 @@ export const copy = {
     doubleTapHint: 'Double-tap a card to save the place',
     backToTop: 'Back to top',
     pullHint: 'Pull for the fresh scoop',
+    pullHintWheel: 'Keep scrolling up for the fresh scoop',
     pullRelease: 'Let go!',
     pullRefreshing: 'Getting the fresh scoop…',
     pullDone: 'Up to date',
