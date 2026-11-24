@@ -714,3 +714,13 @@ html[data-vt='close']::view-transition-old(root) {
     transition: none;
   }
 }
+
+/* PULL TO SCOOP (components/interactive/PullToScoop): the paper that opens above the page.
+   It darkens toward the page edge, where the page lifts off it. */
+.sk-pull {
+  background:
+    linear-gradient(to bottom, transparent 55%, rgb(60 25 5 / 0.1)),
+    radial-gradient(circle, rgb(176 20 27 / 0.16) 1.1px, transparent 1.6px) 0 0 / 9px 9px,
+    var(--c-bg);
+  box-shadow: inset 0 -1px 0 rgb(60 25 5 / 0.08);
+}
